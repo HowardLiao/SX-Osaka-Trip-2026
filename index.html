@@ -583,47 +583,239 @@
     <button class="cat-btn" onclick="showTab('sec-tools', 4)">📱 必備工具與 App</button>
   </div>
 
-  <!-- SECTION 1: TRANSPORT & HOTELS -->
+    <!-- SECTION 1: TRANSPORT & HOTELS (INTERACTIVE COMPARATOR) -->
   <div id="sec-transport" class="section-card active">
     <div class="section-header">
-      <h2><span>🚄</span> 行前交通與住宿戰略精算</h2>
-      <span class="pyramid-badge">核心決策</span>
+      <h2><span>🏨</span> 住宿全選項性價比評估庫（可勾選試算）</h2>
+      <span class="pyramid-badge">動態精算</span>
     </div>
 
     <div class="danger-callout">
-      <strong>🚨 致命時間衝突：當天清晨「絕對不能搭高鐵」！</strong><br>
-      台中往高雄（左營）南下首班高鐵為 <strong>0583 次（06:25 台中發車 ➔ 07:30 抵達左營）</strong>。<br>
-      首班車 07:30 才抵達左營，而亞洲航空 AK170 也於 <strong>07:30 準時電腦關櫃截止報到</strong>！從左營飆計程車到小港最快需 25 分鐘，抵達已超過 07:55，<strong>100% 錯過班機！</strong>因此 11/24（二）前一晚必須在高雄過夜。
+      <strong>🚨 關鍵死線提醒：當天清晨（11/25）「絕對不可搭高鐵」！</strong><br>
+      台中首班高鐵 0583 次（06:25 發車 ➔ 07:30 抵達左營）。但 AK170 也是 <strong>07:30 準時電腦鎖櫃截止報到</strong>，左營到小港飆車需 25 分鐘，<strong>100% 趕不上！</strong>因此 11/24（二）前一晚必須在高雄過夜。
     </div>
 
-    <!-- HOTEL A -->
-    <div class="hotel-card recommended">
-      <div class="winner-ribbon">👑 綜合性價比冠軍</div>
-      <div class="hotel-name">御宿商旅 - 明華館（高雄巨蛋旁）</div>
-      <div class="hotel-price">平日約 NT$ 1,300 ～ 1,500 元 / 晚</div>
-      <ul class="hotel-detail-list">
-        <li><span>📍</span> <strong>位置</strong>：鼓山區明華路 257 號（離華人匯辦公室走路 5~8 分鐘）</li>
-        <li><span>✨</span> <strong>下班動線</strong>：華人匯下班走路 500 公尺直接入住，免大包小包搭捷運奔波！</li>
-        <li><span>🍜</span> <strong>生活機能</strong>：漢神巨蛋商圈、瑞豐夜市美食，大廳 24H 免費冰品包子飲料。</li>
-        <li><span>🚕</span> <strong>隔天送機</strong>：05:45 起床，<strong>06:05 門口搭計程車（車程 22 分鐘，車資約 400 元）➔ 06:28 直達航廈門口</strong>與同仁會合！</li>
-      </ul>
-      <a href="tel:075552299" class="phone-dial-btn">📞 一鍵直撥御宿訂房 (07-555-2299)</a>
+    <div style="background:#fffbeb; border:1px solid #fcd34d; border-radius:12px; padding:14px; margin-bottom:18px;">
+      <div style="font-weight:800; color:#92400e; font-size:14px; margin-bottom:4px;">💡 互動比價模式說明：</div>
+      <p style="font-size:12.5px; color:#78350f;">以下彙整 <strong>7 大住宿候選方案</strong>（涵蓋巨蛋商圈、小港機場旁、捷運站青旅與單人浴場）。請在下方勾選您想比較的項目，系統會即時在最下方產出<strong>「總成本與性價比對照卡」</strong>！</p>
     </div>
 
-    <!-- HOTEL B -->
-    <div class="hotel-card">
-      <div class="hotel-name">橙屋商旅（小港機場旁）</div>
-      <div class="hotel-price">平日約 NT$ 1,350 ～ 1,550 元 / 晚</div>
-      <ul class="hotel-detail-list">
-        <li><span>📍</span> <strong>位置</strong>：小港區大業北路 300 號（機場旁）</li>
-        <li><span>🚐</span> <strong>接駁</strong>：每房含免費機場/捷運接駁專車，06:20 專車 5 分鐘送達航廈。</li>
-        <li><span>⚠️</span> <strong>代價</strong>：11/24 下班後需拖大行李搭 21 分鐘捷運跑到小港，周邊機能較單調。</li>
-      </ul>
-      <a href="tel:078012266" class="phone-dial-btn" style="background:#57534e;">📞 撥打橙屋商旅 (07-801-2266)</a>
+    <!-- HOTEL SELECTION LIST -->
+    <div id="hotel-list">
+
+      <!-- 1. 御宿商旅 明華館 -->
+      <div class="hotel-item-card" data-id="h1" data-name="御宿商旅 明華館" data-area="巨蛋商圈" data-price="1350" data-transit="400" data-total="1750" data-wakeup="05:45" data-cp="9.6" data-type="商務套房" style="border:2px solid var(--gold-600); border-radius:14px; padding:16px; margin-bottom:12px; background:#ffffff; box-shadow:0 3px 12px rgba(180,83,9,0.08);">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+          <label style="display:flex; align-items:center; gap:10px; cursor:pointer; flex:1;">
+            <input type="checkbox" class="hotel-check" checked onchange="calculateComparison()" style="width:20px; height:20px; accent-color:#d97706; cursor:pointer;">
+            <div>
+              <span style="background:var(--gold-100); color:var(--gold-800); font-size:11px; font-weight:800; padding:2px 8px; border-radius:4px;">👑 綜合性價比冠軍 ｜ 巨蛋商圈</span>
+              <h4 style="font-size:17px; font-weight:900; color:var(--stone-dark); margin:3px 0;">御宿商旅 - 明華館</h4>
+              <div style="font-size:12.5px; color:var(--stone-muted);">鼓山區明華路257號（華人匯辦公室走路 5~8 分鐘）</div>
+            </div>
+          </label>
+          <div style="text-align:right;">
+            <div style="font-size:18px; font-weight:900; color:var(--gold-700);">NT$ 1,350</div>
+            <div style="font-size:11px; color:var(--stone-muted);">平日雙人房 / 晚</div>
+          </div>
+        </div>
+        <div style="margin-top:10px; padding-top:10px; border-top:1px dashed var(--sand-200); font-size:12.5px; color:var(--stone-text); display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <div><strong>下班到飯店：</strong>步行 500m (0元)</div>
+          <div><strong>隔天到機場：</strong>06:05 計程車22分 (約400元)</div>
+          <div><strong>預估起床時間：</strong>05:45</div>
+          <div><strong>總預算成本：</strong><strong style="color:var(--gold-800);">約 NT$ 1,750</strong></div>
+        </div>
+        <div style="margin-top:10px; display:flex; gap:8px;">
+          <a href="tel:075552299" class="phone-dial-btn" style="padding:8px; font-size:12.5px;">📞 撥打御宿 (07-555-2299)</a>
+        </div>
+      </div>
+
+      <!-- 2. 橙屋商旅 -->
+      <div class="hotel-item-card" data-id="h2" data-name="橙屋商旅" data-area="小港機場旁" data-price="1400" data-transit="40" data-total="1440" data-wakeup="06:00" data-cp="9.2" data-type="機場商旅" style="border:1px solid var(--stone-border); border-radius:14px; padding:16px; margin-bottom:12px; background:#ffffff;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+          <label style="display:flex; align-items:center; gap:10px; cursor:pointer; flex:1;">
+            <input type="checkbox" class="hotel-check" checked onchange="calculateComparison()" style="width:20px; height:20px; accent-color:#d97706; cursor:pointer;">
+            <div>
+              <span style="background:#e0f2fe; color:#0369a1; font-size:11px; font-weight:800; padding:2px 8px; border-radius:4px;">🥈 預算最低商旅 ｜ 小港機場旁</span>
+              <h4 style="font-size:17px; font-weight:900; color:var(--stone-dark); margin:3px 0;">橙屋商旅</h4>
+              <div style="font-size:12.5px; color:var(--stone-muted);">小港區大業北路300號（附清晨免費送機專車）</div>
+            </div>
+          </label>
+          <div style="text-align:right;">
+            <div style="font-size:18px; font-weight:900; color:var(--gold-700);">NT$ 1,400</div>
+            <div style="font-size:11px; color:var(--stone-muted);">含專車送機 / 晚</div>
+          </div>
+        </div>
+        <div style="margin-top:10px; padding-top:10px; border-top:1px dashed var(--sand-200); font-size:12.5px; color:var(--stone-text); display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <div><strong>下班到飯店：</strong>捷運21分 (40元，免費接)</div>
+          <div><strong>隔天到機場：</strong>06:20 免費專車5分 (0元)</div>
+          <div><strong>預估起床時間：</strong>06:00 (多睡15分)</div>
+          <div><strong>總預算成本：</strong><strong style="color:var(--gold-800);">約 NT$ 1,440</strong></div>
+        </div>
+        <div style="margin-top:10px; display:flex; gap:8px;">
+          <a href="tel:078012266" class="phone-dial-btn" style="padding:8px; font-size:12.5px; background:#57534e;">📞 撥打橙屋 (07-801-2266)</a>
+        </div>
+      </div>
+
+      <!-- 3. 金建商務飯店 -->
+      <div class="hotel-item-card" data-id="h3" data-name="金建商務飯店" data-area="小港機場正對面" data-price="1200" data-transit="130" data-total="1330" data-wakeup="06:00" data-cp="8.5" data-type="平價商旅" style="border:1px solid var(--stone-border); border-radius:14px; padding:16px; margin-bottom:12px; background:#ffffff;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+          <label style="display:flex; align-items:center; gap:10px; cursor:pointer; flex:1;">
+            <input type="checkbox" class="hotel-check" onchange="calculateComparison()" style="width:20px; height:20px; accent-color:#d97706; cursor:pointer;">
+            <div>
+              <span style="background:#f3f4f6; color:#4b5563; font-size:11px; font-weight:800; padding:2px 8px; border-radius:4px;">純房價最低 ｜ 小港飛機路</span>
+              <h4 style="font-size:17px; font-weight:900; color:var(--stone-dark); margin:3px 0;">金建商務飯店</h4>
+              <div style="font-size:12.5px; color:var(--stone-muted);">小港區飛機路459號（機場正對面）</div>
+            </div>
+          </label>
+          <div style="text-align:right;">
+            <div style="font-size:18px; font-weight:900; color:var(--gold-700);">NT$ 1,200</div>
+            <div style="font-size:11px; color:var(--stone-muted);">平日雙人房 / 晚</div>
+          </div>
+        </div>
+        <div style="margin-top:10px; padding-top:10px; border-top:1px dashed var(--sand-200); font-size:12.5px; color:var(--stone-text); display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <div><strong>下班到飯店：</strong>捷運40元+計程車90元</div>
+          <div><strong>隔天到機場：</strong>步行8~10分 (0元) 或計程車90元</div>
+          <div><strong>預估起床時間：</strong>06:00</div>
+          <div><strong>總預算成本：</strong><strong style="color:var(--gold-800);">約 NT$ 1,330~1,420</strong></div>
+        </div>
+        <div style="margin-top:10px; display:flex; gap:8px;">
+          <a href="tel:078021655" class="phone-dial-btn" style="padding:8px; font-size:12.5px; background:#78716c;">📞 撥打金建 (07-802-1655)</a>
+        </div>
+      </div>
+
+      <!-- 4. 巨蛋旅店 Hotel R14 -->
+      <div class="hotel-item-card" data-id="h4" data-name="巨蛋旅店 Hotel R14" data-area="巨蛋商圈" data-price="1900" data-transit="400" data-total="2300" data-wakeup="05:45" data-cp="8.8" data-type="設計旅店" style="border:1px solid var(--stone-border); border-radius:14px; padding:16px; margin-bottom:12px; background:#ffffff;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+          <label style="display:flex; align-items:center; gap:10px; cursor:pointer; flex:1;">
+            <input type="checkbox" class="hotel-check" onchange="calculateComparison()" style="width:20px; height:20px; accent-color:#d97706; cursor:pointer;">
+            <div>
+              <span style="background:#ecfdf5; color:#047857; font-size:11px; font-weight:800; padding:2px 8px; border-radius:4px;">北歐極簡 ｜ 巨蛋2號出口旁</span>
+              <h4 style="font-size:17px; font-weight:900; color:var(--stone-dark); margin:3px 0;">巨蛋旅店 Hotel R14</h4>
+              <div style="font-size:12.5px; color:var(--stone-muted);">鼓山區文強路99號（華人匯步行 6~8 分鐘）</div>
+            </div>
+          </label>
+          <div style="text-align:right;">
+            <div style="font-size:18px; font-weight:900; color:var(--gold-700);">NT$ 1,900</div>
+            <div style="font-size:11px; color:var(--stone-muted);">標準雙人房 / 晚</div>
+          </div>
+        </div>
+        <div style="margin-top:10px; padding-top:10px; border-top:1px dashed var(--sand-200); font-size:12.5px; color:var(--stone-text); display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <div><strong>下班到飯店：</strong>步行 600m (0元)</div>
+          <div><strong>隔天到機場：</strong>06:05 計程車22分 (約400元)</div>
+          <div><strong>預估起床時間：</strong>05:45</div>
+          <div><strong>總預算成本：</strong><strong style="color:var(--gold-800);">約 NT$ 2,300</strong></div>
+        </div>
+      </div>
+
+      <!-- 5. Single Inn 單人房 高雄站前館 -->
+      <div class="hotel-item-card" data-id="h5" data-name="Single Inn 單人房" data-area="高雄車站商圈" data-price="850" data-transit="300" data-total="1150" data-wakeup="05:45" data-cp="8.9" data-type="單人隔間+大浴場" style="border:1px solid var(--stone-border); border-radius:14px; padding:16px; margin-bottom:12px; background:#ffffff;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+          <label style="display:flex; align-items:center; gap:10px; cursor:pointer; flex:1;">
+            <input type="checkbox" class="hotel-check" onchange="calculateComparison()" style="width:20px; height:20px; accent-color:#d97706; cursor:pointer;">
+            <div>
+              <span style="background:#fef3c7; color:#b45309; font-size:11px; font-weight:800; padding:2px 8px; border-radius:4px;">獨立單人艙 ｜ 附大浴場泡湯</span>
+              <h4 style="font-size:17px; font-weight:900; color:var(--stone-dark); margin:3px 0;">Single Inn 單人房（高雄站前館）</h4>
+              <div style="font-size:12.5px; color:var(--stone-muted);">新興區林森一路267號（近高雄車站/美麗島）</div>
+            </div>
+          </label>
+          <div style="text-align:right;">
+            <div style="font-size:18px; font-weight:900; color:var(--gold-700);">NT$ 850</div>
+            <div style="font-size:11px; color:var(--stone-muted);">單人隔間 / 晚</div>
+          </div>
+        </div>
+        <div style="margin-top:10px; padding-top:10px; border-top:1px dashed var(--sand-200); font-size:12.5px; color:var(--stone-text); display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <div><strong>下班到飯店：</strong>捷運6分 (20元)</div>
+          <div><strong>隔天到機場：</strong>06:05 計程車18分 (約300元) 或捷運35元</div>
+          <div><strong>預估起床時間：</strong>05:45</div>
+          <div><strong>總預算成本：</strong><strong style="color:var(--gold-800);">約 NT$ 1,170</strong></div>
+        </div>
+      </div>
+
+      <!-- 6. D'well Hostel 旅悅青旅 -->
+      <div class="hotel-item-card" data-id="h6" data-name="D'well 旅悅青旅" data-area="三多商圈 R8" data-price="500" data-transit="250" data-total="750" data-wakeup="05:45" data-cp="8.7" data-type="青年旅館床位" style="border:1px solid var(--stone-border); border-radius:14px; padding:16px; margin-bottom:12px; background:#ffffff;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+          <label style="display:flex; align-items:center; gap:10px; cursor:pointer; flex:1;">
+            <input type="checkbox" class="hotel-check" onchange="calculateComparison()" style="width:20px; height:20px; accent-color:#d97706; cursor:pointer;">
+            <div>
+              <span style="background:#f3e8ff; color:#7e22ce; font-size:11px; font-weight:800; padding:2px 8px; border-radius:4px;">極致省錢 ｜ 捷運三多商圈4號出口旁</span>
+              <h4 style="font-size:17px; font-weight:900; color:var(--stone-dark); margin:3px 0;">D'well Hostel 旅悅青旅</h4>
+              <div style="font-size:12.5px; color:var(--stone-muted);">苓雅區三多三路211號3樓（出站走路 2 分鐘）</div>
+            </div>
+          </label>
+          <div style="text-align:right;">
+            <div style="font-size:18px; font-weight:900; color:var(--gold-700);">NT$ 500</div>
+            <div style="font-size:11px; color:var(--stone-muted);">單人背包床位 / 晚</div>
+          </div>
+        </div>
+        <div style="margin-top:10px; padding-top:10px; border-top:1px dashed var(--sand-200); font-size:12.5px; color:var(--stone-text); display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <div><strong>下班到飯店：</strong>捷運10分 (30元)</div>
+          <div><strong>隔天到機場：</strong>06:07 捷運14分直達 (30元) 或計程車250元</div>
+          <div><strong>預估起床時間：</strong>05:35</div>
+          <div><strong>總預算成本：</strong><strong style="color:var(--gold-800);">約 NT$ 560~780</strong></div>
+        </div>
+      </div>
+
+      <!-- 7. 水京棧國際酒店 H2O Hotel -->
+      <div class="hotel-item-card" data-id="h7" data-name="水京棧 H2O Hotel" data-area="巨蛋商圈" data-price="4800" data-transit="400" data-total="5200" data-wakeup="05:45" data-cp="8.0" data-type="五星頂級酒店" style="border:1px solid var(--stone-border); border-radius:14px; padding:16px; margin-bottom:12px; background:#ffffff;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+          <label style="display:flex; align-items:center; gap:10px; cursor:pointer; flex:1;">
+            <input type="checkbox" class="hotel-check" onchange="calculateComparison()" style="width:20px; height:20px; accent-color:#d97706; cursor:pointer;">
+            <div>
+              <span style="background:#fee2e2; color:#b91c1c; font-size:11px; font-weight:800; padding:2px 8px; border-radius:4px;">五星奢華 ｜ 頂樓泳池酒吧</span>
+              <h4 style="font-size:17px; font-weight:900; color:var(--stone-dark); margin:3px 0;">水京棧國際酒店（H2O Hotel）</h4>
+              <div style="font-size:12.5px; color:var(--stone-muted);">鼓山區明華路366號（華人匯步行 5~7 分鐘）</div>
+            </div>
+          </label>
+          <div style="text-align:right;">
+            <div style="font-size:18px; font-weight:900; color:var(--gold-700);">NT$ 4,800</div>
+            <div style="font-size:11px; color:var(--stone-muted);">五星豪華客房 / 晚</div>
+          </div>
+        </div>
+        <div style="margin-top:10px; padding-top:10px; border-top:1px dashed var(--sand-200); font-size:12.5px; color:var(--stone-text); display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <div><strong>下班到飯店：</strong>步行 500m (0元)</div>
+          <div><strong>隔天到機場：</strong>06:05 計程車22分 (約400元)</div>
+          <div><strong>預估起床時間：</strong>05:45</div>
+          <div><strong>總預算成本：</strong><strong style="color:var(--gold-800);">約 NT$ 5,200</strong></div>
+        </div>
+      </div>
+
     </div>
+
+    <!-- LIVE DYNAMIC COMPARISON RESULT TABLE -->
+    <div id="comparison-result" style="margin-top:20px; background:#ffffff; border:2px solid var(--gold-600); border-radius:14px; padding:16px; box-shadow:0 6px 20px rgba(180,83,9,0.12);">
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid var(--sand-200); padding-bottom:10px; margin-bottom:12px;">
+        <h4 style="font-size:16px; font-weight:900; color:var(--stone-dark);">📊 勾選項目的即時性價比排行對照表</h4>
+        <span id="selected-count" style="font-size:12px; font-weight:800; color:var(--gold-800); background:var(--gold-100); padding:3px 8px; border-radius:999px;">已勾選 2 項</span>
+      </div>
+
+      <div class="table-wrapper">
+        <table id="dynamic-table">
+          <thead>
+            <tr>
+              <th>飯店名稱</th>
+              <th>區域</th>
+              <th>房價</th>
+              <th>交通費</th>
+              <th>總花費</th>
+              <th>起床時間</th>
+              <th>CP評分</th>
+            </tr>
+          </thead>
+          <tbody id="dynamic-tbody">
+            <!-- Dynamic rows injected here -->
+          </tbody>
+        </table>
+      </div>
+
+      <div id="best-recommend-box" style="margin-top:12px; background:var(--gold-100); border:1px solid var(--gold-300); border-radius:8px; padding:12px; font-size:13px; color:#78350f;">
+        <!-- Dynamic best verdict injected here -->
+      </div>
+    </div>
+
   </div>
 
-    <!-- SECTION 2: DAY 4 PLANS (SEPARATED & ENLARGED) -->
+<!-- SECTION 2: DAY 4 PLANS (SEPARATED & ENLARGED) -->
   <div id="sec-plans" class="section-card">
     <div class="section-header">
       <h2><span>📊</span> Day 4 自由活動獨立大圖專區</h2>
@@ -944,6 +1136,64 @@
       blockB.style.display = 'block';
     }
   }
+  function calculateComparison() {
+    const checkedBoxes = document.querySelectorAll('.hotel-check:checked');
+    const countBadge = document.getElementById('selected-count');
+    const tbody = document.getElementById('dynamic-tbody');
+    const recBox = document.getElementById('best-recommend-box');
+    
+    countBadge.textContent = '已勾選 ' + checkedBoxes.length + ' 項';
+    tbody.innerHTML = '';
+    
+    if (checkedBoxes.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:#9ca3af; padding:20px;">請至少勾選一項住宿進行比較</td></tr>';
+      recBox.innerHTML = '請在上方勾選想比較的住宿方案。';
+      return;
+    }
+    
+    let selectedData = [];
+    checkedBoxes.forEach(cb => {
+      const card = cb.closest('.hotel-item-card');
+      selectedData.push({
+        id: card.dataset.id,
+        name: card.dataset.name,
+        area: card.dataset.area,
+        price: parseInt(card.dataset.price),
+        transit: parseInt(card.dataset.transit),
+        total: parseInt(card.dataset.total),
+        wakeup: card.dataset.wakeup,
+        cp: parseFloat(card.dataset.cp),
+        type: card.dataset.type
+      });
+    });
+    
+    // Sort by CP score descending
+    selectedData.sort((a, b) => b.cp - a.cp);
+    
+    selectedData.forEach((item, index) => {
+      const tr = document.createElement('tr');
+      const isTop = index === 0;
+      tr.innerHTML = `
+        <td><strong>${item.name}</strong> ${isTop ? '<span style="color:#d97706;">★首選</span>' : ''}</td>
+        <td>${item.area}</td>
+        <td>NT$ ${item.price.toLocaleString()}</td>
+        <td>NT$ ${item.transit.toLocaleString()}</td>
+        <td><strong style="color:${isTop ? '#b45309' : '#1c1917'};">NT$ ${item.total.toLocaleString()}</strong></td>
+        <td>${item.wakeup}</td>
+        <td><span style="font-weight:800; color:${item.cp >= 9.0 ? '#047857' : '#d97706'};">${item.cp} / 10</span></td>
+      `;
+      tbody.appendChild(tr);
+    });
+    
+    const topItem = selectedData[0];
+    recBox.innerHTML = `
+      <strong>🏆 目前勾選中性價比第一名：【${topItem.name}】（評分 ${topItem.cp} / 10）</strong><br>
+      總花費約 <strong>NT$ ${topItem.total.toLocaleString()} 元</strong>（含交通），起床時間 <strong>${topItem.wakeup}</strong>。從容省力、完全不耽誤隔天早上 06:30 機場集合！
+    `;
+  }
+
+  // Run once on load
+  document.addEventListener('DOMContentLoaded', calculateComparison);
 </script>
 
 </body>
