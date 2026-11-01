@@ -623,116 +623,164 @@
     </div>
   </div>
 
-  <!-- SECTION 2: DAY 4 PLANS -->
+    <!-- SECTION 2: DAY 4 PLANS (SEPARATED & ENLARGED) -->
   <div id="sec-plans" class="section-card">
     <div class="section-header">
-      <h2><span>📊</span> Day 4 自由活動雙方案深度對決</h2>
-      <span class="pyramid-badge">自主探索</span>
+      <h2><span>📊</span> Day 4 自由活動獨立大圖專區</h2>
+      <span class="pyramid-badge">清晰放大版</span>
     </div>
 
-    <div class="plan-switcher">
-      <button class="plan-switch-btn active" onclick="switchPlan('subplan-a', this)">🏯 Plan A 歷史文化商街（最推）</button>
-      <button class="plan-switch-btn" onclick="switchPlan('subplan-b', this)">🦈 Plan B 港灣海景溫泉</button>
+    <!-- VIEW TOGGLE BUTTONS -->
+    <div class="plan-switcher" style="margin-bottom: 20px;">
+      <button class="plan-switch-btn active" onclick="filterPlans('all', this)" style="font-size:14px; padding:10px 14px;">🌟 全部顯示（分開並列）</button>
+      <button class="plan-switch-btn" onclick="filterPlans('plan-a-block', this)" style="font-size:14px; padding:10px 14px;">🏯 只看 Plan A 歷史商街</button>
+      <button class="plan-switch-btn" onclick="filterPlans('plan-b-block', this)" style="font-size:14px; padding:10px 14px;">🦈 只看 Plan B 港灣海景</button>
     </div>
 
-    <!-- PLAN A SUB -->
-    <div id="subplan-a">
-      <div class="success-callout">
-        <strong>👍 Plan A 亮點：</strong>動線最順、全在室內與拱頂商店街（不怕雨天低溫），下午 16:30 即可直奔難波/梅田大買電器，節奏最從容！
+    <!-- ==================== PLAN A CONTAINER ==================== -->
+    <div id="plan-a-block" style="margin-bottom: 35px; border: 2px solid var(--gold-500); border-radius: var(--radius-lg); padding: 20px 16px; background: #ffffff; box-shadow: 0 4px 18px rgba(217, 119, 6, 0.1);">
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 2px solid var(--gold-300); padding-bottom: 12px; margin-bottom: 16px;">
+        <div>
+          <span style="background:var(--gold-100); color:var(--gold-800); font-weight:800; font-size:12px; padding:3px 10px; border-radius:4px; border:1px solid var(--gold-300);">方案 A • 獨立專屬動線</span>
+          <h3 style="font-size:22px; font-weight:900; color:var(--stone-dark); margin-top:6px;">🏯 Plan A：歷史文化與下町商街線</h3>
+        </div>
+        <span style="font-size:13px; font-weight:800; color:var(--nile-emerald); background:var(--nile-light); padding:4px 10px; border-radius:999px;">👑 綜合推薦首選</span>
       </div>
-      <div class="timeline-flow">
-        <div class="timeline-node">
-          <div class="node-time">09:30 - 11:30</div>
-          <div class="node-body">
-            <h4>大阪城天守閣 ＆ 大阪城公園</h4>
-            <p>登天守閣俯瞰大阪全景，護城河與石垣古蹟（地鐵森之宮/谷町四丁目站）。</p>
-          </div>
-        </div>
-        <div class="timeline-node">
-          <div class="node-time">11:30 - 12:45</div>
-          <div class="node-body">
-            <h4>大阪歷史博物館</h4>
-            <p>谷町四丁目 9 號出口直達，冷氣舒適、古大阪奈良時代至近代實景復原。</p>
-          </div>
-        </div>
-        <div class="timeline-node">
-          <div class="node-time">13:00 - 14:30</div>
-          <div class="node-body">
-            <h4>大阪生活今昔館（くらしの今昔館）</h4>
-            <p>谷町線搭至「天神橋筋六丁目站」直結，8 樓室內江戶街道造景體驗。</p>
-          </div>
-        </div>
-        <div class="timeline-node">
-          <div class="node-time">14:30 - 16:30</div>
-          <div class="node-body">
-            <h4>天神橋筋商店街（日本最長 2.6 km）</h4>
-            <p>全覆蓋拱頂雨棚免日曬雨淋！在地平價小吃、壽司、可樂餅與藥妝。</p>
-          </div>
-        </div>
-        <div class="timeline-node" style="border-left: 4px solid var(--gold-600); background:#fff;">
-          <div class="node-time" style="background:var(--gold-600); color:#fff;">17:00 - 19:30</div>
-          <div class="node-body">
-            <h4>🔌 電器大採購：Bic Camera 難波 / 梅田 Yodobashi</h4>
-            <p><strong>採買黃金檔</strong>：吹風機、電鍋、相機、刮鬍刀，買完先放回飯店再吃晚餐！</p>
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <!-- PLAN B SUB -->
-    <div id="subplan-b" style="display:none;">
-      <div class="tip-box" style="background:#fffbeb; border-color:#fcd34d; color:#92400e;">
-        <strong>💡 Plan B 亮點與提醒：</strong>視覺衝擊大（看巨型鯨鯊＋出海遊船＋露天溫泉放鬆），但海風大、跨區轉乘多；傍晚已打烊的黑門市場請直接略過！
+      <div class="success-callout" style="font-size:14px; line-height:1.6; margin-bottom:18px;">
+        <strong>⭐ 為什麼 Plan A 最好走？</strong><br>
+        動線同線直結、絕不走回頭路！除大阪城戶外散步外，其餘全在室內展館與拱頂避雨商店街（不怕 11 月底低溫海風），且<strong>下午 16:30 即可直奔難波/梅田大買電器</strong>，時間最充裕從容！
       </div>
-      <div class="timeline-flow">
-        <div class="timeline-node">
-          <div class="node-time">09:30 - 12:00</div>
+
+      <!-- Plan A Large Timeline Nodes -->
+      <div class="timeline-flow" style="gap: 14px;">
+        <div class="timeline-node" style="padding: 16px; background: var(--sand-50); border-left: 6px solid var(--gold-600);">
+          <div class="node-time" style="font-size:13px; padding:4px 10px; background:var(--gold-100); color:var(--gold-800);">09:30 - 11:30</div>
           <div class="node-body">
-            <h4>海遊館（世界級大型水族館）</h4>
-            <p>超震撼 9 米巨大水槽看鯨鯊悠游、企鵝海豹，視覺效果極強。</p>
+            <h4 style="font-size:17px;">1. 大阪城天守閣 ＆ 大阪城公園</h4>
+            <p style="font-size:13.5px; margin-top:4px;">登天守閣俯瞰大阪全景，欣賞護城河巨石垣與古城建築群，秋景散策最美。</p>
+            <div style="margin-top:6px; font-size:12.5px; color:#0284c7; font-weight:700;">🚇 轉乘：步行至谷町四丁目站（中央線 2 分鐘）</div>
           </div>
         </div>
-        <div class="timeline-node">
-          <div class="node-time">12:15 - 13:30</div>
+
+        <div class="timeline-node" style="padding: 16px; background: var(--sand-50); border-left: 6px solid var(--gold-600);">
+          <div class="node-time" style="font-size:13px; padding:4px 10px; background:var(--gold-100); color:var(--gold-800);">11:30 - 12:45</div>
           <div class="node-body">
-            <h4>天保山觀光船「聖瑪利亞號」+ 午餐</h4>
-            <p>仿哥倫布旗艦雙桅帆船出海巡航 45 分鐘，飽覽大阪港海景。</p>
+            <h4 style="font-size:17px;">2. 大阪歷史博物館</h4>
+            <p style="font-size:13.5px; margin-top:4px;">谷町四丁目站 9 號出口直達！冷氣舒適、古大阪奈良時代至近代街景實體等比例復原。</p>
+            <div style="margin-top:6px; font-size:12.5px; color:#0284c7; font-weight:700;">🚇 轉乘：谷町四丁目 ➔ 天神橋筋六丁目（谷町線直達 8 分鐘）</div>
           </div>
         </div>
-        <div class="timeline-node">
-          <div class="node-time">14:00 - 15:30</div>
+
+        <div class="timeline-node" style="padding: 16px; background: var(--sand-50); border-left: 6px solid var(--gold-600);">
+          <div class="node-time" style="font-size:13px; padding:4px 10px; background:var(--gold-100); color:var(--gold-800);">13:00 - 14:30</div>
           <div class="node-body">
-            <h4>咲州宇宙展望台（大阪府咲洲廳舍）</h4>
-            <p>西日本頂級高空景觀，360 度俯瞰大阪灣與明石海峽大橋日落。</p>
+            <h4 style="font-size:17px;">3. 大阪生活今昔館（くらしの今昔館）</h4>
+            <p style="font-size:13.5px; margin-top:4px;">車站直結大樓 8 樓！室內江戶時代老街實景造景，日夜燈光投影體驗昔日庶民日常。</p>
+            <div style="margin-top:6px; font-size:12.5px; color:#0284c7; font-weight:700;">🚶 轉乘：出館直結天神橋筋商店街</div>
           </div>
         </div>
-        <div class="timeline-node">
-          <div class="node-time">16:00 - 17:45</div>
+
+        <div class="timeline-node" style="padding: 16px; background: var(--sand-50); border-left: 6px solid var(--gold-600);">
+          <div class="node-time" style="font-size:13px; padding:4px 10px; background:var(--gold-100); color:var(--gold-800);">14:30 - 16:30</div>
           <div class="node-body">
-            <h4>天然露天溫泉住之江</h4>
-            <p>森林庭園露天風呂、三溫暖，徹底洗去前三天跟團健行疲憊！</p>
+            <h4 style="font-size:17px;">4. 天神橋筋商店街（日本最長 2.6 公里）</h4>
+            <p style="font-size:13.5px; margin-top:4px;">全覆蓋拱頂雨棚免日曬雨淋！在地平價小吃（可樂餅、春駒壽司、章魚燒）與藥妝採買。</p>
+            <div style="margin-top:6px; font-size:12.5px; color:#0284c7; font-weight:700;">🚇 轉乘：堺筋線直達日本橋/難波，或谷町線到東梅田</div>
           </div>
         </div>
-        <div class="timeline-node" style="border-left: 4px solid var(--gold-600); background:#fff;">
-          <div class="node-time" style="background:var(--gold-600); color:#fff;">18:15 - 20:30</div>
+
+        <div class="timeline-node" style="padding: 16px; background: #fffbeb; border: 2px solid var(--gold-500); border-left: 6px solid #b45309;">
+          <div class="node-time" style="font-size:13px; padding:4px 10px; background:var(--gold-600); color:#fff;">17:00 - 19:30</div>
           <div class="node-body">
-            <h4>難波電器街 + 通天閣夜景串炸</h4>
-            <p><strong>EDION / Bic Camera 難波店採買</strong>，順道造訪通天閣吃道地炸串。</p>
+            <h4 style="font-size:17px; color:#b45309;">5. 購物黃金檔：Bic Camera 難波 / 梅田 Yodobashi</h4>
+            <p style="font-size:13.5px; color:#44403c; margin-top:4px;"><strong>電器大採購</strong>：吹風機、象印電鍋、相機、刮鬍刀，免稅 10% + 折 7%！買完直接提回心齋橋飯店放好，輕裝出門吃晚餐！</p>
           </div>
         </div>
       </div>
+
+      <!-- Plan A Dedicated Large Image -->
+      <div style="margin-top:20px; text-align:center;">
+        <h5 style="font-size:14px; font-weight:800; color:var(--stone-muted); margin-bottom:8px;">▼ Plan A 專屬高清清晰大圖（點擊可原圖放大）</h5>
+        <a href="images/Plan_A_歷史文化線_詳圖.png" target="_blank">
+          <img src="images/Plan_A_歷史文化線_詳圖.png" class="img-responsive" style="max-width:100%; border:2px solid var(--gold-300); border-radius:12px; box-shadow:0 6px 16px rgba(0,0,0,0.08);" alt="Plan A 專屬清晰大圖">
+        </a>
+      </div>
     </div>
 
-    <!-- FULL INFOGRAPHIC IMAGE EMBED -->
-    <div style="margin-top:20px; text-align:center;">
-      <a href="images/PlanA_vs_PlanB_比較圖.png" target="_blank">
-        <img src="images/PlanA_vs_PlanB_比較圖.png" class="img-responsive" alt="Plan A vs Plan B 全方位決策圖">
-      </a>
-      <p style="font-size:12px; color:var(--stone-muted);">▲ 點擊可放大檢視高解析度決策圖鑑</p>
-    </div>
-  </div>
 
-  <!-- SECTION 3: ITINERARY -->
+    <!-- ==================== PLAN B CONTAINER ==================== -->
+    <div id="plan-b-block" style="margin-bottom: 30px; border: 2px solid #be123c; border-radius: var(--radius-lg); padding: 20px 16px; background: #ffffff; box-shadow: 0 4px 18px rgba(190, 18, 60, 0.1);">
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 2px solid #fecdd3; padding-bottom: 12px; margin-bottom: 16px;">
+        <div>
+          <span style="background:#ffe4e6; color:#9f1239; font-weight:800; font-size:12px; padding:3px 10px; border-radius:4px; border:1px solid #fecdd3;">方案 B • 獨立專屬動線</span>
+          <h3 style="font-size:22px; font-weight:900; color:var(--stone-dark); margin-top:6px;">🦈 Plan B：港灣海景・日落溫泉線</h3>
+        </div>
+        <span style="font-size:13px; font-weight:800; color:#9f1239; background:#ffe4e6; padding:4px 10px; border-radius:999px;">🌊 景觀反差最大</span>
+      </div>
+
+      <div class="danger-callout" style="background:#fff1f2; border-color:#fecdd3; color:#881337; font-size:14px; line-height:1.6; margin-bottom:18px;">
+        <strong>💡 Plan B 特色與重要提醒：</strong><br>
+        風景與前三天的京都寺廟截然不同（看巨型鯨鯊＋出海帆船＋露天溫泉放鬆），但 11 月底海風偏強需穿厚外套；<strong>原簡報中的黑門市場下午 17:00 陸續收攤，請略過直接去難波電器街！</strong>
+      </div>
+
+      <!-- Plan B Large Timeline Nodes -->
+      <div class="timeline-flow" style="gap: 14px;">
+        <div class="timeline-node" style="padding: 16px; background: #fff1f2; border-left: 6px solid #be123c;">
+          <div class="node-time" style="font-size:13px; padding:4px 10px; background:#ffe4e6; color:#9f1239;">09:30 - 12:00</div>
+          <div class="node-body">
+            <h4 style="font-size:17px;">1. 海遊館（世界級大型水族館）</h4>
+            <p style="font-size:13.5px; margin-top:4px;">超震撼 9 米巨大水槽近距離看鯨鯊悠游、企鵝海豹，視覺療癒效果極強。</p>
+            <div style="margin-top:6px; font-size:12.5px; color:#be123c; font-weight:700;">🚶 轉乘：步行 2 分鐘至天保山購物中心與碼頭</div>
+          </div>
+        </div>
+
+        <div class="timeline-node" style="padding: 16px; background: #fff1f2; border-left: 6px solid #be123c;">
+          <div class="node-time" style="font-size:13px; padding:4px 10px; background:#ffe4e6; color:#9f1239;">12:15 - 13:30</div>
+          <div class="node-body">
+            <h4 style="font-size:17px;">2. 天保山觀光船「聖瑪利亞號」+ 午餐</h4>
+            <p style="font-size:13.5px; margin-top:4px;">搭乘仿哥倫布旗艦雙桅帆船出海巡航 45 分鐘，飽覽大阪港海景與跨海大橋。</p>
+            <div style="margin-top:6px; font-size:12.5px; color:#be123c; font-weight:700;">🚇 轉乘：大阪港 ➔ 宇宙廣場（中央線 3 分鐘）</div>
+          </div>
+        </div>
+
+        <div class="timeline-node" style="padding: 16px; background: #fff1f2; border-left: 6px solid #be123c;">
+          <div class="node-time" style="font-size:13px; padding:4px 10px; background:#ffe4e6; color:#9f1239;">14:00 - 15:30</div>
+          <div class="node-body">
+            <h4 style="font-size:17px;">3. 咲州宇宙展望台（大阪府咲洲廳舍）</h4>
+            <p style="font-size:13.5px; margin-top:4px;">西日本頂級高空景觀，360 度玻璃帷幕俯瞰大阪灣與明石海峽大橋日落。</p>
+            <div style="margin-top:6px; font-size:12.5px; color:#be123c; font-weight:700;">🚇 轉乘：貿易中心前 ➔ 住之江公園（南港港城線 16 分鐘）</div>
+          </div>
+        </div>
+
+        <div class="timeline-node" style="padding: 16px; background: #fff1f2; border-left: 6px solid #be123c;">
+          <div class="node-time" style="font-size:13px; padding:4px 10px; background:#ffe4e6; color:#9f1239;">16:00 - 17:45</div>
+          <div class="node-body">
+            <h4 style="font-size:17px;">4. 天然露天溫泉住之江</h4>
+            <p style="font-size:13.5px; margin-top:4px;">森林庭園露天風呂、壺湯、三溫暖，徹底洗去前三天跟團健行積累的疲憊！</p>
+            <div style="margin-top:6px; font-size:12.5px; color:#be123c; font-weight:700;">🚇 轉乘：住之江公園 ➔ 難波（四橋線 12 分鐘直達）</div>
+          </div>
+        </div>
+
+        <div class="timeline-node" style="padding: 16px; background: #fffbeb; border: 2px solid var(--gold-500); border-left: 6px solid #b45309;">
+          <div class="node-time" style="font-size:13px; padding:4px 10px; background:#b45309; color:#fff;">18:15 - 20:30</div>
+          <div class="node-body">
+            <h4 style="font-size:17px; color:#b45309;">5. 難波電器街 + 新世界通天閣夜景串炸</h4>
+            <p style="font-size:13.5px; color:#44403c; margin-top:4px;"><strong>EDION / Bic Camera 難波店採買</strong>，順道造訪通天閣巨型看板吃道地炸串。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Plan B Dedicated Large Image -->
+      <div style="margin-top:20px; text-align:center;">
+        <h5 style="font-size:14px; font-weight:800; color:var(--stone-muted); margin-bottom:8px;">▼ Plan B 專屬高清清晰大圖（點擊可原圖放大）</h5>
+        <a href="images/Plan_B_港灣海景線_詳圖.png" target="_blank">
+          <img src="images/Plan_B_港灣海景線_詳圖.png" class="img-responsive" style="max-width:100%; border:2px solid #fecdd3; border-radius:12px; box-shadow:0 6px 16px rgba(0,0,0,0.08);" alt="Plan B 專屬清晰大圖">
+        </a>
+      </div>
+    </div>
+
+  </div><!-- SECTION 3: ITINERARY -->
   <div id="sec-itinerary" class="section-card">
     <div class="section-header">
       <h2><span>🗺️</span> 盛欣網絡 2026 大阪五日官方行程</h2>
@@ -878,13 +926,23 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  function switchPlan(subId, btn) {
-    document.getElementById('subplan-a').style.display = 'none';
-    document.getElementById('subplan-b').style.display = 'none';
+  function filterPlans(mode, btn) {
     document.querySelectorAll('.plan-switch-btn').forEach(el => el.classList.remove('active'));
-    
-    document.getElementById(subId).style.display = 'block';
     btn.classList.add('active');
+    
+    const blockA = document.getElementById('plan-a-block');
+    const blockB = document.getElementById('plan-b-block');
+    
+    if (mode === 'all') {
+      blockA.style.display = 'block';
+      blockB.style.display = 'block';
+    } else if (mode === 'plan-a-block') {
+      blockA.style.display = 'block';
+      blockB.style.display = 'none';
+    } else if (mode === 'plan-b-block') {
+      blockA.style.display = 'none';
+      blockB.style.display = 'block';
+    }
   }
 </script>
 
