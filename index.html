@@ -3,6 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="description" content="盛欣網絡科技有限公司 2026 大阪五日員工旅遊全攻略 ｜ 行前交通宿點決策、Day 4 自由活動 Plan A vs B、全品類台日價差省錢全鑑、即時匯率換算">
+<meta property="og:title" content="盛欣網絡科技 2026 大阪五日員旅全攻略 ｜ 隨身指南">
+<meta property="og:description" content="航班 AK170/AK171、前晚巨蛋御宿住宿精算、Day 4 自由行大圖、台日必買價差排行榜">
+<meta property="og:image" content="https://howardliao.github.io/SX-Osaka-Trip-2026/images/PlanA_vs_PlanB_%E6%AF%94%E8%BC%83%E5%9C%96.png">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://howardliao.github.io/SX-Osaka-Trip-2026/">
 <title>盛欣網絡科技 2026 大阪五日員旅全攻略 ｜ 行前交通與自由活動手冊</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -581,6 +587,7 @@
     <button class="cat-btn" onclick="showTab('sec-itinerary', 2)">🗺️ 官方五日行程</button>
     <button class="cat-btn" onclick="showTab('sec-electronics', 3)">🛒 日本必買全品類省錢全鑑</button>
     <button class="cat-btn" onclick="showTab('sec-tools', 4)">📱 必備工具與 App</button>
+    <button class="cat-btn" onclick="showTab('sec-weather', 5)">❄️ 氣溫穿著 ＆ 必備清單</button>
   </div>
 
     <!-- SECTION 1: TRANSPORT & HOTELS (INTERACTIVE COMPARATOR) -->
@@ -1181,6 +1188,35 @@
       <span class="pyramid-badge">省錢排行榜</span>
     </div>
 
+        <!-- LIVE CURRENCY CALCULATOR (REAL-TIME JPY -> TWD) -->
+    <div style="background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border: 2px solid var(--gold-500); border-radius: 14px; padding: 18px; margin-bottom: 22px; box-shadow: 0 4px 14px rgba(180,83,9,0.12);">
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 1px solid var(--gold-300); padding-bottom: 8px; margin-bottom: 12px;">
+        <h3 style="font-size:16.5px; font-weight:900; color:#92400e; display:flex; align-items:center; gap:6px;">
+          <span>🧮</span> 現場購物即時換算機（日幣 ➔ 台幣）
+        </h3>
+        <span style="font-size:11px; font-weight:800; background:var(--gold-600); color:#fff; padding:2px 8px; border-radius:4px;">現場血拼必備</span>
+      </div>
+      <p style="font-size:12.5px; color:#78350f; margin-bottom:12px;">
+        在 Bic Camera 或藥妝店看到日幣標價？輸入未稅或含稅日幣金額，一鍵自動扣除 <strong>免稅 10% 與 7% 折價券</strong>，秒算折合台幣實付金額！
+      </p>
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; align-items:center;">
+        <div>
+          <label style="font-size:11.5px; font-weight:800; color:var(--stone-muted); display:block; margin-bottom:4px;">輸入商品日幣標價 (JPY ¥)：</label>
+          <input type="number" id="calc-jpy" placeholder="例如: 35000" oninput="calcTwd()" style="width:100%; padding:10px 12px; font-size:16px; font-weight:800; border:2px solid var(--gold-400); border-radius:8px; outline:none; background:#ffffff; color:#1c1917;">
+        </div>
+        <div>
+          <label style="font-size:11.5px; font-weight:800; color:var(--stone-muted); display:block; margin-bottom:4px;">退稅折算實付台幣 (TWD NT$)：</label>
+          <div id="calc-twd-result" style="width:100%; padding:10px 12px; font-size:17px; font-weight:900; border:2px solid var(--nile-emerald); border-radius:8px; background:#ecfdf5; color:#065f46; text-align:center;">
+            NT$ 0
+          </div>
+        </div>
+      </div>
+      <div style="display:flex; justify-content:space-between; font-size:11.5px; color:#92400e; margin-top:10px;">
+        <span>基準匯率：1 JPY ≈ 0.21 TWD</span>
+        <span>計算公式：JPY × 0.90(免稅) × 0.93(券) × 0.21</span>
+      </div>
+    </div>
+
     <!-- STRATEGIC SHOPPING TIMING CALLOUT -->
     <div style="background:#ffffff; border:2px solid var(--gold-600); border-radius:14px; padding:18px; margin-bottom:20px; box-shadow:0 4px 16px rgba(217,119,6,0.12);">
       <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--sand-300); padding-bottom:8px; margin-bottom:12px;">
@@ -1468,7 +1504,49 @@
 
   </div>
 
-<!-- SECTION 5: TOOLS -->
+  <!-- SECTION 6: WEATHER, PACKING & CUSTOMS CHECKLIST -->
+  <div id="sec-weather" class="section-card">
+    <div class="section-header">
+      <h2><span>❄️</span> 11 月底關西氣溫穿著 ＆ 出國必帶清單</h2>
+      <span class="pyramid-badge">行前必讀</span>
+    </div>
+
+    <!-- WEATHER ADVICE -->
+    <div style="background:#f0f9ff; border:1px solid #bae6fd; border-left:5px solid #0284c7; border-radius:10px; padding:14px; margin-bottom:18px;">
+      <h4 style="font-size:15px; font-weight:900; color:#0369a1; margin-bottom:6px;">🌡️ 11/25 - 11/29 關西氣候與體感分析：</h4>
+      <p style="font-size:13px; color:#0c4a6e; line-height:1.6;">
+        • <strong>京都／山區海邊（伊根舟屋、天橋立、美山町）</strong>：氣溫約 <strong>5°C ～ 13°C</strong>。伊根灣搭船與天橋立山頂海風刺骨，體感逼近 0~3°C！<strong>務必攜帶防風保暖連帽厚外套、圍巾、手套與暖暖包</strong>。<br>
+        • <strong>大阪市區（心齋橋、難波）</strong>：氣溫約 <strong>9°C ～ 16°C</strong>。早晚偏冷、白天室內與地鐵車廂暖氣強勁，<strong>強烈建議「洋蔥式穿法」</strong>（發熱衣 + 易穿脫中層 + 防風防寒大衣），方便穿脫。
+      </p>
+    </div>
+
+    <!-- PACKING CHECKLIST -->
+    <div style="background:#ffffff; border:1px solid var(--stone-border); border-radius:12px; padding:16px; margin-bottom:18px;">
+      <h4 style="font-size:15px; font-weight:900; color:var(--stone-dark); margin-bottom:12px;">🎒 出國必帶重要物品清單（出發前打勾核對）：</h4>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:10px; font-size:13px; color:var(--stone-text);">
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" style="width:17px; height:17px; accent-color:#d97706;"> 護照正本（效期需在6個月以上）</label>
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" style="width:17px; height:17px; accent-color:#d97706;"> 台灣身分證（隨身備查）</label>
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" style="width:17px; height:17px; accent-color:#d97706;"> Visit Japan Web 入境截圖</label>
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" style="width:17px; height:17px; accent-color:#d97706;"> 日幣現金（約3~5萬円備用）</label>
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" style="width:17px; height:17px; accent-color:#d97706;"> 海外高回饋信用卡（JCB/富邦J卡等）</label>
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" style="width:17px; height:17px; accent-color:#d97706;"> 日本上網卡 / eSIM 或漫遊</label>
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" style="width:17px; height:17px; accent-color:#d97706;"> 行動電源（<strong style="color:#b91c1c;">限手提上機，嚴禁托運</strong>）</label>
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" style="width:17px; height:17px; accent-color:#d97706;"> 舒適好走的運動球鞋（每日萬步）</label>
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" style="width:17px; height:17px; accent-color:#d97706;"> 防風保暖外套、發熱衣、暖暖包</label>
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" style="width:17px; height:17px; accent-color:#d97706;"> 個人常備用藥、保濕乳液/護唇膏</label>
+      </div>
+    </div>
+
+    <!-- CUSTOMS LIMITS -->
+    <div style="background:#fffbeb; border:1px solid #fcd34d; border-radius:12px; padding:14px; font-size:12.5px; color:#78350f; line-height:1.6;">
+      <strong>⚠️ 台灣海關入境免稅與攜帶上限法規提示：</strong><br>
+      • <strong>非處方西藥（如合利他命、若元錠）</strong>：每種最多 <strong>12 瓶（盒）</strong>，合計不超過 <strong>36 瓶（盒）</strong>。<br>
+      • <strong>酒類免稅額度</strong>：年滿 18 歲每人可攜帶 <strong>免稅酒類 1 公升（1,000ml）</strong>（威士忌一瓶多為 700ml）。<br>
+      • <strong>肉類製品嚴禁攜帶</strong>：任何含豬肉、牛肉成分之生熟肉、香腸、肉乾、含肉泡麵<strong>嚴禁帶回台灣（違者重罰 20 萬元起）</strong>！
+    </div>
+  </div>
+
+  <!-- SECTION 5: TOOLS -->
   <div id="sec-tools" class="section-card">
     <div class="section-header">
       <h2><span>📱</span> 日本自由行必備實用 App</h2>
@@ -1610,9 +1688,40 @@
     `;
   }
 
+  
+  // Live Currency Converter
+  function calcTwd() {
+    const jpyInput = document.getElementById('calc-jpy');
+    const twdResult = document.getElementById('calc-twd-result');
+    const jpy = parseFloat(jpyInput.value);
+    
+    if (isNaN(jpy) || jpy <= 0) {
+      twdResult.textContent = 'NT$ 0';
+      return;
+    }
+    // Formula: JPY * 0.90 (Tax-free 10%) * 0.93 (Coupon 7%) * 0.21 (rate)
+    const finalTwd = Math.round(jpy * 0.90 * 0.93 * 0.21);
+    twdResult.textContent = '約 NT$ ' + finalTwd.toLocaleString();
+  }
+
+  // Scroll listener for back to top button
+  window.addEventListener('scroll', function() {
+    const btn = document.getElementById('back-to-top');
+    if (btn) {
+      if (window.scrollY > 300) {
+        btn.style.display = 'flex';
+      } else {
+        btn.style.display = 'none';
+      }
+    }
+  });
+
   // Run once on load
   document.addEventListener('DOMContentLoaded', calculateComparison);
 </script>
+
+<!-- FLOATING BACK TO TOP BUTTON -->
+<button id="back-to-top" onclick="window.scrollTo({top:0, behavior:'smooth'})" style="display:none; position:fixed; bottom:calc(70px + env(safe-area-inset-bottom)); right:16px; z-index:998; width:44px; height:44px; border-radius:50%; background:var(--gold-gradient); color:#ffffff; border:none; box-shadow:0 4px 12px rgba(180,83,9,0.3); font-size:16px; font-weight:900; cursor:pointer; align-items:center; justify-content:center;">▲</button>
 
 </body>
 </html>
