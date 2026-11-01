@@ -2,734 +2,889 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>盛欣網絡科技 2026 大阪五日員旅全攻略 ＆ 交通自由活動手冊</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>盛欣網絡科技 2026 大阪五日員旅全攻略 ｜ 行前交通與自由活動手冊</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Noto+Sans+TC:wght@400;500;600;700;900&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg-primary: #0b0f19;
-    --bg-secondary: #111827;
-    --bg-card: #1f2937;
-    --bg-card-hover: #374151;
-    --text-primary: #f9fafb;
-    --text-secondary: #9ca3af;
-    --text-muted: #6b7280;
-    --accent-amber: #f59e0b;
-    --accent-amber-glow: rgba(245, 158, 11, 0.25);
-    --accent-sky: #38bdf8;
-    --accent-rose: #f43f5e;
-    --accent-emerald: #10b981;
-    --border-subtle: #374151;
-    --border-accent: #f59e0b;
+    /* Egyptian Pharaoh & Pyramid Aesthetic Palette */
+    --sand-50: #fcfaf7;
+    --sand-100: #f7f3ec;
+    --sand-200: #eee7da;
+    --sand-300: #e2d5c0;
+    --gold-100: #fef3c7;
+    --gold-300: #fcd34d;
+    --gold-500: #f59e0b;
+    --gold-600: #d97706;
+    --gold-700: #b45309;
+    --gold-800: #92400e;
+    --gold-gradient: linear-gradient(135deg, #b45309 0%, #d97706 50%, #f59e0b 100%);
+    --pyramid-gold: linear-gradient(180deg, #fef3c7 0%, #fde68a 30%, #d97706 100%);
+    
+    --lapis-blue: #1e3a8a;
+    --lapis-light: #eff6ff;
+    --nile-emerald: #065f46;
+    --nile-light: #ecfdf5;
+    --cinnabar-red: #991b1b;
+    --cinnabar-light: #fef2f2;
+    
+    --stone-dark: #1c1917;
+    --stone-text: #292524;
+    --stone-muted: #57534e;
+    --stone-border: #e7dfd5;
+    
+    --card-bg: #ffffff;
+    --card-shadow: 0 4px 20px -2px rgba(180, 83, 9, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.04);
+    --card-shadow-hover: 0 10px 25px -4px rgba(180, 83, 9, 0.16);
     --radius-sm: 8px;
     --radius-md: 14px;
     --radius-lg: 20px;
-    --shadow-card: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   
   body {
-    background-color: var(--bg-primary);
-    color: var(--text-primary);
-    font-family: 'Plus Jakarta Sans', 'Noto Sans TC', -apple-system, sans-serif;
+    background-color: var(--sand-50);
+    color: var(--stone-text);
+    font-family: 'Noto Sans TC', -apple-system, sans-serif;
     line-height: 1.6;
-    padding-bottom: 60px;
+    padding-bottom: calc(85px + env(safe-area-inset-bottom));
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Sticky Top Bar for Mobile */
+  .top-bar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(252, 250, 247, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 2px solid var(--gold-600);
+    padding: 10px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(180, 83, 9, 0.06);
+  }
+  .top-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .pyramid-logo {
+    width: 24px;
+    height: 24px;
+    background: var(--gold-gradient);
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    box-shadow: 0 2px 6px var(--gold-600);
+  }
+  .top-title {
+    font-weight: 900;
+    font-size: 14px;
+    letter-spacing: -0.2px;
+    color: var(--stone-dark);
+  }
+  .top-action-btn {
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+    background: var(--gold-gradient);
+    border: none;
+    padding: 6px 12px;
+    border-radius: 999px;
+    text-decoration: none;
+    box-shadow: 0 2px 6px rgba(180, 83, 9, 0.25);
+    display: flex;
+    align-items: center;
+    gap: 4px;
   }
 
   .container {
-    max-width: 1140px;
+    max-width: 960px;
     margin: 0 auto;
-    padding: 24px 16px;
+    padding: 16px;
   }
 
-  /* Header */
-  .header-badge {
+  /* Pyramid Header Hero */
+  .hero-card {
+    background: #ffffff;
+    border: 2px solid var(--gold-300);
+    border-radius: var(--radius-lg);
+    padding: 24px 18px;
+    text-align: center;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+  }
+  .hero-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: var(--gold-gradient);
+  }
+  .pyramid-insignia {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    background: linear-gradient(135deg, #f59e0b, #d97706);
-    color: #0b0f19;
+    gap: 8px;
+    font-family: 'Cinzel', serif;
     font-weight: 800;
-    font-size: 12px;
-    padding: 6px 16px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--gold-800);
+    background: var(--gold-100);
+    border: 1px solid var(--gold-300);
+    padding: 4px 14px;
     border-radius: 999px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
     margin-bottom: 12px;
-    box-shadow: 0 4px 12px var(--accent-amber-glow);
-  }
-  
-  .hero {
-    text-align: center;
-    padding: 30px 16px 20px;
-  }
-
-  .hero h1 {
-    font-size: clamp(26px, 4vw, 38px);
-    font-weight: 900;
-    letter-spacing: -0.5px;
-    background: linear-gradient(135deg, #ffffff 40%, #9ca3af 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 10px;
-  }
-
-  .hero p {
-    color: var(--text-secondary);
-    font-size: clamp(14px, 2vw, 16px);
-    max-width: 720px;
-    margin: 0 auto 16px;
-  }
-
-  /* Quick Bento Info */
-  .bento-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 16px;
-    margin-bottom: 30px;
-  }
-
-  .bento-card {
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-md);
-    padding: 18px 20px;
-    box-shadow: var(--shadow-card);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    transition: transform 0.2s, border-color 0.2s;
-  }
-  .bento-card:hover {
-    border-color: var(--accent-amber);
-    transform: translateY(-2px);
-  }
-  .bento-card .label {
-    font-size: 12px;
-    color: var(--text-muted);
-    font-weight: 700;
     text-transform: uppercase;
+  }
+  .hero-card h1 {
+    font-size: clamp(22px, 5.5vw, 30px);
+    font-weight: 900;
+    color: var(--stone-dark);
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+  }
+  .hero-meta {
+    font-size: 13.5px;
+    color: var(--stone-muted);
+    font-weight: 500;
+  }
+  .author-tag {
+    margin-top: 10px;
+    font-size: 11.5px;
+    color: var(--gold-700);
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
     letter-spacing: 0.5px;
-    margin-bottom: 6px;
-  }
-  .bento-card .value {
-    font-size: 18px;
-    font-weight: 800;
-    color: var(--text-primary);
-  }
-  .bento-card .subtext {
-    font-size: 13px;
-    color: var(--accent-amber);
-    margin-top: 4px;
-    font-weight: 600;
   }
 
-  /* Navigation Tabs */
-  .nav-tabs {
+  /* Gold Step Pyramid Metric Cards */
+  .pyramid-metrics {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  @media (min-width: 680px) {
+    .pyramid-metrics { grid-template-columns: repeat(4, 1fr); }
+  }
+  .metric-box {
+    background: #ffffff;
+    border: 1px solid var(--stone-border);
+    border-radius: var(--radius-md);
+    padding: 14px 12px;
+    text-align: center;
+    box-shadow: var(--card-shadow);
+    position: relative;
+    border-top: 3px solid var(--gold-600);
+  }
+  .metric-box .label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--stone-muted);
+    margin-bottom: 4px;
+  }
+  .metric-box .val {
+    font-size: 16px;
+    font-weight: 900;
+    color: var(--stone-dark);
+  }
+  .metric-box .sub {
+    font-size: 11px;
+    color: var(--gold-700);
+    font-weight: 600;
+    margin-top: 2px;
+  }
+
+  /* Segmented Category Filter (Phone friendly horizontal scroll) */
+  .category-scroll {
     display: flex;
     overflow-x: auto;
-    gap: 10px;
-    padding-bottom: 12px;
-    margin-bottom: 24px;
-    border-bottom: 1px solid var(--border-subtle);
+    gap: 8px;
+    padding-bottom: 10px;
+    margin-bottom: 16px;
     scrollbar-width: none;
   }
-  .nav-tabs::-webkit-scrollbar { display: none; }
-  .nav-tab {
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-subtle);
-    color: var(--text-secondary);
-    padding: 10px 18px;
-    border-radius: var(--radius-md);
-    font-size: 14px;
+  .category-scroll::-webkit-scrollbar { display: none; }
+  .cat-btn {
+    flex: 0 0 auto;
+    padding: 9px 15px;
+    font-size: 13.5px;
     font-weight: 700;
-    white-space: nowrap;
+    border-radius: 999px;
+    border: 1px solid var(--stone-border);
+    background: #ffffff;
+    color: var(--stone-muted);
     cursor: pointer;
     transition: all 0.2s;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
   }
-  .nav-tab:hover {
-    color: #fff;
-    border-color: var(--text-muted);
-  }
-  .nav-tab.active {
-    background: var(--accent-amber);
-    color: #0b0f19;
-    border-color: var(--accent-amber);
-    box-shadow: 0 4px 14px var(--accent-amber-glow);
-  }
-
-  /* Tab Sections */
-  .tab-pane {
-    display: none;
-    animation: fadeIn 0.3s ease;
-  }
-  .tab-pane.active {
-    display: block;
-  }
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(6px); }
-    to { opacity: 1; transform: translateY(0); }
+  .cat-btn.active {
+    background: var(--gold-gradient);
+    color: #ffffff;
+    border-color: var(--gold-600);
+    box-shadow: 0 3px 10px rgba(180, 83, 9, 0.25);
   }
 
   /* Content Cards */
-  .content-card {
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-subtle);
+  .section-card {
+    background: #ffffff;
+    border: 1px solid var(--stone-border);
     border-radius: var(--radius-lg);
-    padding: 24px;
-    margin-bottom: 24px;
-    box-shadow: var(--shadow-card);
+    padding: 20px 16px;
+    margin-bottom: 18px;
+    box-shadow: var(--card-shadow);
+    display: none;
   }
-  .card-title {
-    font-size: 20px;
-    font-weight: 800;
+  .section-card.active { display: block; animation: fadeIn 0.25s ease-out; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-header {
+    border-bottom: 2px solid var(--sand-200);
+    padding-bottom: 12px;
     margin-bottom: 16px;
     display: flex;
     align-items: center;
-    gap: 10px;
-    color: #fff;
+    justify-content: space-between;
   }
-  .card-title span.badge {
-    font-size: 12px;
+  .section-header h2 {
+    font-size: 17px;
+    font-weight: 900;
+    color: var(--stone-dark);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .pyramid-badge {
+    background: var(--gold-100);
+    color: var(--gold-800);
+    border: 1px solid var(--gold-300);
+    font-size: 11px;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  /* Critical Alert */
+  .danger-callout {
+    background: var(--cinnabar-light);
+    border: 1px solid #fecaca;
+    border-left: 5px solid var(--cinnabar-red);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    margin-bottom: 16px;
+    font-size: 13px;
+    color: #7f1d1d;
+    line-height: 1.5;
+  }
+  .danger-callout strong { color: var(--cinnabar-red); }
+
+  .success-callout {
+    background: var(--nile-light);
+    border: 1px solid #a7f3d0;
+    border-left: 5px solid var(--nile-emerald);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    margin-bottom: 16px;
+    font-size: 13px;
+    color: #064e3b;
+    line-height: 1.5;
+  }
+
+  /* Mobile-first Hotel Comparison Cards */
+  .hotel-card {
+    background: var(--sand-50);
+    border: 2px solid var(--stone-border);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    margin-bottom: 14px;
+    position: relative;
+    transition: border-color 0.2s;
+  }
+  .hotel-card.recommended {
+    border-color: var(--gold-600);
+    background: #ffffff;
+    box-shadow: 0 4px 14px rgba(180, 83, 9, 0.1);
+  }
+  .winner-ribbon {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: var(--gold-gradient);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 800;
     padding: 3px 10px;
     border-radius: 999px;
-    background: rgba(245, 158, 11, 0.15);
-    color: var(--accent-amber);
-    border: 1px solid rgba(245, 158, 11, 0.3);
   }
-
-  /* Critical Warning Box */
-  .alert-box {
-    background: rgba(244, 63, 94, 0.1);
-    border: 1px solid rgba(244, 63, 94, 0.3);
-    border-left: 5px solid var(--accent-rose);
-    border-radius: var(--radius-md);
-    padding: 16px;
-    margin-bottom: 20px;
+  .hotel-name {
+    font-size: 16px;
+    font-weight: 900;
+    color: var(--stone-dark);
+    margin-bottom: 4px;
+  }
+  .hotel-price {
     font-size: 14px;
-    color: #fecdd3;
+    font-weight: 800;
+    color: var(--gold-700);
+    margin-bottom: 10px;
   }
-  .alert-box strong { color: #fff; }
-
-  .tip-box {
-    background: rgba(56, 189, 248, 0.1);
-    border: 1px solid rgba(56, 189, 248, 0.3);
-    border-left: 5px solid var(--accent-sky);
-    border-radius: var(--radius-md);
-    padding: 16px;
-    margin-bottom: 20px;
-    font-size: 14px;
-    color: #bae6fd;
-  }
-
-  /* Tables */
-  .table-wrapper {
-    overflow-x: auto;
-    margin-bottom: 16px;
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border-subtle);
-  }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-    text-align: left;
-  }
-  th {
-    background: var(--bg-card);
-    color: var(--text-secondary);
-    padding: 12px 16px;
-    font-weight: 700;
-    border-bottom: 1px solid var(--border-subtle);
-    white-space: nowrap;
-  }
-  td {
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--border-subtle);
-    color: var(--text-primary);
-  }
-  tr:last-child td { border-bottom: none; }
-  tr:hover td { background: rgba(255, 255, 255, 0.02); }
-
-  /* Plan Comparison Grid */
-  .plan-comparison-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    margin-bottom: 24px;
-  }
-  @media (max-width: 840px) {
-    .plan-comparison-grid { grid-template-columns: 1fr; }
-  }
-  .plan-block {
-    background: var(--bg-card);
-    border-radius: var(--radius-md);
-    padding: 20px;
-    border: 1px solid var(--border-subtle);
-  }
-  .plan-block.plan-a { border-top: 4px solid var(--accent-sky); }
-  .plan-block.plan-b { border-top: 4px solid var(--accent-rose); }
-  
-  .step-item {
-    display: flex;
-    gap: 12px;
-    padding: 12px 0;
-    border-bottom: 1px dashed var(--border-subtle);
-  }
-  .step-item:last-child { border-bottom: none; }
-  .step-time {
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--accent-amber);
-    background: rgba(245, 158, 11, 0.1);
-    padding: 4px 8px;
-    border-radius: 6px;
-    height: fit-content;
-    white-space: nowrap;
-  }
-  .step-info h5 {
-    font-size: 14.5px;
-    color: #fff;
-    margin-bottom: 3px;
-  }
-  .step-info p {
+  .hotel-detail-list {
+    list-style: none;
     font-size: 12.5px;
-    color: var(--text-secondary);
+    color: var(--stone-muted);
+    margin-bottom: 12px;
   }
-
-  /* Full Infographic Image Container */
-  .img-showcase {
-    text-align: center;
-    margin: 20px 0;
+  .hotel-detail-list li {
+    padding: 4px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    border-bottom: 1px dashed var(--sand-200);
   }
-  .img-showcase img {
-    max-width: 100%;
-    height: auto;
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border-subtle);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-  }
-
-  /* Buttons */
-  .btn {
-    display: inline-flex;
+  .hotel-detail-list li:last-child { border-bottom: none; }
+  
+  .phone-dial-btn {
+    display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    background: var(--accent-amber);
-    color: #0b0f19;
+    width: 100%;
+    padding: 10px;
+    background: var(--gold-gradient);
+    color: #ffffff;
     font-weight: 800;
-    font-size: 14px;
-    padding: 10px 20px;
-    border-radius: var(--radius-md);
+    font-size: 13.5px;
+    border-radius: var(--radius-sm);
     text-decoration: none;
-    border: none;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .btn:hover {
-    background: #fbbf24;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 14px var(--accent-amber-glow);
-  }
-  .btn-outline {
-    background: transparent;
-    color: var(--text-primary);
-    border: 1px solid var(--border-subtle);
-  }
-  .btn-outline:hover {
-    border-color: var(--accent-amber);
-    color: var(--accent-amber);
-    background: rgba(245, 158, 11, 0.05);
+    box-shadow: 0 2px 8px rgba(180, 83, 9, 0.2);
   }
 
-  /* Floating Action Buttons / Footer */
-  .footer {
-    text-align: center;
+  /* Plan Comparison Switcher on Mobile */
+  .plan-switcher {
+    display: flex;
+    background: var(--sand-100);
+    padding: 4px;
+    border-radius: 999px;
+    margin-bottom: 14px;
+    border: 1px solid var(--sand-300);
+  }
+  .plan-switch-btn {
+    flex: 1;
+    padding: 8px 12px;
     font-size: 13px;
-    color: var(--text-muted);
-    margin-top: 40px;
-    padding-top: 20px;
-    border-top: 1px solid var(--border-subtle);
+    font-weight: 800;
+    border: none;
+    background: transparent;
+    color: var(--stone-muted);
+    border-radius: 999px;
+    cursor: pointer;
+  }
+  .plan-switch-btn.active {
+    background: #ffffff;
+    color: var(--stone-dark);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  }
+
+  .timeline-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .timeline-node {
+    display: flex;
+    gap: 12px;
+    background: var(--sand-50);
+    padding: 12px 14px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--stone-border);
+  }
+  .node-time {
+    font-size: 11.5px;
+    font-weight: 800;
+    color: var(--gold-800);
+    background: var(--gold-100);
+    padding: 3px 6px;
+    border-radius: 4px;
+    height: fit-content;
+    white-space: nowrap;
+  }
+  .node-body h4 {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--stone-dark);
+    margin-bottom: 3px;
+  }
+  .node-body p {
+    font-size: 12px;
+    color: var(--stone-muted);
+  }
+
+  /* Electronics Store Cards */
+  .store-card {
+    background: var(--sand-50);
+    border: 1px solid var(--stone-border);
+    border-radius: var(--radius-md);
+    padding: 14px;
+    margin-bottom: 12px;
+  }
+  .store-card h4 {
+    font-size: 15px;
+    color: var(--stone-dark);
+    margin-bottom: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .store-card .badge-time {
+    font-size: 11px;
+    background: var(--sand-200);
+    color: var(--stone-text);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 700;
+  }
+
+  /* Mobile Bottom Navigation Bar (App Bar) */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 999;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-top: 2px solid var(--gold-600);
+    padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
+    display: flex;
+    justify-content: space-around;
+    box-shadow: 0 -4px 16px rgba(180, 83, 9, 0.08);
+  }
+  .bnav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    color: var(--stone-muted);
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    transition: all 0.15s;
+    flex: 1;
+  }
+  .bnav-icon {
+    font-size: 18px;
+  }
+  .bnav-item.active {
+    color: var(--gold-700);
+  }
+  .bnav-item.active .bnav-icon {
+    transform: scale(1.15);
+  }
+
+  /* Action Buttons */
+  .btn-gold {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: var(--gold-gradient);
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 13.5px;
+    padding: 10px 16px;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    box-shadow: 0 2px 8px rgba(180, 83, 9, 0.2);
+    border: none;
+    width: 100%;
+    margin-top: 10px;
+  }
+  
+  .img-responsive {
+    width: 100%;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--stone-border);
+    margin: 10px 0;
   }
 </style>
 </head>
 <body>
 
+<!-- TOP BAR -->
+<header class="top-bar">
+  <div class="top-brand">
+    <div class="pyramid-logo"></div>
+    <div class="top-title">盛欣網絡 2026 大阪五日行</div>
+  </div>
+  <a href="tel:075552299" class="top-action-btn">📞 直撥御宿訂房</a>
+</header>
+
 <div class="container">
-  
-  <!-- HERO HEADER -->
-  <div class="hero">
-    <div class="header-badge">盛欣網絡科技有限公司 ｜ 2026 員工旅遊</div>
-    <h1>日本大阪五日員旅全攻略</h1>
-    <p>2026/11/25（三）～ 11/29（日）｜ 航班實戰時間軸・行前交通宿點決策・Day 4 自由活動 Plan A vs Plan B 雙方案對決</p>
+
+  <!-- HERO CARD (Egyptian Pyramid Aesthetic) -->
+  <div class="hero-card">
+    <div class="pyramid-insignia">▲ SHENG XIN • OSAKA 2026 ▲</div>
+    <h1>盛欣網絡科技有限公司<br>大阪五日員旅隨身指南</h1>
+    <div class="hero-meta">2026/11/25（三）～ 11/29（日）｜ 航班 AK170 / AK171</div>
+    <div class="author-tag">EXECUTIVE BLUEPRINT • HOWARD LIAO PH.D.</div>
   </div>
 
-  <!-- BENTO STATS -->
-  <div class="bento-grid">
-    <div class="bento-card">
+  <!-- GOLD STEP PYRAMID METRICS -->
+  <div class="pyramid-metrics">
+    <div class="metric-box">
       <div class="label">去程航班</div>
-      <div class="value">亞洲航空 AK170</div>
-      <div class="subtext">高雄 08:30 ➔ 關西 12:40</div>
+      <div class="val">AK170 08:30</div>
+      <div class="sub">高雄 ✈ 關西 12:40</div>
     </div>
-    <div class="bento-card">
-      <div class="label">集合與報到死線</div>
-      <div class="value">06:30 集合 ｜ 07:30 關櫃</div>
-      <div class="subtext">⚠️ 廉航起飛前60分準時鎖櫃</div>
+    <div class="metric-box">
+      <div class="label">集合時間</div>
+      <div class="val">06:30 集合</div>
+      <div class="sub">小港航廈 3F 大廳</div>
     </div>
-    <div class="bento-card">
-      <div class="label">行前前晚落腳首選</div>
-      <div class="value">巨蛋御宿商旅 明華館</div>
-      <div class="subtext">06:05 計程車 22 分直達航廈門口</div>
+    <div class="metric-box">
+      <div class="label">關櫃死線</div>
+      <div class="val">07:30 關櫃</div>
+      <div class="sub">⚠️ 逾時無法登機</div>
     </div>
-    <div class="bento-card">
-      <div class="label">官方行程檔案</div>
-      <div class="value">旅天下五日手冊 PDF</div>
-      <div class="subtext"><a href="docs/20261125盛欣網絡科技有限公司大阪員工旅遊五日-行程.pdf" target="_blank" style="color:var(--accent-amber); text-decoration:underline;">點此下載原始行程單</a></div>
+    <div class="metric-box">
+      <div class="label">宿點冠軍</div>
+      <div class="val">巨蛋御宿明華</div>
+      <div class="sub">06:05 計程車 22分</div>
     </div>
   </div>
 
-  <!-- NAVIGATION TABS -->
-  <div class="nav-tabs">
-    <button class="nav-tab active" onclick="switchTab('tab-transport')">🚄 行前交通與住宿攻略</button>
-    <button class="nav-tab" onclick="switchTab('tab-plans')">📊 Day 4 Plan A vs B 決策圖</button>
-    <button class="nav-tab" onclick="switchTab('tab-itinerary')">🗺️ 公司官方五日行程</button>
-    <button class="nav-tab" onclick="switchTab('tab-electronics')">🔌 大阪必買電器指南</button>
-    <button class="nav-tab" onclick="switchTab('tab-tools')">📱 自由行必備 App</button>
+  <!-- HORIZONTAL CATEGORY SELECTOR -->
+  <div class="category-scroll">
+    <button class="cat-btn active" onclick="showTab('sec-transport', 0)">🚄 交通與前晚住宿</button>
+    <button class="cat-btn" onclick="showTab('sec-plans', 1)">📊 Day 4 自由行對決</button>
+    <button class="cat-btn" onclick="showTab('sec-itinerary', 2)">🗺️ 官方五日行程</button>
+    <button class="cat-btn" onclick="showTab('sec-electronics', 3)">🔌 必買電器攻略</button>
+    <button class="cat-btn" onclick="showTab('sec-tools', 4)">📱 必備工具與 App</button>
   </div>
 
-  <!-- TAB 1: TRANSPORT & HOTEL -->
-  <div id="tab-transport" class="tab-pane active">
-    
-    <div class="alert-box">
-      <strong>🚨 致命時間衝突警告：當天清晨「絕對不可搭高鐵」！</strong><br>
-      台中往高雄（左營）南下每日首班高鐵為 <strong>0583 次（06:25 台中發車 ➔ 07:30 抵達左營）</strong>。<br>
-      首班車 07:30 才抵達左營，而亞洲航空 AK170 也是 <strong>07:30 電腦準時鎖櫃截止報到</strong>！從左營叫計程車到小港機場至少需 25 分鐘（08:00 抵達），<strong>100% 錯過班機！</strong>因此 11/24（二）前一晚必須在高雄過夜。
+  <!-- SECTION 1: TRANSPORT & HOTELS -->
+  <div id="sec-transport" class="section-card active">
+    <div class="section-header">
+      <h2><span>🚄</span> 行前交通與住宿戰略精算</h2>
+      <span class="pyramid-badge">核心決策</span>
     </div>
 
-    <div class="content-card">
-      <div class="card-title">🏨 前一晚（11/24）住宿性價比終極對決 <span class="badge">二選一</span></div>
-      
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th>方案項目</th>
-              <th>方案 A：巨蛋御宿商旅 明華館（👑 綜合性價比冠軍）</th>
-              <th>方案 B：小港橙屋商旅（🥈 預算最低備案）</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>飯店位置</strong></td>
-              <td>鼓山區明華路 257 號（離華人匯辦公室走路 5~8 分鐘）</td>
-              <td>小港區大業北路 300 號（機場旁）</td>
-            </tr>
-            <tr>
-              <td><strong>平日房價</strong></td>
-              <td>約 NT$ 1,300 ～ 1,500 元 / 晚</td>
-              <td>約 NT$ 1,350 ～ 1,550 元 / 晚</td>
-            </tr>
-            <tr>
-              <td><strong>11/24 下班動線</strong></td>
-              <td><span style="color:var(--accent-emerald); font-weight:700;">零折騰！</span> 華人匯下班走路 500 公尺直接進飯店放行李</td>
-              <td>需拖著出國大箱子在凹子底站搭 21 分鐘捷運到小港</td>
-            </tr>
-            <tr>
-              <td><strong>11/25 出發動線</strong></td>
-              <td>05:45 起床，<strong>06:05 門口搭計程車</strong>（22分鐘，車資約 400 元）➔ <strong>06:28 直達航廈門口</strong></td>
-              <td>06:00 起床，<strong>06:20 搭飯店免費專車</strong> 5 分鐘直達航廈門口</td>
-            </tr>
-            <tr>
-              <td><strong>生活機能與夜間</strong></td>
-              <td>漢神巨蛋商圈、瑞豐夜市美食無敵，24H 免費冰品點心</td>
-              <td>周邊為機場住宅區，機能較為單調</td>
-            </tr>
-            <tr>
-              <td><strong>總花費評估</strong></td>
-              <td>約 <strong>NT$ 1,750 元</strong>（含計程車資）</td>
-              <td>約 <strong>NT$ 1,440 元</strong>（省約 300 元）</td>
-            </tr>
-            <tr>
-              <td><strong>訂房專線</strong></td>
-              <td><strong style="color:var(--accent-amber);">07-555-2299</strong>（24H 櫃檯）</td>
-              <td>07-801-2266</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="tip-box">
-        💡 <strong>結論決策：</strong> 兩者僅差約 NT$ 300 元計程車費，強烈推薦選 <strong>【方案 A：巨蛋御宿商旅 明華館】</strong>！下班直接進飯店休息，免去跨區奔波拉行李之苦，出國前一晚睡好睡飽最重要！
-      </div>
+    <div class="danger-callout">
+      <strong>🚨 致命時間衝突：當天清晨「絕對不能搭高鐵」！</strong><br>
+      台中往高雄（左營）南下首班高鐵為 <strong>0583 次（06:25 台中發車 ➔ 07:30 抵達左營）</strong>。<br>
+      首班車 07:30 才抵達左營，而亞洲航空 AK170 也於 <strong>07:30 準時電腦關櫃截止報到</strong>！從左營飆計程車到小港最快需 25 分鐘，抵達已超過 07:55，<strong>100% 錯過班機！</strong>因此 11/24（二）前一晚必須在高雄過夜。
     </div>
 
+    <!-- HOTEL A -->
+    <div class="hotel-card recommended">
+      <div class="winner-ribbon">👑 綜合性價比冠軍</div>
+      <div class="hotel-name">御宿商旅 - 明華館（高雄巨蛋旁）</div>
+      <div class="hotel-price">平日約 NT$ 1,300 ～ 1,500 元 / 晚</div>
+      <ul class="hotel-detail-list">
+        <li><span>📍</span> <strong>位置</strong>：鼓山區明華路 257 號（離華人匯辦公室走路 5~8 分鐘）</li>
+        <li><span>✨</span> <strong>下班動線</strong>：華人匯下班走路 500 公尺直接入住，免大包小包搭捷運奔波！</li>
+        <li><span>🍜</span> <strong>生活機能</strong>：漢神巨蛋商圈、瑞豐夜市美食，大廳 24H 免費冰品包子飲料。</li>
+        <li><span>🚕</span> <strong>隔天送機</strong>：05:45 起床，<strong>06:05 門口搭計程車（車程 22 分鐘，車資約 400 元）➔ 06:28 直達航廈門口</strong>與同仁會合！</li>
+      </ul>
+      <a href="tel:075552299" class="phone-dial-btn">📞 一鍵直撥御宿訂房 (07-555-2299)</a>
+    </div>
+
+    <!-- HOTEL B -->
+    <div class="hotel-card">
+      <div class="hotel-name">橙屋商旅（小港機場旁）</div>
+      <div class="hotel-price">平日約 NT$ 1,350 ～ 1,550 元 / 晚</div>
+      <ul class="hotel-detail-list">
+        <li><span>📍</span> <strong>位置</strong>：小港區大業北路 300 號（機場旁）</li>
+        <li><span>🚐</span> <strong>接駁</strong>：每房含免費機場/捷運接駁專車，06:20 專車 5 分鐘送達航廈。</li>
+        <li><span>⚠️</span> <strong>代價</strong>：11/24 下班後需拖大行李搭 21 分鐘捷運跑到小港，周邊機能較單調。</li>
+      </ul>
+      <a href="tel:078012266" class="phone-dial-btn" style="background:#57534e;">📞 撥打橙屋商旅 (07-801-2266)</a>
+    </div>
   </div>
 
-  <!-- TAB 2: DAY 4 PLANS -->
-  <div id="tab-plans" class="tab-pane">
-    <div class="content-card">
-      <div class="card-title">📊 第 4 天「大阪整日自由活動」全方位決策圖鑑</div>
-      <p style="color:var(--text-secondary); margin-bottom:16px;">前一晚宿大阪市區（心齋橋／難波周邊），兩套經典路線深度評析：</p>
-      
-      <div class="img-showcase">
-        <a href="images/PlanA_vs_PlanB_比較圖.png" target="_blank">
-          <img src="images/PlanA_vs_PlanB_比較圖.png" alt="Plan A vs Plan B 比較圖">
-        </a>
-        <div style="margin-top: 8px; font-size:12px; color:var(--text-muted);">（點擊圖片可放大檢視高解析度原圖）</div>
-      </div>
+  <!-- SECTION 2: DAY 4 PLANS -->
+  <div id="sec-plans" class="section-card">
+    <div class="section-header">
+      <h2><span>📊</span> Day 4 自由活動雙方案深度對決</h2>
+      <span class="pyramid-badge">自主探索</span>
+    </div>
 
-      <div class="plan-comparison-grid">
-        <div class="plan-block plan-a">
-          <h4 style="color:var(--accent-sky); font-size:18px; margin-bottom:12px;">🏯 Plan A：歷史文化與下町商街線</h4>
-          <div class="step-item">
-            <div class="step-time">09:30 - 11:30</div>
-            <div class="step-info">
-              <h5>大阪城天守閣 ＆ 大阪城公園</h5>
-              <p>登天守閣俯瞰大阪全景，欣賞雄偉護城河與石垣古蹟。</p>
-            </div>
-          </div>
-          <div class="step-item">
-            <div class="step-time">11:30 - 12:45</div>
-            <div class="step-info">
-              <h5>大阪歷史博物館</h5>
-              <p>谷町四丁目 9 號出口直達，冷氣舒適、古大阪奈良時代至近代實景復原。</p>
-            </div>
-          </div>
-          <div class="step-item">
-            <div class="step-time">13:00 - 14:30</div>
-            <div class="step-info">
-              <h5>大阪生活今昔館</h5>
-              <p>谷町線搭至「天神橋筋六丁目站」直結，8 樓室內江戶街道造景體驗。</p>
-            </div>
-          </div>
-          <div class="step-item">
-            <div class="step-time">14:30 - 16:30</div>
-            <div class="step-info">
-              <h5>天神橋筋商店街（日本最長 2.6 km）</h5>
-              <p>全覆蓋拱頂雨棚免日曬雨淋！在地平價小吃、壽司、可樂餅與藥妝。</p>
-            </div>
-          </div>
-          <div class="step-item" style="background: rgba(245,158,11,0.08); border-radius:8px; padding:10px;">
-            <div class="step-time" style="background:var(--accent-amber); color:#0b0f19;">17:00 - 19:30</div>
-            <div class="step-info">
-              <h5>🔌 購物黃金檔：Bic Camera 難波 / 梅田 Yodobashi</h5>
-              <p><strong>大採購電器</strong>：吹風機、電鍋、相機，買完輕鬆放回心齋橋飯店！</p>
-            </div>
+    <div class="plan-switcher">
+      <button class="plan-switch-btn active" onclick="switchPlan('subplan-a', this)">🏯 Plan A 歷史文化商街（最推）</button>
+      <button class="plan-switch-btn" onclick="switchPlan('subplan-b', this)">🦈 Plan B 港灣海景溫泉</button>
+    </div>
+
+    <!-- PLAN A SUB -->
+    <div id="subplan-a">
+      <div class="success-callout">
+        <strong>👍 Plan A 亮點：</strong>動線最順、全在室內與拱頂商店街（不怕雨天低溫），下午 16:30 即可直奔難波/梅田大買電器，節奏最從容！
+      </div>
+      <div class="timeline-flow">
+        <div class="timeline-node">
+          <div class="node-time">09:30 - 11:30</div>
+          <div class="node-body">
+            <h4>大阪城天守閣 ＆ 大阪城公園</h4>
+            <p>登天守閣俯瞰大阪全景，護城河與石垣古蹟（地鐵森之宮/谷町四丁目站）。</p>
           </div>
         </div>
-
-        <div class="plan-block plan-b">
-          <h4 style="color:var(--accent-rose); font-size:18px; margin-bottom:12px;">🦈 Plan B：港灣海景・日落溫泉線</h4>
-          <div class="step-item">
-            <div class="step-time">09:30 - 12:00</div>
-            <div class="step-info">
-              <h5>海遊館（世界級大型水族館）</h5>
-              <p>超震撼 9 米巨大水槽看鯨鯊悠游、企鵝海豹，視覺效果極強。</p>
-            </div>
+        <div class="timeline-node">
+          <div class="node-time">11:30 - 12:45</div>
+          <div class="node-body">
+            <h4>大阪歷史博物館</h4>
+            <p>谷町四丁目 9 號出口直達，冷氣舒適、古大阪奈良時代至近代實景復原。</p>
           </div>
-          <div class="step-item">
-            <div class="step-time">12:15 - 13:30</div>
-            <div class="step-info">
-              <h5>天保山觀光船「聖瑪利亞號」+ 午餐</h5>
-              <p>搭乘仿哥倫布旗艦雙桅帆船出海巡航 45 分鐘，飽覽大阪港海景。</p>
-            </div>
+        </div>
+        <div class="timeline-node">
+          <div class="node-time">13:00 - 14:30</div>
+          <div class="node-body">
+            <h4>大阪生活今昔館（くらしの今昔館）</h4>
+            <p>谷町線搭至「天神橋筋六丁目站」直結，8 樓室內江戶街道造景體驗。</p>
           </div>
-          <div class="step-item">
-            <div class="step-time">14:00 - 15:30</div>
-            <div class="step-info">
-              <h5>咲州宇宙展望台（大阪府咲洲廳舍）</h5>
-              <p>西日本頂級高空景觀，360 度俯瞰大阪灣與明石海峽大橋日落。</p>
-            </div>
+        </div>
+        <div class="timeline-node">
+          <div class="node-time">14:30 - 16:30</div>
+          <div class="node-body">
+            <h4>天神橋筋商店街（日本最長 2.6 km）</h4>
+            <p>全覆蓋拱頂雨棚免日曬雨淋！在地平價小吃、壽司、可樂餅與藥妝。</p>
           </div>
-          <div class="step-item">
-            <div class="step-time">16:00 - 17:45</div>
-            <div class="step-info">
-              <h5>天然露天溫泉住之江</h5>
-              <p>森林庭園風呂、壺湯、三溫暖，徹底洗去前三天跟團健行疲憊！</p>
-            </div>
-          </div>
-          <div class="step-item" style="background: rgba(245,158,11,0.08); border-radius:8px; padding:10px;">
-            <div class="step-time" style="background:var(--accent-amber); color:#0b0f19;">18:15 - 20:30</div>
-            <div class="step-info">
-              <h5>🔌 難波電器街 + 新世界通天閣夜景串炸</h5>
-              <p><strong>EDION / Bic Camera 難波採買</strong>，順訪通天閣巨型看板吃炸串。</p>
-            </div>
+        </div>
+        <div class="timeline-node" style="border-left: 4px solid var(--gold-600); background:#fff;">
+          <div class="node-time" style="background:var(--gold-600); color:#fff;">17:00 - 19:30</div>
+          <div class="node-body">
+            <h4>🔌 電器大採購：Bic Camera 難波 / 梅田 Yodobashi</h4>
+            <p><strong>採買黃金檔</strong>：吹風機、電鍋、相機、刮鬍刀，買完先放回飯店再吃晚餐！</p>
           </div>
         </div>
       </div>
+    </div>
 
-      <div class="tip-box">
-        ⭐ <strong>裁決總結：</strong> 如果您重視<strong>「充裕時間買電器、走路平坦、不趕車」</strong>，<strong>Plan A</strong> 是絕對首選！如果您特別嚮往<strong>「看鯨鯊、港灣巡航、露天溫泉泡湯」</strong>，可選 <strong>Plan B</strong>（請剔除下午打烊的黑門市場與四天王寺）。
+    <!-- PLAN B SUB -->
+    <div id="subplan-b" style="display:none;">
+      <div class="tip-box" style="background:#fffbeb; border-color:#fcd34d; color:#92400e;">
+        <strong>💡 Plan B 亮點與提醒：</strong>視覺衝擊大（看巨型鯨鯊＋出海遊船＋露天溫泉放鬆），但海風大、跨區轉乘多；傍晚已打烊的黑門市場請直接略過！
       </div>
+      <div class="timeline-flow">
+        <div class="timeline-node">
+          <div class="node-time">09:30 - 12:00</div>
+          <div class="node-body">
+            <h4>海遊館（世界級大型水族館）</h4>
+            <p>超震撼 9 米巨大水槽看鯨鯊悠游、企鵝海豹，視覺效果極強。</p>
+          </div>
+        </div>
+        <div class="timeline-node">
+          <div class="node-time">12:15 - 13:30</div>
+          <div class="node-body">
+            <h4>天保山觀光船「聖瑪利亞號」+ 午餐</h4>
+            <p>仿哥倫布旗艦雙桅帆船出海巡航 45 分鐘，飽覽大阪港海景。</p>
+          </div>
+        </div>
+        <div class="timeline-node">
+          <div class="node-time">14:00 - 15:30</div>
+          <div class="node-body">
+            <h4>咲州宇宙展望台（大阪府咲洲廳舍）</h4>
+            <p>西日本頂級高空景觀，360 度俯瞰大阪灣與明石海峽大橋日落。</p>
+          </div>
+        </div>
+        <div class="timeline-node">
+          <div class="node-time">16:00 - 17:45</div>
+          <div class="node-body">
+            <h4>天然露天溫泉住之江</h4>
+            <p>森林庭園露天風呂、三溫暖，徹底洗去前三天跟團健行疲憊！</p>
+          </div>
+        </div>
+        <div class="timeline-node" style="border-left: 4px solid var(--gold-600); background:#fff;">
+          <div class="node-time" style="background:var(--gold-600); color:#fff;">18:15 - 20:30</div>
+          <div class="node-body">
+            <h4>難波電器街 + 通天閣夜景串炸</h4>
+            <p><strong>EDION / Bic Camera 難波店採買</strong>，順道造訪通天閣吃道地炸串。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FULL INFOGRAPHIC IMAGE EMBED -->
+    <div style="margin-top:20px; text-align:center;">
+      <a href="images/PlanA_vs_PlanB_比較圖.png" target="_blank">
+        <img src="images/PlanA_vs_PlanB_比較圖.png" class="img-responsive" alt="Plan A vs Plan B 全方位決策圖">
+      </a>
+      <p style="font-size:12px; color:var(--stone-muted);">▲ 點擊可放大檢視高解析度決策圖鑑</p>
     </div>
   </div>
 
-  <!-- TAB 3: COMPANY 5-DAY ITINERARY -->
-  <div id="tab-itinerary" class="tab-pane">
-    <div class="content-card">
-      <div class="card-title">🗺️ 盛欣網絡科技有限公司 大阪五日官方行程表</div>
-      
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th width="12%">天數 / 日期</th>
-              <th width="35%">主要景點與活動內容</th>
-              <th width="28%">餐食安排</th>
-              <th width="25%">住宿飯店</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>第 1 天<br>11/25 (三)</strong></td>
-              <td>高雄小港機場 ✈ 大阪關西海上空港（AK170 08:30-12:40）➔ 世界遺產【清水寺】、二三年坂京風小舖老街</td>
-              <td>早：機上簡餐<br>午：贈送壽司餐盒+綠茶<br>晚：日式相撲鍋吃到飽+半隻龍蝦 (餐標3500円)</td>
-              <td>URBAN京都 / Mystays京都四條 / MONday京都 或同級</td>
-            </tr>
-            <tr>
-              <td><strong>第 2 天<br>11/26 (四)</strong></td>
-              <td>米其林星級【伊根灣舟屋】海上遊覽船 ➔ 日本三景【天橋立】傘松公園搭纜車俯瞰「升天之龍」奇景</td>
-              <td>早：飯店早餐<br>午：但馬牛壽喜燒長腳蟹海鮮鍋 (餐標3500円)<br>晚：日式炸牛排和風御膳 (餐標3000円)</td>
-              <td>URBAN京都 / Mystays京都四條 / MONday京都 或同級</td>
-            </tr>
-            <tr>
-              <td><strong>第 3 天<br>11/27 (五)</strong></td>
-              <td>日本三大合掌村【美山町～茅葺之里】秘境 ➔ 免稅店 ➔ 難波～心齋橋～戎橋商店街～道頓堀美食大道</td>
-              <td>早：飯店早餐<br>午：日式鄉土風味御膳 (餐標2500円)<br>晚：心齋橋逛街自理</td>
-              <td>心齋橋Grand Hotel / 捷絲旅心齋橋 / Holiday Inn / 大阪本町ROUTE INN 或同級</td>
-            </tr>
-            <tr>
-              <td><strong>第 4 天<br>11/28 (六)</strong></td>
-              <td><strong>全日自由活動</strong>（自主探索大阪城、海遊館、天神橋筋、住之江溫泉，詳見 Plan A / B）</td>
-              <td>早：飯店早餐<br>午：逛街敬請自理<br>晚：逛街敬請自理</td>
-              <td>心齋橋Grand Hotel / 捷絲旅心齋橋 / Holiday Inn / 大阪本町ROUTE INN 或同級</td>
-            </tr>
-            <tr>
-              <td><strong>第 5 天<br>11/29 (日)</strong></td>
-              <td>專車前往大阪關西空港 ✈ 高雄小港機場（AK171 13:45-16:00），平安返抵溫暖的家</td>
-              <td>早：飯店早餐<br>午：機上精緻餐食</td>
-              <td>溫暖的家</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+  <!-- SECTION 3: ITINERARY -->
+  <div id="sec-itinerary" class="section-card">
+    <div class="section-header">
+      <h2><span>🗺️</span> 盛欣網絡 2026 大阪五日官方行程</h2>
+      <span class="pyramid-badge">旅行社規劃</span>
+    </div>
 
-      <div style="margin-top: 16px;">
-        <a class="btn" href="docs/20261125盛欣網絡科技有限公司大阪員工旅遊五日-行程.pdf" target="_blank">📄 下載官方五日行程 PDF 完整版</a>
+    <div class="timeline-flow">
+      <div class="timeline-node">
+        <div class="node-time">Day 1 (11/25)</div>
+        <div class="node-body">
+          <h4>高雄 ✈ 關西 ➔ 世界遺產【清水寺】</h4>
+          <p>AK170 (08:30-12:40) ➔ 二三年坂老街 ➔ 晚餐相撲鍋+半隻龍蝦吃到飽 ➔ 宿京都（URBAN/Mystays同級）。</p>
+        </div>
       </div>
+      <div class="timeline-node">
+        <div class="node-time">Day 2 (11/26)</div>
+        <div class="node-body">
+          <h4>伊根灣舟屋遊船 ➔ 日本三景【天橋立】</h4>
+          <p>米其林星級伊根舟屋遊船 ➔ 傘松公園纜車看升天之龍 ➔ 但馬牛壽喜燒長腳蟹海鮮鍋 ➔ 宿京都。</p>
+        </div>
+      </div>
+      <div class="timeline-node">
+        <div class="node-time">Day 3 (11/27)</div>
+        <div class="node-body">
+          <h4>美山町合掌村 ➔ 心齋橋・道頓堀</h4>
+          <p>三大合掌村秘境 ➔ 免稅店 ➔ 難波～心齋橋商圈自由散策吃美食 ➔ 宿大阪（心齋橋Grand Hotel/捷絲旅同級）。</p>
+        </div>
+      </div>
+      <div class="timeline-node">
+        <div class="node-time">Day 4 (11/28)</div>
+        <div class="node-body">
+          <h4>大阪整日自由活動（自主探險）</h4>
+          <p>全日由同仁自由選擇 Plan A 或 Plan B 玩遍大阪，傍晚採買電器 ➔ 宿大阪。</p>
+        </div>
+      </div>
+      <div class="timeline-node">
+        <div class="node-time">Day 5 (11/29)</div>
+        <div class="node-body">
+          <h4>關西空港 ✈ 高雄小港機場（平安賦歸）</h4>
+          <p>搭乘 AK171 (13:45-16:00) 班機返抵高雄小港，回到溫暖的家。</p>
+        </div>
+      </div>
+    </div>
+
+    <a href="docs/20261125盛欣網絡科技有限公司大阪員工旅遊五日-行程.pdf" target="_blank" class="btn-gold">📄 下載官方行程 PDF 原檔 (旅天下)</a>
+  </div>
+
+  <!-- SECTION 4: ELECTRONICS -->
+  <div id="sec-electronics" class="section-card">
+    <div class="section-header">
+      <h2><span>🔌</span> 大阪必買電器旗艦店採購全攻略</h2>
+      <span class="pyramid-badge">購物秘笈</span>
+    </div>
+
+    <div class="store-card">
+      <h4><span>Bic Camera 難波店</span> <span class="badge-time">10:00 - 21:00</span></h4>
+      <p style="font-size:12.5px; color:var(--stone-muted); margin-bottom:6px;">📍 千日前商圈（心齋橋筋往南走 5 分鐘即達）</p>
+      <p style="font-size:12px; color:var(--stone-text);">整整 7 層樓！象印/虎牌電鍋、Dyson/Panasonic吹風機、刮鬍刀、相機鏡頭庫存最齊，免稅 10% + 7% 折價券最好用。</p>
+    </div>
+
+    <div class="store-card">
+      <h4><span>EDION 愛電王 難波本店</span> <span class="badge-time">10:00 - 21:00</span></h4>
+      <p style="font-size:12.5px; color:var(--stone-muted); margin-bottom:6px;">📍 難波車站正對面（9層樓巨型旗艦）</p>
+      <p style="font-size:12px; color:var(--stone-text);">全日本最新型旗艦店之一，走道極寬敞、家電展示齊全，整層拉麵街與扭蛋區，逛起來舒適度最高。</p>
+    </div>
+
+    <div class="store-card">
+      <h4><span>Yodobashi 友都八喜 梅田店</span> <span class="badge-time">09:30 - 22:00</span></h4>
+      <p style="font-size:12.5px; color:var(--stone-muted); margin-bottom:6px;">📍 JR 大阪站 / 阪急梅田站旁</p>
+      <p style="font-size:12px; color:var(--stone-text);">全日本最大量販店！攝影器材、發燒音響、耳機、電腦零件與 3C 配件怪獸，營業時間最晚到 22:00。</p>
+    </div>
+
+    <div class="success-callout">
+      💡 <strong>血拼省錢技巧：</strong> 結帳時出示護照實體＋手機優惠券條碼，合計直接現折 <strong>17%（約 83 折）</strong>！大件家電如電鍋水波爐告知「Check-in baggage」，店家會以堅固紙箱加裝手提把，可直接送機場托運。
     </div>
   </div>
 
-  <!-- TAB 4: ELECTRONICS SHOPPING -->
-  <div id="tab-electronics" class="tab-pane">
-    <div class="content-card">
-      <div class="card-title">🔌 大阪必買電器旗艦店採購全攻略</div>
-      <p style="color:var(--text-secondary); margin-bottom:16px;">電器賣場營業至晚上 21:00～22:00，白天走完景點傍晚殺過去剛剛好！</p>
-      
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th>旗艦店名</th>
-              <th>地理位置</th>
-              <th>營業時間</th>
-              <th>必買亮點與特色</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong style="color:var(--accent-amber);">Bic Camera 難波店</strong></td>
-              <td>千日前商圈（心齋橋筋往南走 5 分鐘即達）</td>
-              <td><strong>10:00 - 21:00</strong></td>
-              <td>整整 7 層樓！象印/虎牌電鍋、Dyson/Panasonic吹風機、百靈/Panasonic刮鬍刀、相機鏡頭庫存最足，中文店員最多。</td>
-            </tr>
-            <tr>
-              <td><strong style="color:var(--accent-amber);">EDION 愛電王 難波本店</strong></td>
-              <td>難波車站正對面（9層樓巨型旗艦）</td>
-              <td><strong>10:00 - 21:00</strong></td>
-              <td>全日本最新型旗艦店之一，走道寬敞、展示齊全，整層拉麵店與扭蛋區，逛起來舒適度最高。</td>
-            </tr>
-            <tr>
-              <td><strong style="color:var(--accent-amber);">Yodobashi 友都八喜 梅田店</strong></td>
-              <td>JR 大阪站 / 阪急梅田站旁</td>
-              <td><strong>09:30 - 22:00</strong>（營業最晚）</td>
-              <td>全日本最大量販店！攝影器材、發燒音響、耳機、PC電腦零件與3C配件之王，想找冷門規格來這裡準沒錯。</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="tip-box">
-        💡 <strong>實戰退稅與託運秘訣：</strong><br>
-        1. <strong>免稅 10% + 7% 折價券</strong>：結帳時出示護照實體與手機折價券條碼，合計享有高達 17% 折扣（約 83 折）！<br>
-        2. <strong>大件家電托運</strong>：電鍋、水波爐結帳時告知店員「Check-in baggage packing」，店家會以原廠堅固紙箱加裝提把包裝，可直接作為一件行李託運！
-      </div>
+  <!-- SECTION 5: TOOLS -->
+  <div id="sec-tools" class="section-card">
+    <div class="section-header">
+      <h2><span>📱</span> 日本自由行必備實用 App</h2>
+      <span class="pyramid-badge">旅行神隊友</span>
     </div>
-  </div>
 
-  <!-- TAB 5: APPS & TOOLS -->
-  <div id="tab-tools" class="tab-pane">
-    <div class="content-card">
-      <div class="card-title">📱 日本自由行必備實用 App 與數位工具</div>
-      
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th width="20%">工具名稱</th>
-              <th width="30%">主要功能</th>
-              <th width="50%">使用秘訣</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Google Maps</strong></td>
-              <td>步行導航、地鐵即時轉乘</td>
-              <td>日本準確度 100%，會精確顯示地鐵第幾月台發車與出口編號。</td>
-            </tr>
-            <tr>
-              <td><strong>乘換案內（乗換案内）</strong></td>
-              <td>日本軌道時刻表、最佳換乘</td>
-              <td>遇到地鐵複雜轉乘時，可精準查詢「最快到達」與「幾號車廂轉乘最近」。</td>
-            </tr>
-            <tr>
-              <td><strong>Tabelog（食べログ）</strong></td>
-              <td>在地人美食權威評分</td>
-              <td>日本人不刷評，<strong>評分超過 3.5 分</strong>的餐廳基本上都是神級美味。</td>
-            </tr>
-            <tr>
-              <td><strong>Visit Japan Web</strong></td>
-              <td>入境檢疫與海關數位申報</td>
-              <td>出發前先在台灣填寫完成，抵達關西機場直接掃 QR Code 走電子走道快速通關。</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+    <div class="store-card">
+      <h4><span>1. Google Maps</span></h4>
+      <p style="font-size:12px; color:var(--stone-text);">日本大眾運輸換乘、步行導航準確度 100%，會精確顯示月台編號與出口名稱。</p>
     </div>
-  </div>
-
-  <!-- FOOTER -->
-  <div class="footer">
-    盛欣網絡科技有限公司 2026 大阪五日員工旅遊指南手冊 ｜ 本專案開源託管於 GitHub Pages<br>
-    © 2026 Sheng Xin Network Technology Co., Ltd. All Rights Reserved.
+    <div class="store-card">
+      <h4><span>2. 乘換案內（乗換案内）</span></h4>
+      <p style="font-size:12px; color:var(--stone-text);">查詢地鐵發車時刻表與轉乘最佳車廂，避免在複雜車站迷路走冤枉路。</p>
+    </div>
+    <div class="store-card">
+      <h4><span>3. Tabelog（食べログ）</span></h4>
+      <p style="font-size:12px; color:var(--stone-text);">日本在地人美食權威評分，只要分數超過 3.5 分以上皆為保證好吃的神級名店。</p>
+    </div>
+    <div class="store-card">
+      <h4><span>4. Visit Japan Web</span></h4>
+      <p style="font-size:12px; color:var(--stone-text);">出發前上網填寫入境查驗與海關申報，入境直接刷 QR Code 走電子走道快速通關。</p>
+    </div>
   </div>
 
 </div>
 
+<!-- MOBILE BOTTOM NAVIGATION BAR -->
+<nav class="bottom-nav">
+  <button class="bnav-item active" onclick="showTab('sec-transport', 0)">
+    <span class="bnav-icon">🚄</span>
+    <span>交通住宿</span>
+  </button>
+  <button class="bnav-item" onclick="showTab('sec-plans', 1)">
+    <span class="bnav-icon">📊</span>
+    <span>自由活動</span>
+  </button>
+  <button class="bnav-item" onclick="showTab('sec-itinerary', 2)">
+    <span class="bnav-icon">🗺️</span>
+    <span>五日行程</span>
+  </button>
+  <button class="bnav-item" onclick="showTab('sec-electronics', 3)">
+    <span class="bnav-icon">🔌</span>
+    <span>必買電器</span>
+  </button>
+  <button class="bnav-item" onclick="showTab('sec-tools', 4)">
+    <span class="bnav-icon">📱</span>
+    <span>實用工具</span>
+  </button>
+</nav>
+
 <script>
-  function switchTab(tabId) {
-    document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
-    document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
+  function showTab(secId, index) {
+    document.querySelectorAll('.section-card').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.cat-btn').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.bnav-item').forEach(el => el.classList.remove('active'));
     
-    document.getElementById(tabId).classList.add('active');
-    event.currentTarget.classList.add('active');
+    document.getElementById(secId).classList.add('active');
+    
+    const catBtns = document.querySelectorAll('.cat-btn');
+    if (catBtns[index]) catBtns[index].classList.add('active');
+    
+    const bnavs = document.querySelectorAll('.bnav-item');
+    if (bnavs[index]) bnavs[index].classList.add('active');
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function switchPlan(subId, btn) {
+    document.getElementById('subplan-a').style.display = 'none';
+    document.getElementById('subplan-b').style.display = 'none';
+    document.querySelectorAll('.plan-switch-btn').forEach(el => el.classList.remove('active'));
+    
+    document.getElementById(subId).style.display = 'block';
+    btn.classList.add('active');
   }
 </script>
 
