@@ -892,10 +892,91 @@
     </div>
 
     <!-- VIEW TOGGLE BUTTONS -->
-    <div class="plan-switcher" style="margin-bottom: 20px;">
-      <button class="plan-switch-btn active" onclick="filterPlans('all', this)" style="font-size:14px; padding:10px 14px;">🌟 全部顯示（分開並列）</button>
-      <button class="plan-switch-btn" onclick="filterPlans('plan-a-block', this)" style="font-size:14px; padding:10px 14px;">🏯 只看 Plan A 歷史商街</button>
-      <button class="plan-switch-btn" onclick="filterPlans('plan-b-block', this)" style="font-size:14px; padding:10px 14px;">🦈 只看 Plan B 港灣海景</button>
+    <div class="plan-switcher" style="margin-bottom: 20px; display:flex; flex-wrap:wrap; gap:8px;">
+      <button class="plan-switch-btn active" onclick="filterPlans('all', this)" style="font-size:13.5px; padding:9px 13px;">🌟 全部顯示</button>
+      <button class="plan-switch-btn" onclick="filterPlans('early-bird-block', this)" style="font-size:13.5px; padding:9px 13px;">🌅 晨型加碼（木津市場＋八阪神社）</button>
+      <button class="plan-switch-btn" onclick="filterPlans('plan-a-block', this)" style="font-size:13.5px; padding:9px 13px;">🏯 Plan A 歷史商街＋狸狸亭</button>
+      <button class="plan-switch-btn" onclick="filterPlans('plan-b-block', this)" style="font-size:13.5px; padding:9px 13px;">🦈 Plan B 港灣海景日落溫泉</button>
+      <button class="plan-switch-btn" onclick="filterPlans('plan-c-block', this)" style="font-size:13.5px; padding:9px 13px;">🍁 Plan C 箕面勝尾寺不倒翁楓葉</button>
+    </div>
+
+    <!-- ==================== EARLY BIRD CONTAINER ==================== -->
+    <div id="early-bird-block" style="margin-bottom: 30px; border: 2px solid #059669; border-radius: var(--radius-lg); padding: 20px 16px; background: #ffffff; box-shadow: 0 4px 18px rgba(5, 150, 105, 0.1);">
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 2px solid #a7f3d0; padding-bottom: 12px; margin-bottom: 16px;">
+        <div>
+          <span style="background:#ecfdf5; color:#047857; font-weight:800; font-size:12px; padding:3px 10px; border-radius:4px; border:1px solid #a7f3d0;">週六早晨限定 • 自由選修加碼</span>
+          <h3 style="font-size:21px; font-weight:900; color:var(--stone-dark); margin-top:6px;">🌅 Day 4 晨間神級加碼：木津市場海鮮盛宴 ➔ 難波八阪神社大獅子殿開運（08:00 - 10:15）</h3>
+        </div>
+        <span style="font-size:13px; font-weight:800; color:#047857; background:#d1fae5; padding:4px 10px; border-radius:999px;">🐟 市場早市 × 獅子神獸</span>
+      </div>
+
+      <div style="background:#ecfdf5; border-left:4px solid #059669; padding:12px 14px; border-radius:6px; font-size:13.5px; color:#065f46; line-height:1.6; margin-bottom:18px;">
+        <strong>⭐ 為什麼週六清晨必衝木津市場？</strong><br>
+        11/28（週六）正好逢木津市場每月定期舉辦的<strong>「木津早市」</strong>！海鮮、生魚片、草莓哈密瓜批發價直接開嗑，價格痛擊觀光黑門市場！吃飽後散步 6 分鐘直達「難波八阪神社」，在 12 米高金牙大獅子前吸除所有厄運、祈求 2027 業績必勝！<strong>10:15 走回難波站，剛好與全團無縫會合啟動全日主行程！</strong>
+      </div>
+
+      <!-- Photo Grid: Market + Shrine -->
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:14px; margin-bottom:18px;">
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; overflow:hidden;">
+          <img src="images/kizu_market.jpg" style="width:100%; height:200px; object-fit:cover;" alt="大阪木津卸賣市場">
+          <div style="padding:12px;">
+            <div style="font-size:14px; font-weight:800; color:#0f172a;">🐟 大阪木津市場（300年在地人廚房）</div>
+            <div style="font-size:12.5px; color:#475569; margin-top:4px; line-height:1.5;">
+              • <strong>魚市食堂</strong>：海膽干貝海鮮丼、鮪魚中腹丼（早上6點開排）<br>
+              • <strong>ヤマタ小林商店</strong>：奈良古都華三色草莓、哈密瓜現切<br>
+              • <strong>魚宗水產</strong>：現剖生蠔 3 顆 1,500 円、整盒海膽超便宜
+            </div>
+          </div>
+        </div>
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; overflow:hidden;">
+          <img src="images/namba_yasaka.jpg" style="width:100%; height:200px; object-fit:cover;" alt="難波八阪神社獅子殿">
+          <div style="padding:12px;">
+            <div style="font-size:14px; font-weight:800; color:#0f172a;">🦁 難波八阪神社（巨型金牙獅子殿）</div>
+            <div style="font-size:12.5px; color:#475569; margin-top:4px; line-height:1.5;">
+              • <strong>神殿象徵</strong>：張開大口吞噬苦難厄運，招來勝利與金運<br>
+              • <strong>祈願特色</strong>：求職順利、商業繁盛、求籤釣「一年安鯛籤」<br>
+              • <strong>限定伴手禮</strong>：木雕小獅子頭御守、小學生書包造型學業御守
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Early Bird Timeline Flow -->
+      <div class="timeline-flow" style="gap: 12px;">
+        <div class="timeline-node" style="padding: 14px; background: #f0fdf4; border-left: 6px solid #059669;">
+          <div class="node-time" style="font-size:12.5px; padding:3px 8px; background:#dcfce7; color:#15803d;">08:00 - 08:15</div>
+          <div class="node-body">
+            <h4 style="font-size:16px;">心齋橋飯店出發 ➔ 御堂筋線搭 2 站至「大國町站」</h4>
+            <p style="font-size:13px; margin-top:4px;">心齋橋站刷 ICOCA 乘御堂筋線（車程 4 分鐘），大國町站 1 號出口出站，步行 3 分鐘即達木津市場。</p>
+          </div>
+        </div>
+
+        <div class="timeline-node" style="padding: 14px; background: #f0fdf4; border-left: 6px solid #059669;">
+          <div class="node-time" style="font-size:12.5px; padding:3px 8px; background:#dcfce7; color:#15803d;">08:15 - 09:30</div>
+          <div class="node-body">
+            <h4 style="font-size:16px;">木津市場海鮮盛宴 ＆ 當季日本三色草莓品嚐</h4>
+            <p style="font-size:13px; margin-top:4px;">品嚐魚市食堂厚切海鮮丼、烤鰻魚串或現剖生蠔，小林商店入手奈良「古都華・淡雪」草莓回房享用！</p>
+            <div style="margin-top:4px; font-size:12px; color:#059669; font-weight:700;">🚶 轉乘：出市場後沿浪速區住宅巷弄漫步 600 公尺（約 6 分鐘）</div>
+          </div>
+        </div>
+
+        <div class="timeline-node" style="padding: 14px; background: #f0fdf4; border-left: 6px solid #059669;">
+          <div class="node-time" style="font-size:12.5px; padding:3px 8px; background:#dcfce7; color:#15803d;">09:30 - 10:00</div>
+          <div class="node-body">
+            <h4 style="font-size:16px;">難波八阪神社參拜 ＆ 巨大獅子殿合影祈福</h4>
+            <p style="font-size:13px; margin-top:4px;">站在高達 12 米的巨型獅子口前拍照打卡，投 300 円求取「一年安鯛」吉籤，吸走壞運迎向好彩頭！</p>
+            <div style="margin-top:4px; font-size:12px; color:#059669; font-weight:700;">🚶 轉乘：從神社步行 8 分鐘抵達「南海難波站 / 地鐵難波站」</div>
+          </div>
+        </div>
+
+        <div class="timeline-node" style="padding: 14px; background: #fffbeb; border: 2px solid var(--gold-500); border-left: 6px solid #b45309;">
+          <div class="node-time" style="font-size:12.5px; padding:3px 8px; background:var(--gold-600); color:#fff;">10:00 - 10:15</div>
+          <div class="node-body">
+            <h4 style="font-size:16px; color:#b45309;">抵達難波站樞紐 ➔ 無縫接軌全日主線（Plan A / B / C）！</h4>
+            <p style="font-size:13px; color:#44403c; margin-top:4px;">10:15 兩手空空、肚子飽滿、滿面春風！剛好在難波站搭乘御堂筋線/中央線，從容啟動全日自由行！</p>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- ==================== PLAN A CONTAINER ==================== -->
@@ -925,18 +1006,37 @@
         </div>
 
         <div class="timeline-node" style="padding: 16px; background: var(--sand-50); border-left: 6px solid var(--gold-600);">
-          <div class="node-time" style="font-size:13px; padding:4px 10px; background:var(--gold-100); color:var(--gold-800);">11:30 - 12:45</div>
+          <div class="node-time" style="font-size:13px; padding:4px 10px; background:var(--gold-100); color:var(--gold-800);">11:30 - 12:30</div>
           <div class="node-body">
-            <h4 style="font-size:17px;">2. 大阪歷史博物館</h4>
+            <h4 style="font-size:17px;">2. 大阪歷史博物館（或漫步至天滿橋）</h4>
             <p style="font-size:13.5px; margin-top:4px;">谷町四丁目站 9 號出口直達！冷氣舒適、古大阪奈良時代至近代街景實體等比例復原。</p>
-            <div style="margin-top:6px; font-size:12.5px; color:#0284c7; font-weight:700;">🚇 轉乘：谷町四丁目 ➔ 天神橋筋六丁目（谷町線直達 8 分鐘）</div>
+            <div style="margin-top:6px; font-size:12.5px; color:#0284c7; font-weight:700;">🚶 轉乘：步行至天滿橋站 OMM 商業大樓（約 8~10 分鐘）</div>
+          </div>
+        </div>
+
+        <div class="timeline-node" style="padding: 16px; background: #fefce8; border: 2px solid #ca8a04; border-left: 6px solid #a16207;">
+          <div class="node-time" style="font-size:13px; padding:4px 10px; background:#ca8a04; color:#fff;">12:30 - 13:45 ★ 名店午餐</div>
+          <div class="node-body">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:10px;">
+              <div style="flex:1; min-width:260px;">
+                <h4 style="font-size:17px; color:#854d0e;">3. 鉄板焼きとお好み焼き 狸狸亭（天滿橋OMMビル店）</h4>
+                <div style="display:inline-block; font-size:12px; background:#fef08a; color:#854d0e; font-weight:800; padding:2px 8px; border-radius:4px; margin:4px 0;">Google 4.7 ⭐ 超高評價（278則）｜ 地鐵天滿橋站直結 B2F</div>
+                <p style="font-size:13.5px; color:#44403c; margin-top:4px; line-height:1.5;">
+                  大阪在地人狂推的隱藏版鐵板燒！圍著滾燙鐵板現點現煎，外酥內嫩高麗菜甜脆，大口享受最正宗的大阪燒、螢烏賊燒、梅肉豬肉豚平燒與特製海鮮炒麵，徹底補充體力！
+                </p>
+                <div style="margin-top:6px; font-size:12.5px; color:#0284c7; font-weight:700;">🚇 轉乘：OMM 樓下天滿橋站 ➔ 天神橋筋六丁目（谷町線直達 4 分鐘）</div>
+              </div>
+              <div style="width:140px; border-radius:8px; overflow:hidden; border:1px solid #eab308; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+                <img src="images/ponpocotei.jpg" style="width:100%; height:100px; object-fit:cover;" alt="狸狸亭天滿橋店">
+              </div>
+            </div>
           </div>
         </div>
 
         <div class="timeline-node" style="padding: 16px; background: var(--sand-50); border-left: 6px solid var(--gold-600);">
           <div class="node-time" style="font-size:13px; padding:4px 10px; background:var(--gold-100); color:var(--gold-800);">13:00 - 14:30</div>
           <div class="node-body">
-            <h4 style="font-size:17px;">3. 大阪生活今昔館（くらしの今昔館）</h4>
+            <h4 style="font-size:17px;">4. 大阪生活今昔館（くらしの今昔館）</h4>
             <p style="font-size:13.5px; margin-top:4px;">車站直結大樓 8 樓！室內江戶時代老街實景造景，日夜燈光投影體驗昔日庶民日常。</p>
             <div style="margin-top:6px; font-size:12.5px; color:#0284c7; font-weight:700;">🚶 轉乘：出館直結天神橋筋商店街</div>
           </div>
@@ -945,7 +1045,7 @@
         <div class="timeline-node" style="padding: 16px; background: var(--sand-50); border-left: 6px solid var(--gold-600);">
           <div class="node-time" style="font-size:13px; padding:4px 10px; background:var(--gold-100); color:var(--gold-800);">14:30 - 16:30</div>
           <div class="node-body">
-            <h4 style="font-size:17px;">4. 天神橋筋商店街（日本最長 2.6 公里）</h4>
+            <h4 style="font-size:17px;">5. 天神橋筋商店街（日本最長 2.6 公里）</h4>
             <p style="font-size:13.5px; margin-top:4px;">全覆蓋拱頂雨棚免日曬雨淋！在地平價小吃（可樂餅、春駒壽司、章魚燒）與藥妝採買。</p>
             <div style="margin-top:6px; font-size:12.5px; color:#0284c7; font-weight:700;">🚇 轉乘：堺筋線直達日本橋/難波，或谷町線到東梅田</div>
           </div>
@@ -954,7 +1054,7 @@
         <div class="timeline-node" style="padding: 16px; background: #fffbeb; border: 2px solid var(--gold-500); border-left: 6px solid #b45309;">
           <div class="node-time" style="font-size:13px; padding:4px 10px; background:var(--gold-600); color:#fff;">17:00 - 19:30</div>
           <div class="node-body">
-            <h4 style="font-size:17px; color:#b45309;">5. 購物黃金檔：Bic Camera 難波 / 梅田 Yodobashi</h4>
+            <h4 style="font-size:17px; color:#b45309;">6. 購物黃金檔：Bic Camera 難波 / 梅田 Yodobashi</h4>
             <p style="font-size:13.5px; color:#44403c; margin-top:4px;"><strong>電器大採購</strong>：吹風機、象印電鍋、相機、刮鬍刀，免稅 10% + 折 7%！買完直接提回心齋橋飯店放好，輕裝出門吃晚餐！</p>
           </div>
         </div>
@@ -1040,6 +1140,120 @@
         </a>
       </div>
     </div>
+
+    <!-- ==================== PLAN C CONTAINER ==================== -->
+    <div id="plan-c-block" style="margin-bottom: 30px; border: 2px solid #7c2d12; border-radius: var(--radius-lg); padding: 20px 16px; background: #ffffff; box-shadow: 0 4px 18px rgba(124, 45, 18, 0.1);">
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 2px solid #fed7aa; padding-bottom: 12px; margin-bottom: 16px;">
+        <div>
+          <span style="background:#ffedd5; color:#9a3412; font-weight:800; font-size:12px; padding:3px 10px; border-radius:4px; border:1px solid #fed7aa;">方案 C • 秘境勝運線</span>
+          <h3 style="font-size:22px; font-weight:900; color:var(--stone-dark); margin-top:6px;">🍁 Plan C：箕面秋楓・勝運達摩不倒翁秘境線</h3>
+        </div>
+        <span style="font-size:13px; font-weight:800; color:#9a3412; background:#ffedd5; padding:4px 10px; border-radius:999px;">🍂 紅葉盛開 × 戰勝自我</span>
+      </div>
+
+      <div style="background:#fff7ed; border-left:4px solid #ea580c; padding:12px 14px; border-radius:6px; font-size:14px; color:#9a3412; line-height:1.6; margin-bottom:18px;">
+        <strong>💡 為什麼 Plan C 適合您？</strong><br>
+        如果您前三天看夠了市區熱鬧，想徹底擁抱<strong>「關西秋季紅葉全盛期」</strong>與古剎靈氣，這條北攝秘境路線是唯一解答！探訪 1300 年歷史古寺「勝尾寺」，滿山遍野擺滿數萬尊祈求生意興隆與戰勝自我考驗的<strong>「必勝達摩不倒翁」</strong>，再沿著「箕面大瀑布」芬多精步道散策，身心靈徹底淨化！
+      </div>
+
+      <!-- Plan C Featured Photo Banner -->
+      <div style="margin-bottom:18px; border-radius:12px; overflow:hidden; border:2px solid #fed7aa; box-shadow:0 4px 14px rgba(0,0,0,0.06);">
+        <img src="images/katsuoji.webp" style="width:100%; height:260px; object-fit:cover;" alt="大阪箕面勝尾寺滿寺達摩不倒翁與楓紅">
+        <div style="padding:10px 14px; background:#fff7ed; font-size:12.5px; color:#9a3412; font-weight:700; text-align:center;">
+          ▲ 箕面勝尾寺：滿山遍野擺滿參拜者祈福的「必勝達摩不倒翁」，楓紅掩映下震撼非凡
+        </div>
+      </div>
+
+      <!-- Plan C Large Timeline Nodes -->
+      <div class="timeline-flow" style="gap: 14px;">
+        <div class="timeline-node" style="padding: 16px; background: #fff7ed; border-left: 6px solid #ea580c;">
+          <div class="node-time" style="font-size:13px; padding:4px 10px; background:#fed7aa; color:#9a3412;">09:30 - 10:35</div>
+          <div class="node-body">
+            <h4 style="font-size:17px;">1. 心齋橋出發 ➔ 御堂筋線直通「千里中央站」➔ 阪急巴士至勝尾寺</h4>
+            <p style="font-size:13.5px; margin-top:4px;">心齋橋站搭御堂筋線（直通北大阪急行線）約 25 分鐘直達「千里中央站」，轉乘阪急巴士特急 29 號約 35 分鐘，直達勝尾寺山門正門口。</p>
+            <div style="margin-top:6px; font-size:12.5px; color:#ea580c; font-weight:700;">🚌 交通票券：可刷 ICOCA / Suica，乘車超便利</div>
+          </div>
+        </div>
+
+        <div class="timeline-node" style="padding: 16px; background: #fff7ed; border-left: 6px solid #ea580c;">
+          <div class="node-time" style="font-size:13px; padding:4px 10px; background:#fed7aa; color:#9a3412;">10:35 - 13:00</div>
+          <div class="node-body">
+            <h4 style="font-size:17px;">2. 勝尾寺：淨化之橋水煙、千座達摩不倒翁奉納所、求勝運</h4>
+            <p style="font-size:13.5px; margin-top:4px;">
+              • 越過噴灑仙境薄霧的<strong>「淨化之橋」</strong>驅除厄運，步入八萬坪宏偉古寺。<br>
+              • <strong>祈願達摩奉納架</strong>：在授予所挑選專屬達摩，在背後寫下年度目標，親手為達摩畫上右眼祈求勝運！<br>
+              • 收藏特色「小達摩御神籤」與紅葉限定御朱印。
+            </p>
+            <div style="margin-top:6px; font-size:12.5px; color:#ea580c; font-weight:700;">🚶 轉乘：計程車 10 分鐘或沿自然步道前往箕面大瀑布</div>
+          </div>
+        </div>
+
+        <div class="timeline-node" style="padding: 16px; background: #fff7ed; border-left: 6px solid #ea580c;">
+          <div class="node-time" style="font-size:13px; padding:4px 10px; background:#fed7aa; color:#9a3412;">13:00 - 15:30</div>
+          <div class="node-body">
+            <h4 style="font-size:17px;">3. 日本百大名瀑【箕面大瀑布】森林散策 ＆ 品嚐酥脆「炸楓葉」</h4>
+            <p style="font-size:13.5px; margin-top:4px;">
+              落差達 33 米的壯觀飛瀑在四周染紅的楓林中傾瀉而下，負離子能量爆發！漫步沿途百年老街，必吃當地特產「油炸真楓葉酥餅（もみじの天ぷら）」，香脆甜美超涮嘴。
+            </p>
+            <div style="margin-top:6px; font-size:12.5px; color:#ea580c; font-weight:700;">🚇 轉乘：阪急箕面站 ➔ 阪急梅田站（電車直達約 28 分鐘）</div>
+          </div>
+        </div>
+
+        <div class="timeline-node" style="padding: 16px; background: #fffbeb; border: 2px solid var(--gold-500); border-left: 6px solid #b45309;">
+          <div class="node-time" style="font-size:13px; padding:4px 10px; background:#b45309; color:#fff;">16:00 - 19:30</div>
+          <div class="node-body">
+            <h4 style="font-size:17px; color:#b45309;">4. 回抵梅田商圈：梅田 Yodobashi / 難波 Bic Camera 採購黃金檔</h4>
+            <p style="font-size:13.5px; color:#44403c; margin-top:4px;">電車直達梅田核心！直接進攻全日本規模最大的梅田 Yodobashi 電器城，買完吹風機、保溫杯與大件伴手禮後，搭御堂筋線輕鬆返回心齋橋飯店放好戰利品！</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== SPECIAL HIGHLIGHTS: HARUKAS 300 & ICHIRAN ==================== -->
+    <div id="special-wishes-block" style="margin-bottom: 30px; border: 2px solid var(--gold-600); border-radius: var(--radius-lg); padding: 20px 16px; background: #ffffff; box-shadow: 0 4px 18px rgba(180, 83, 9, 0.1);">
+      <div style="border-bottom: 2px solid var(--gold-300); padding-bottom: 12px; margin-bottom: 16px;">
+        <span style="background:var(--gold-100); color:var(--gold-800); font-weight:800; font-size:12px; padding:3px 10px; border-radius:4px; border:1px solid var(--gold-300);">同仁許願特別專欄</span>
+        <h3 style="font-size:21px; font-weight:900; color:var(--stone-dark); margin-top:6px;">🌃 高空景觀地理校正 ＆ 🍜 心齋橋深夜拉麵神殿</h3>
+      </div>
+
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:16px;">
+        <!-- Card 1: Harukas 300 vs Skytree -->
+        <div style="border:1px solid #fed7aa; border-radius:12px; overflow:hidden; background:#fffdfa; display:flex; flex-direction:column;">
+          <img src="images/harukas.jpg" style="width:100%; height:190px; object-fit:cover;" alt="阿倍野 HARUKAS 300 展望台">
+          <div style="padding:14px; flex:1; display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <div style="font-size:16px; font-weight:900; color:#b45309;">⚠️ 東京晴空塔 vs 大阪之巔【阿倍野 HARUKAS 300】</div>
+              <p style="font-size:13px; color:#44403c; line-height:1.5; margin-top:6px;">
+                <strong>地理釐清</strong>：同仁許願之「晴空塔」遠在東京（關東，離大阪 500 公里，新幹線來回車資破 3 萬円）！<br>
+                <strong>👑 大阪極致對標替代</strong>：直接鎖定 <strong>【阿倍野 HARUKAS 300 展望台】</strong>！高達 300 米（日本第一高樓展望台），從心齋橋搭御堂筋線<strong>僅 3 站直達天王寺</strong>！360度環景落地窗俯瞰通天閣、大阪灣日落與百萬繁星夜景，震撼度遠超晴空塔！
+              </p>
+            </div>
+            <div style="margin-top:8px; font-size:12px; color:#b45309; font-weight:700;">
+              🚇 交通：心齋橋搭御堂筋線 6 分鐘直達「天王寺站」直結！
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: Ichiran Ramen -->
+        <div style="border:1px solid #fed7aa; border-radius:12px; overflow:hidden; background:#fffdfa; display:flex; flex-direction:column;">
+          <img src="images/ichiran.jpg" style="width:100%; height:190px; object-fit:cover;" alt="一蘭拉麵心齋橋道頓堀店">
+          <div style="padding:14px; flex:1; display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <div style="font-size:16px; font-weight:900; color:#b45309;">🍜 心齋橋拉麵首選：一蘭拉麵（道頓堀運河畔）</div>
+              <p style="font-size:13px; color:#44403c; line-height:1.5; margin-top:6px;">
+                <strong>老饕時機</strong>：強烈建議排在 <strong>Day 3 採購大件電器回房後的慶功宵夜</strong>，或 Day 4 逛街空檔！<br>
+                <strong>用餐特色</strong>：招牌個人專屬「味集中隔間」，客製化勾選濃厚豚骨湯頭、大蒜辛香度與獨家赤紅秘傳辣醬。<br>
+                <strong>💡 免排隊秘訣</strong>：太佐衛門橋本店常排 1 小時，可轉往步行 2 分鐘的「道頓堀店別館」或「難波御堂筋店」，挑下午 15:30 或晚上 21:30 離峰時段秒入座！
+              </p>
+            </div>
+            <div style="margin-top:8px; font-size:12px; color:#b45309; font-weight:700;">
+              🚶 交通：從下榻心齋橋飯店步行僅 5~8 分鐘！
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
 
   </div>  <!-- SECTION 3: COMPANY 5-DAY DETAILED ITINERARY WITH PHOTOS -->
   <div id="sec-itinerary" class="section-card">
@@ -1129,7 +1343,7 @@
           • <strong>16:30</strong> 抵達心齋橋飯店，辦理入住、大行李放進房間。<br>
           • <strong>17:00 - 19:30</strong> 步行 6~8 分鐘直奔 <strong>Bic Camera 難波店 / EDION 旗艦店</strong>，專心比價採買大件電器（電鍋、吹風機、刮鬍刀）。<br>
           • <strong>19:30 - 20:00</strong> 結帳後大紙箱直接在門口跳上計程車 <strong>3 分鐘（基本車資約 700 円，折台幣 150 元）</strong>，司機直接載到飯店門口放回房間床頭！<br>
-          • <strong>20:00 之後</strong> 兩手空空極度輕鬆！漫步道頓堀吃拉麵燒肉、逛松本清與 24H 唐吉訶德！<br>
+          • <strong>20:00 之後</strong> 兩手空空極度輕鬆！宵夜推薦步行 6 分鐘直奔運河旁<strong>【一蘭拉麵 道頓堀店】</strong>享用豚骨拉麵，順道逛松本清與 24H 唐吉訶德！<br>
           • <strong>第 4 天（自由活動）</strong> <strong>整天徹底大解放！</strong>兩手空空一身輕裝暢遊 Plan A 或 Plan B，完全不用掛念扛電器！
         </div>
         <div style="font-size:12px; color:var(--nile-emerald); font-weight:700;">
@@ -1152,7 +1366,7 @@
       </div>
       <h3 style="font-size:19px; font-weight:900; color:var(--stone-dark); margin-bottom:8px;">大阪全日自由活動 ➔ 傍晚 17:00 難波/梅田電器與伴手禮大採購</h3>
       <p style="font-size:13.5px; color:var(--stone-muted); line-height:1.6; margin-bottom:12px;">
-        全日無團體拘束！可依個人喜好選擇 <strong>Plan A（大阪城+歷史博物館+今昔館+天神橋筋商店街）</strong> 或 <strong>Plan B（海遊館看鯨鯊+聖瑪利亞號帆船+住之江露天溫泉）</strong>。傍晚銜接 Bic Camera 難波旗艦店或梅田 Yodobashi 大買電器！
+        全日無團體拘束！晨型人可自由選修<strong>【木津市場海鮮早市 ➔ 難波八阪神社大獅子殿】</strong>，日間可依喜好選擇 <strong>Plan A（古城文藝＋狸狸亭大阪燒）</strong>、<strong>Plan B（港灣海景＋住之江露天風呂）</strong> 或新增之 <strong>Plan C（箕面勝尾寺滿山不倒翁賞楓）</strong>！夜間亦可登上<strong>【阿倍野 HARUKAS 300】</strong>飽覽無敵高空夜景。傍晚銜接 Bic Camera 難波旗艦店或梅田 Yodobashi 大買電器！
       </p>
       <div style="background:var(--sand-50); border-radius:8px; padding:10px 12px; font-size:13px; color:var(--stone-text); margin-bottom:12px;">
         🍽️ <strong>餐食</strong>：早餐／飯店早餐 ｜ 午餐／方便逛街~敬請自理 ｜ 晚餐／方便逛街~敬請自理<br>
@@ -1214,6 +1428,57 @@
       <div style="display:flex; justify-content:space-between; font-size:11.5px; color:#92400e; margin-top:10px;">
         <span>基準匯率：1 JPY ≈ 0.21 TWD</span>
         <span>計算公式：JPY × 0.90(免稅) × 0.93(券) × 0.21</span>
+      </div>
+    </div>
+
+    <!-- TAX FREE REFUND FEE GUIDE (60 CHANNELS SHOWDOWN) -->
+    <div style="background: #ffffff; border: 2px solid #2563eb; border-radius: 14px; padding: 18px; margin-bottom: 22px; box-shadow: 0 4px 18px rgba(37,99,235,0.1);">
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 2px solid #bfdbfe; padding-bottom: 10px; margin-bottom: 14px;">
+        <h3 style="font-size:17.5px; font-weight:900; color:#1e40af; display:flex; align-items:center; gap:6px;">
+          <span>✈️</span> 終極避坑！日本退稅手續費 60 間通路大對決（0% 免手續費 vs 1.55% 吃錢百貨）
+        </h3>
+        <span style="font-size:11.5px; font-weight:800; background:#2563eb; color:#fff; padding:3px 10px; border-radius:999px;">出國血拼看這張就夠</span>
+      </div>
+
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:16px; align-items:center; margin-bottom:14px;">
+        <div>
+          <div style="background:#eff6ff; border-left:4px solid #2563eb; padding:12px; border-radius:6px; font-size:13px; color:#1e3a8a; line-height:1.6; margin-bottom:12px;">
+            <strong>🚨 退稅魔鬼藏在細節裡：您以為退 10%，實際可能只拿 8.45%！</strong><br>
+            各大百貨與部分 Outlet 會巧立名目收取 <strong>1.5%～1.55%「退稅手續費」</strong>。買 10 萬日幣等於現虧 1,550 円手續費！
+          </div>
+
+          <!-- COMPARISON SUMMARY BOXES -->
+          <div style="margin-bottom:10px;">
+            <div style="font-size:13.5px; font-weight:900; color:#059669; margin-bottom:4px;">🟢 $0% 免手續費（良心必去，實拿滿 10%）：</div>
+            <div style="font-size:12.5px; color:#334155; line-height:1.5; background:#f0fdf4; border:1px solid #bbf7d0; border-radius:6px; padding:8px 10px;">
+              • <strong>電器/相機</strong>：Bic Camera、友都八喜 Yodobashi、愛電王 EDION、樂天電器<br>
+              • <strong>藥妝/生活</strong>：驚安殿堂 Donki、松本清、鶴羽藥妝、大國藥妝、Sundrug、OS Drug、杉藥局<br>
+              • <strong>連鎖/服飾</strong>：Uniqlo、GU、無印良品 MUJI、LOFT、宜得利、多慶屋
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size:13.5px; font-weight:900; color:#dc2626; margin-bottom:4px;">🔴 1.5%～1.55% 吃錢通路（實拿僅 8.45%）：</div>
+            <div style="font-size:12.5px; color:#334155; line-height:1.5; background:#fef2f2; border:1px solid #fecaca; border-radius:6px; padding:8px 10px;">
+              • <strong>關西各大百貨</strong>：難波高島屋、心齋橋大丸、阪急梅田、阪神梅田、京都高島屋、大丸京都、近鐵百貨<br>
+              • <strong>商場與 Outlet</strong>：難波 Parks、LaLaport、臨空城三井 Outlet、永旺夢樂城 (AEON)
+            </div>
+          </div>
+
+          <div style="margin-top:12px; font-size:12.5px; color:#1e40af; font-weight:800; background:#dbeafe; padding:8px 10px; border-radius:6px;">
+            💡 <strong>盛欣同仁必備採購鐵律</strong>：電器（Bic / EDION）、藥妝（松本清 / Donki）、衣服（Uniqlo / MUJI）請 100% 在 0% 手續費獨立門市買齊！百貨商場僅保留給「專櫃限定精品」或 mont-bell 獨家款！
+          </div>
+        </div>
+
+        <!-- Image preview card -->
+        <div style="text-align:center;">
+          <a href="images/tax_free_guide.png" target="_blank" title="點擊查看 60 間通路高清大圖">
+            <img src="images/tax_free_guide.png" style="max-height:360px; width:auto; max-width:100%; border:2px solid #93c5fd; border-radius:10px; box-shadow:0 4px 14px rgba(0,0,0,0.12);" alt="日本退稅手續費60間通路大對決">
+          </a>
+          <div style="font-size:11.5px; color:#64748b; margin-top:6px; font-weight:700;">
+            🔍 點擊上方圖片可原圖放大查看 60 間通路名冊
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1618,18 +1883,42 @@
     document.querySelectorAll('.plan-switch-btn').forEach(el => el.classList.remove('active'));
     btn.classList.add('active');
     
+    const blockEarly = document.getElementById('early-bird-block');
     const blockA = document.getElementById('plan-a-block');
     const blockB = document.getElementById('plan-b-block');
+    const blockC = document.getElementById('plan-c-block');
+    const blockSpecial = document.getElementById('special-wishes-block');
     
     if (mode === 'all') {
-      blockA.style.display = 'block';
-      blockB.style.display = 'block';
+      if (blockEarly) blockEarly.style.display = 'block';
+      if (blockA) blockA.style.display = 'block';
+      if (blockB) blockB.style.display = 'block';
+      if (blockC) blockC.style.display = 'block';
+      if (blockSpecial) blockSpecial.style.display = 'block';
+    } else if (mode === 'early-bird-block') {
+      if (blockEarly) blockEarly.style.display = 'block';
+      if (blockA) blockA.style.display = 'none';
+      if (blockB) blockB.style.display = 'none';
+      if (blockC) blockC.style.display = 'none';
+      if (blockSpecial) blockSpecial.style.display = 'none';
     } else if (mode === 'plan-a-block') {
-      blockA.style.display = 'block';
-      blockB.style.display = 'none';
+      if (blockEarly) blockEarly.style.display = 'none';
+      if (blockA) blockA.style.display = 'block';
+      if (blockB) blockB.style.display = 'none';
+      if (blockC) blockC.style.display = 'none';
+      if (blockSpecial) blockSpecial.style.display = 'none';
     } else if (mode === 'plan-b-block') {
-      blockA.style.display = 'none';
-      blockB.style.display = 'block';
+      if (blockEarly) blockEarly.style.display = 'none';
+      if (blockA) blockA.style.display = 'none';
+      if (blockB) blockB.style.display = 'block';
+      if (blockC) blockC.style.display = 'none';
+      if (blockSpecial) blockSpecial.style.display = 'none';
+    } else if (mode === 'plan-c-block') {
+      if (blockEarly) blockEarly.style.display = 'none';
+      if (blockA) blockA.style.display = 'none';
+      if (blockB) blockB.style.display = 'none';
+      if (blockC) blockC.style.display = 'block';
+      if (blockSpecial) blockSpecial.style.display = 'none';
     }
   }
   function calculateComparison() {
