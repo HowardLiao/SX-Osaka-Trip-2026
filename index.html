@@ -895,7 +895,7 @@
     <div class="plan-switcher" style="margin-bottom: 20px; display:flex; flex-wrap:wrap; gap:8px;">
       <button class="plan-switch-btn active" onclick="filterPlans('all', this)" style="font-size:13.5px; padding:9px 13px;">🌟 全部顯示</button>
       <button class="plan-switch-btn" onclick="filterPlans('early-bird-block', this)" style="font-size:13.5px; padding:9px 13px;">🌅 晨型加碼（木津市場＋八阪神社）</button>
-      <button class="plan-switch-btn" onclick="filterPlans('plan-a-block', this)" style="font-size:13.5px; padding:9px 13px;">🏯 Plan A 歷史商街＋狸狸亭</button>
+      <button class="plan-switch-btn" onclick="filterPlans('plan-a-block', this)" style="font-size:13.5px; padding:9px 13px;">🏯 Plan A+ 旗艦究極線（古城＋狸狸亭＋天滿宮＋HARUKAS夜景）</button>
       <button class="plan-switch-btn" onclick="filterPlans('plan-b-block', this)" style="font-size:13.5px; padding:9px 13px;">🦈 Plan B 港灣海景日落溫泉</button>
       <button class="plan-switch-btn" onclick="filterPlans('plan-c-block', this)" style="font-size:13.5px; padding:9px 13px;">🍁 Plan C 箕面勝尾寺不倒翁楓葉</button>
     </div>
@@ -980,42 +980,50 @@
     </div>
 
     <!-- ==================== PLAN A CONTAINER ==================== -->
-    <div id="plan-a-block" style="margin-bottom: 35px; border: 2px solid var(--gold-500); border-radius: var(--radius-lg); padding: 20px 16px; background: #ffffff; box-shadow: 0 4px 18px rgba(217, 119, 6, 0.1);">
+    <div id="plan-a-block" style="margin-bottom: 35px; border: 2px solid var(--gold-500); border-radius: var(--radius-lg); padding: 20px 16px; background: #ffffff; box-shadow: 0 4px 18px rgba(217, 119, 6, 0.12);">
       <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 2px solid var(--gold-300); padding-bottom: 12px; margin-bottom: 16px;">
         <div>
-          <span style="background:var(--gold-100); color:var(--gold-800); font-weight:800; font-size:12px; padding:3px 10px; border-radius:4px; border:1px solid var(--gold-300);">方案 A • 獨立專屬動線</span>
-          <h3 style="font-size:22px; font-weight:900; color:var(--stone-dark); margin-top:6px;">🏯 Plan A：歷史文化與下町商街線</h3>
+          <span style="background:var(--gold-100); color:var(--gold-800); font-weight:800; font-size:12px; padding:3px 10px; border-radius:4px; border:1px solid var(--gold-300);">方案 A+ • 達人旗艦全日究極動線 (08:00 - 22:30)</span>
+          <h3 style="font-size:22px; font-weight:900; color:var(--stone-dark); margin-top:6px;">🏯 Plan A+：古城下町・金運開運・百萬夜景「達人旗艦究極線」</h3>
         </div>
-        <span style="font-size:13px; font-weight:800; color:var(--nile-emerald); background:var(--nile-light); padding:4px 10px; border-radius:999px;">👑 綜合推薦首選</span>
+        <span style="font-size:13px; font-weight:800; color:var(--nile-emerald); background:var(--nile-light); padding:4px 10px; border-radius:999px;">👑 全團滿意度冠軍 • 0 繞路老手制霸版</span>
       </div>
 
       <div class="success-callout" style="font-size:14px; line-height:1.6; margin-bottom:18px;">
-        <strong>⭐ 為什麼 Plan A 最好走？</strong><br>
-        動線同線直結、絕不走回頭路！除大阪城戶外散步外，其餘全在室內展館與拱頂避雨商店街（不怕 11 月底低溫海風），且<strong>下午 16:30 即可直奔難波/梅田大買電器</strong>，時間最充裕從容！
+        <strong>⭐ 為什麼 Plan A+ 是全團滿意度最高的終極解答？</strong><br>
+        一條龍串接<strong>「木津早市海鮮 ➔ 八阪神社金牙獅子 ➔ 大阪城古城與金箔御座船 ➔ 狸狸亭大阪燒 ➔ 今昔館 ➔ 天神橋筋商街 ➔ 大阪天滿宮 ➔ 難波電器大血拼 ➔ 阿倍野 HARUKAS 300 百萬夜景 ➔ 心齋橋一蘭拉麵」</strong>！動線完全沿著地鐵谷町線與御堂筋線直線巡航，<strong>0 繞路、0 折返</strong>，吃喝玩樂、祈福血拼全部滿分！
       </div>
 
-      <!-- Plan A Large Timeline Nodes -->
+      <!-- Plan A+ Large Timeline Nodes (8 Nodes) -->
       <div class="timeline-flow" style="gap: 14px;">
-        <div class="timeline-node" style="padding: 16px; background: var(--sand-50); border-left: 6px solid var(--gold-600);">
-          <div class="node-time" style="font-size:13px; padding:4px 10px; background:var(--gold-100); color:var(--gold-800);">09:30 - 11:30</div>
+        
+        <!-- Node 1: Early Bird -->
+        <div class="timeline-node" style="padding: 16px; background: #f0fdf4; border-left: 6px solid #059669;">
+          <div class="node-time" style="font-size:13px; padding:4px 10px; background:#dcfce7; color:#15803d;">08:00 - 09:15 ★ 晨間早鳥選修</div>
           <div class="node-body">
-            <h4 style="font-size:17px;">1. 大阪城天守閣 ＆ 大阪城公園</h4>
-            <p style="font-size:13.5px; margin-top:4px;">登天守閣俯瞰大阪全景，欣賞護城河巨石垣與古城建築群，秋景散策最美。</p>
-            <div style="margin-top:6px; font-size:12.5px; color:#0284c7; font-weight:700;">🚇 轉乘：步行至谷町四丁目站（中央線 2 分鐘）</div>
+            <h4 style="font-size:17px; color:#166534;">1. 木津市場頂級海鮮早餐 ➔ 難波八阪神社巨型獅子殿開運</h4>
+            <p style="font-size:13.5px; margin-top:4px; line-height:1.5;">
+              週六早市限定！大國町站 1 號出口直達「木津市場」，品嚐魚市食堂厚切海鮮丼、買小林商店古都華草莓；吃飽散步 6 分鐘直達「難波八阪神社」，朝聖 12 米金牙大獅子殿吸走厄運求勝運！
+            </p>
+            <div style="margin-top:6px; font-size:12.5px; color:#059669; font-weight:700;">🚇 轉乘：難波/大國町站搭地鐵至「谷町四丁目站」（約 12 分鐘）</div>
           </div>
         </div>
 
+        <!-- Node 2: Osaka Castle & Boat -->
         <div class="timeline-node" style="padding: 16px; background: var(--sand-50); border-left: 6px solid var(--gold-600);">
-          <div class="node-time" style="font-size:13px; padding:4px 10px; background:var(--gold-100); color:var(--gold-800);">11:30 - 12:30</div>
+          <div class="node-time" style="font-size:13px; padding:4px 10px; background:var(--gold-100); color:var(--gold-800);">09:30 - 11:45</div>
           <div class="node-body">
-            <h4 style="font-size:17px;">2. 大阪歷史博物館（或漫步至天滿橋）</h4>
-            <p style="font-size:13.5px; margin-top:4px;">谷町四丁目站 9 號出口直達！冷氣舒適、古大阪奈良時代至近代街景實體等比例復原。</p>
+            <h4 style="font-size:17px;">2. 大阪城天守閣 ＆ 大阪城公園 ＋ ★加碼：金箔御座船（護城河巡航）</h4>
+            <p style="font-size:13.5px; margin-top:4px; line-height:1.5;">
+              登天守閣俯瞰大阪全景，欣賞雄偉護城石垣與古城秋景；極樂橋旁搭乘貼滿金箔的<strong>「大阪城御座船」</strong>巡航 20 分鐘，從水面上仰望古城壯觀視角與防邪人面石！
+            </p>
             <div style="margin-top:6px; font-size:12.5px; color:#0284c7; font-weight:700;">🚶 轉乘：步行至天滿橋站 OMM 商業大樓（約 8~10 分鐘）</div>
           </div>
         </div>
 
+        <!-- Node 3: Ponpocotei Lunch -->
         <div class="timeline-node" style="padding: 16px; background: #fefce8; border: 2px solid #ca8a04; border-left: 6px solid #a16207;">
-          <div class="node-time" style="font-size:13px; padding:4px 10px; background:#ca8a04; color:#fff;">12:30 - 13:45 ★ 名店午餐</div>
+          <div class="node-time" style="font-size:13px; padding:4px 10px; background:#ca8a04; color:#fff;">11:45 - 13:00 ★ 名店午餐</div>
           <div class="node-body">
             <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:10px;">
               <div style="flex:1; min-width:260px;">
@@ -1033,31 +1041,82 @@
           </div>
         </div>
 
+        <!-- Node 4: Museum of Housing and Living -->
         <div class="timeline-node" style="padding: 16px; background: var(--sand-50); border-left: 6px solid var(--gold-600);">
-          <div class="node-time" style="font-size:13px; padding:4px 10px; background:var(--gold-100); color:var(--gold-800);">13:00 - 14:30</div>
+          <div class="node-time" style="font-size:13px; padding:4px 10px; background:var(--gold-100); color:var(--gold-800);">13:15 - 14:15</div>
           <div class="node-body">
             <h4 style="font-size:17px;">4. 大阪生活今昔館（くらしの今昔館）</h4>
-            <p style="font-size:13.5px; margin-top:4px;">車站直結大樓 8 樓！室內江戶時代老街實景造景，日夜燈光投影體驗昔日庶民日常。</p>
-            <div style="margin-top:6px; font-size:12.5px; color:#0284c7; font-weight:700;">🚶 轉乘：出館直結天神橋筋商店街</div>
+            <p style="font-size:13.5px; margin-top:4px; line-height:1.5;">
+              天神橋筋六丁目站直結大樓 8 樓！室內江戶時代老街實景等比例造景，日夜燈光投影體驗昔日大阪庶民日常與節慶風貌。
+            </p>
+            <div style="margin-top:6px; font-size:12.5px; color:#0284c7; font-weight:700;">🚶 轉乘：出館直結天神橋筋商店街入口</div>
           </div>
         </div>
 
+        <!-- Node 5: Tenjinbashisuji + Osaka Temmangu -->
         <div class="timeline-node" style="padding: 16px; background: var(--sand-50); border-left: 6px solid var(--gold-600);">
-          <div class="node-time" style="font-size:13px; padding:4px 10px; background:var(--gold-100); color:var(--gold-800);">14:30 - 16:30</div>
+          <div class="node-time" style="font-size:13px; padding:4px 10px; background:var(--gold-100); color:var(--gold-800);">14:15 - 16:30</div>
           <div class="node-body">
-            <h4 style="font-size:17px;">5. 天神橋筋商店街（日本最長 2.6 公里）</h4>
-            <p style="font-size:13.5px; margin-top:4px;">全覆蓋拱頂雨棚免日曬雨淋！在地平價小吃（可樂餅、春駒壽司、章魚燒）與藥妝採買。</p>
-            <div style="margin-top:6px; font-size:12.5px; color:#0284c7; font-weight:700;">🚇 轉乘：堺筋線直達日本橋/難波，或谷町線到東梅田</div>
+            <h4 style="font-size:17px;">5. 天神橋筋商店街（日本最長 2.6 公里）➔ ★加碼：大阪天滿宮 ＆ 中村屋炸可樂餅</h4>
+            <p style="font-size:13.5px; margin-top:4px; line-height:1.5;">
+              全覆蓋拱頂雨棚免日曬雨淋！沿街一路往南逛到二丁目，參拜關西最負盛名之學問、事業與升遷之神<strong>「大阪天滿宮」</strong>（高管求事業晉升必拜），並在正門牌樓旁品嚐名物傳奇<strong>「中村屋現炸可樂餅」</strong>（熱騰騰酥脆一個僅約 100 円）！
+            </p>
+            <div style="margin-top:6px; font-size:12.5px; color:#0284c7; font-weight:700;">🚇 轉乘：南森町站搭谷町線至東梅田，或堺筋線直達日本橋/難波（約 8~10 分鐘）</div>
           </div>
         </div>
 
+        <!-- Node 6: Shopping Golden Hours -->
         <div class="timeline-node" style="padding: 16px; background: #fffbeb; border: 2px solid var(--gold-500); border-left: 6px solid #b45309;">
-          <div class="node-time" style="font-size:13px; padding:4px 10px; background:var(--gold-600); color:#fff;">17:00 - 19:30</div>
+          <div class="node-time" style="font-size:13px; padding:4px 10px; background:var(--gold-600); color:#fff;">17:00 - 19:30 ★ 採購黃金檔</div>
           <div class="node-body">
-            <h4 style="font-size:17px; color:#b45309;">6. 購物黃金檔：Bic Camera 難波 / 梅田 Yodobashi</h4>
-            <p style="font-size:13.5px; color:#44403c; margin-top:4px;"><strong>電器大採購</strong>：吹風機、象印電鍋、相機、刮鬍刀，免稅 10% + 折 7%！買完直接提回心齋橋飯店放好，輕裝出門吃晚餐！</p>
+            <h4 style="font-size:17px; color:#b45309;">6. Bic Camera 難波旗艦店 / EDION 旗艦店 / 梅田 Yodobashi（戰利品計程車送回房）</h4>
+            <p style="font-size:13.5px; color:#44403c; margin-top:4px; line-height:1.5;">
+              <strong>電器大採購</strong>：享受免稅 10% + 折 7%（實付 83 折）！採買吹風機、象印電鍋、相機、刮鬍刀，結帳後大紙箱直接在門口跳上計程車 3 分鐘直接載到心齋橋飯店門口放回房間床頭，兩手空空出發看夜景！
+            </p>
+            <div style="margin-top:6px; font-size:12.5px; color:#b45309; font-weight:700;">🚇 轉乘：心齋橋站刷 ICOCA 搭御堂筋線 3 站直達「天王寺站」（僅 6 分鐘）</div>
           </div>
         </div>
+
+        <!-- Node 7: Harukas 300 -->
+        <div class="timeline-node" style="padding: 16px; background: #fdf2f8; border: 2px solid #ec4899; border-left: 6px solid #db2777;">
+          <div class="node-time" style="font-size:13px; padding:4px 10px; background:#db2777; color:#fff;">20:00 - 21:30 ★ 百萬夜景</div>
+          <div class="node-body">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:10px;">
+              <div style="flex:1; min-width:260px;">
+                <h4 style="font-size:17px; color:#9d174d;">7. 阿倍野 HARUKAS 300 展望台（日本第一高樓 300 米高空夜景）</h4>
+                <div style="display:inline-block; font-size:12px; background:#fce7f3; color:#9d174d; font-weight:800; padding:2px 8px; border-radius:4px; margin:4px 0;">晴空塔級高空震撼 ｜ 心齋橋御堂筋線 6 分鐘直達</div>
+                <p style="font-size:13.5px; color:#44403c; margin-top:4px; line-height:1.5;">
+                  直上 300 公尺之巔！360 度環景巨型落地玻璃，俯瞰通天閣、大阪灣日落餘暉與神戶百萬繁星璀璨夜景，震撼度與浪漫氛圍完勝晴空塔！
+                </p>
+                <div style="margin-top:6px; font-size:12.5px; color:#db2777; font-weight:700;">🚇 轉乘：天王寺站搭御堂筋線 6 分鐘直達心齋橋站</div>
+              </div>
+              <div style="width:140px; border-radius:8px; overflow:hidden; border:1px solid #f472b6; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+                <img src="images/harukas.jpg" style="width:100%; height:100px; object-fit:cover;" alt="阿倍野 HARUKAS 300 展望台">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Node 8: Ichiran Ramen -->
+        <div class="timeline-node" style="padding: 16px; background: #fffbeb; border: 2px solid #ca8a04; border-left: 6px solid #a16207;">
+          <div class="node-time" style="font-size:13px; padding:4px 10px; background:#ca8a04; color:#fff;">21:45 之後 ★ 深夜慶功宵夜</div>
+          <div class="node-body">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:10px;">
+              <div style="flex:1; min-width:260px;">
+                <h4 style="font-size:17px; color:#854d0e;">8. 心齋橋 一蘭拉麵（道頓堀太佐衛門橋運河畔）</h4>
+                <div style="display:inline-block; font-size:12px; background:#fef08a; color:#854d0e; font-weight:800; padding:2px 8px; border-radius:4px; margin:4px 0;">個人獨立味集中隔間 ｜ 離峰時段免排隊</div>
+                <p style="font-size:13.5px; color:#44403c; margin-top:4px; line-height:1.5;">
+                  兩手空空漫步道頓堀運河！在招牌「味集中隔間」內客製化享用濃厚豚骨拉麵與赤紅秘傳辣醬，深夜時段避開白天的觀光大長龍，為充實的一天畫下完美句點！
+                </p>
+                <div style="margin-top:6px; font-size:12.5px; color:#854d0e; font-weight:700;">🚶 散策：吃完悠閒散步 5 分鐘回心齋橋飯店休息</div>
+              </div>
+              <div style="width:140px; border-radius:8px; overflow:hidden; border:1px solid #eab308; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+                <img src="images/ichiran.jpg" style="width:100%; height:100px; object-fit:cover;" alt="一蘭拉麵道頓堀店">
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
 
       <!-- Plan A Dedicated Large Image -->
@@ -1069,9 +1128,8 @@
       </div>
     </div>
 
-
     <!-- ==================== PLAN B CONTAINER ==================== -->
-    <div id="plan-b-block" style="margin-bottom: 30px; border: 2px solid #be123c; border-radius: var(--radius-lg); padding: 20px 16px; background: #ffffff; box-shadow: 0 4px 18px rgba(190, 18, 60, 0.1);">
+    <div style="margin-bottom: 30px; border: 2px solid #be123c; border-radius: var(--radius-lg); padding: 20px 16px; background: #ffffff; box-shadow: 0 4px 18px rgba(190, 18, 60, 0.1);">
       <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 2px solid #fecdd3; padding-bottom: 12px; margin-bottom: 16px;">
         <div>
           <span style="background:#ffe4e6; color:#9f1239; font-weight:800; font-size:12px; padding:3px 10px; border-radius:4px; border:1px solid #fecdd3;">方案 B • 獨立專屬動線</span>
@@ -1371,6 +1429,11 @@
       <div style="background:var(--sand-50); border-radius:8px; padding:10px 12px; font-size:13px; color:var(--stone-text); margin-bottom:12px;">
         🍽️ <strong>餐食</strong>：早餐／飯店早餐 ｜ 午餐／方便逛街~敬請自理 ｜ 晚餐／方便逛街~敬請自理<br>
         🏨 <strong>住宿</strong>：續住大阪市區飯店（心齋橋 Grand Hotel 或同級）
+      </div>
+      <!-- DAY 4 PLAN A+ RECOMMENDATION CALLOUT -->
+      <div style="margin-top:12px; background:#fffdf5; border:2px solid var(--gold-500); border-radius:10px; padding:12px 14px; font-size:13px; color:#92400e; line-height:1.6; box-shadow:0 2px 8px rgba(180,83,9,0.08);">
+        💡 <strong>全日無頭緒不知道怎麼走？達人強烈推薦直接指名【Plan A+ 達人旗艦究極線】</strong>：<br>
+        一條龍串接<strong>木津早市海鮮 ➔ 八阪神社金牙獅子 ➔ 大阪城古城與金箔御座船 ➔ 狸狸亭大阪燒 ➔ 今昔館 ➔ 天神橋筋商街 ➔ 大阪天滿宮 ➔ 電器 83 折大血拼 ➔ 阿倍野 HARUKAS 300 百萬夜景 ➔ 心齋橋一蘭拉麵</strong>，全天動線直結不走回頭路！
       </div>
     </div>
 
