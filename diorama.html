@@ -2,773 +2,811 @@
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>關西在地 3D 互動地理地圖 ｜ 2026 盛欣大阪員工旅遊</title>
-  
-  <!-- MapLibre GL JS 3D WebGL Map Engine -->
-  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css">
-  <script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>2026 盛欣大阪 3D 空間數位導覽 ｜ Executive 3D Showcase</title>
 
-  <!-- Google Fonts -->
+  <!-- MapLibre GL JS 3D Engine -->
+  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+
+  <!-- Google Fonts: Plus Jakarta Sans & Noto Sans TC -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Noto+Sans+TC:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg-dark: #0a0a0c;
-      --card-bg: rgba(18, 18, 24, 0.88);
-      --card-border: rgba(212, 175, 55, 0.35);
-      --gold-primary: #d4af37;
-      --gold-light: #fef08a;
-      --amber-accent: #f59e0b;
-      --cyan-accent: #06b6d4;
-      --emerald-accent: #10b981;
-      --ruby-accent: #ef4444;
+      --bg-dark: #07090e;
+      --panel-bg: rgba(13, 17, 28, 0.78);
+      --panel-border: rgba(245, 158, 11, 0.28);
+      --panel-glow: rgba(245, 158, 11, 0.15);
+      --gold-primary: #f59e0b;
+      --gold-light: #fde68a;
+      --gold-deep: #b45309;
+      --cyan-neon: #38bdf8;
+      --emerald-neon: #10b981;
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
+      --glass-blur: blur(24px) saturate(180%);
     }
 
     * {
-      box-sizing: border-box;
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
       -webkit-tap-highlight-color: transparent;
     }
 
-    body {
-      background-color: var(--bg-dark);
-      color: var(--text-main);
-      font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      overflow: hidden;
-      width: 100vw;
-      height: 100vh;
-    }
-
-    #map {
+    body, html {
       width: 100%;
       height: 100%;
+      overflow: hidden;
+      background: var(--bg-dark);
+      font-family: 'Plus Jakarta Sans', 'Noto Sans TC', sans-serif;
+      color: var(--text-main);
+      user-select: none;
+    }
+
+    /* Fullscreen WebGL Canvas */
+    #map {
       position: absolute;
       top: 0;
       left: 0;
+      width: 100%;
+      height: 100%;
       z-index: 1;
-      background: #08090d;
     }
 
-    /* Top Glass Navigation Bar */
-    .top-header {
+    /* Cinematic Vignette & Lighting Ambient Overlay */
+    .vignette-overlay {
       position: absolute;
-      top: 16px;
-      left: 16px;
-      right: 16px;
-      z-index: 10;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
       pointer-events: none;
+      background: radial-gradient(circle at 50% 50%, rgba(7, 9, 14, 0) 50%, rgba(7, 9, 14, 0.6) 92%, rgba(7, 9, 14, 0.95) 100%),
+                  linear-gradient(180deg, rgba(7, 9, 14, 0.7) 0%, rgba(7, 9, 14, 0) 15%, rgba(7, 9, 14, 0) 85%, rgba(7, 9, 14, 0.8) 100%);
     }
 
-    .top-header > * {
-      pointer-events: auto;
-    }
-
-    .brand-badge {
+    /* Floating Glass Header Capsule */
+    .header-capsule {
+      position: absolute;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 20;
       display: flex;
       align-items: center;
-      gap: 12px;
-      background: var(--card-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--card-border);
-      border-radius: 999px;
-      padding: 8px 18px;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6), 0 0 15px rgba(212, 175, 55, 0.15);
+      gap: 10px;
+      padding: 5px 10px 5px 14px;
+      background: var(--panel-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--panel-border);
+      border-radius: 9999px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 20px var(--panel-glow);
+      max-width: calc(100vw - 28px);
     }
 
-    .back-btn {
+    .back-home-pill {
       display: inline-flex;
       align-items: center;
       gap: 6px;
       text-decoration: none;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #cbd5e1;
+      padding: 5px 12px;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      transition: all 0.25s ease;
+      white-space: nowrap;
+    }
+
+    .back-home-pill:hover {
+      background: rgba(245, 158, 11, 0.2);
+      border-color: var(--gold-primary);
       color: var(--gold-light);
-      font-size: 13px;
-      font-weight: 700;
-      transition: all 0.2s;
+      transform: translateY(-1px);
     }
 
-    .back-btn:hover {
-      color: #fff;
-      transform: translateX(-2px);
+    .brand-divider {
+      width: 1px;
+      height: 18px;
+      background: rgba(255, 255, 255, 0.15);
     }
 
-    .brand-title {
-      font-family: 'Cinzel', serif;
-      font-weight: 800;
-      font-size: 14px;
-      letter-spacing: 1px;
-      color: #fff;
-      border-left: 1px solid rgba(255, 255, 255, 0.2);
-      padding-left: 12px;
-    }
-
-    .brand-title span {
-      color: var(--gold-primary);
-    }
-
-    /* Plan Switcher Bar */
-    .plan-selector-bar {
+    /* Plan Tabs Bar inside capsule */
+    .plan-pills-scroll {
       display: flex;
-      gap: 8px;
-      background: var(--card-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--card-border);
-      border-radius: 999px;
-      padding: 6px;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6);
+      align-items: center;
+      gap: 5px;
       overflow-x: auto;
-      max-width: calc(100vw - 32px);
+      scrollbar-width: none;
+    }
+    .plan-pills-scroll::-webkit-scrollbar {
+      display: none;
     }
 
-    .plan-tab-btn {
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      font-family: inherit;
-      font-size: 13px;
+    .plan-pill {
+      padding: 6px 13px;
+      border-radius: 9999px;
+      font-size: 12.5px;
       font-weight: 700;
-      padding: 7px 16px;
-      border-radius: 999px;
+      color: #94a3b8;
+      background: transparent;
+      border: 1px solid transparent;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .plan-pill:hover {
+      color: #f1f5f9;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .plan-pill.active {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.28), rgba(180, 83, 9, 0.35));
+      border: 1px solid var(--gold-primary);
+      color: var(--gold-light);
+      box-shadow: 0 0 16px rgba(245, 158, 11, 0.35);
+    }
+
+    /* Right HUD Tools: Style Switcher & Tour Button */
+    .hud-controls-left {
+      position: absolute;
+      top: 76px;
+      left: 18px;
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .hud-btn {
+      padding: 8px 14px;
+      border-radius: 12px;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #f1f5f9;
+      background: var(--panel-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      white-space: nowrap;
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      gap: 7px;
+      transition: all 0.25s ease;
     }
 
-    .plan-tab-btn:hover {
-      color: #fff;
-      background: rgba(255, 255, 255, 0.08);
-    }
-
-    .plan-tab-btn.active {
-      background: linear-gradient(135deg, #d4af37, #b45309);
-      color: #0f172a;
-      box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
-      font-weight: 900;
-    }
-
-    /* Layer Switcher & Map Tools */
-    .map-tools-box {
-      position: absolute;
-      top: 80px;
-      left: 16px;
-      z-index: 10;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .tool-group {
-      background: var(--card-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 6px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
-    }
-
-    .tool-btn {
-      background: transparent;
-      border: 1px solid transparent;
-      color: var(--text-muted);
-      border-radius: 8px;
-      padding: 6px 12px;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      text-align: left;
-      transition: all 0.2s;
-    }
-
-    .tool-btn:hover {
-      color: #fff;
-      background: rgba(255,255,255,0.06);
-    }
-
-    .tool-btn.active {
-      background: rgba(212, 175, 55, 0.2);
-      border-color: var(--gold-primary);
-      color: var(--gold-light);
-      font-weight: 800;
-    }
-
-    /* 3D View Presets */
-    .view-presets {
-      position: absolute;
-      bottom: 24px;
-      left: 16px;
-      z-index: 10;
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .preset-chip {
-      background: var(--card-bg);
-      backdrop-filter: blur(14px);
-      border: 1px solid rgba(255,255,255,0.15);
-      color: #e2e8f0;
-      border-radius: 20px;
-      padding: 6px 14px;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-    }
-
-    .preset-chip:hover {
+    .hud-btn:hover {
       border-color: var(--gold-primary);
       color: var(--gold-light);
       transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7), 0 0 15px var(--panel-glow);
     }
 
-    /* Interactive Side Drawer */
-    .side-drawer {
+    .hud-btn.cinema-active {
+      background: linear-gradient(135deg, #b45309, #d97706);
+      border-color: var(--gold-light);
+      color: #ffffff;
+      animation: pulse-glow 2s infinite;
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 15px rgba(245, 158, 11, 0.4); }
+      50% { box-shadow: 0 0 30px rgba(245, 158, 11, 0.85); }
+    }
+
+    /* Map Style Switcher Floating Pill */
+    .style-pill-box {
+      display: flex;
+      background: var(--panel-bg);
+      backdrop-filter: var(--glass-blur);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      padding: 3px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    }
+
+    .style-btn {
+      padding: 5px 10px;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #94a3b8;
+      background: transparent;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .style-btn.active {
+      background: rgba(245, 158, 11, 0.22);
+      color: var(--gold-light);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+    }
+
+    /* Floating Executive Side Drawer (Desktop) */
+    .executive-drawer {
       position: absolute;
-      top: 80px;
-      bottom: 24px;
-      right: 16px;
+      top: 76px;
+      right: 18px;
       width: 380px;
-      max-width: calc(100vw - 32px);
-      background: var(--card-bg);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--card-border);
-      border-radius: 18px;
-      z-index: 10;
+      height: calc(100vh - 96px);
+      z-index: 20;
+      background: rgba(11, 15, 25, 0.88);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      border-radius: 20px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px var(--panel-glow);
       display: flex;
       flex-direction: column;
-      box-shadow: -10px 0 30px rgba(0,0,0,0.7);
-      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
       overflow: hidden;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
     }
 
-    .side-drawer.collapsed {
-      transform: translateX(calc(100% + 24px));
+    .executive-drawer.collapsed {
+      transform: translateX(calc(100% + 40px));
+      opacity: 0;
+      pointer-events: none;
     }
 
-    .drawer-header {
-      padding: 16px 20px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(0,0,0,0.25);
-    }
-
-    .drawer-title-box h3 {
-      font-size: 16px;
-      font-weight: 800;
-      color: var(--gold-light);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .drawer-title-box p {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-
-    .drawer-close-btn {
-      background: rgba(255,255,255,0.08);
-      border: none;
-      color: #cbd5e1;
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      transition: all 0.2s;
-    }
-
-    .drawer-close-btn:hover {
-      background: rgba(255,255,255,0.2);
-      color: #fff;
-    }
-
-    .drawer-toggle-tab {
+    .drawer-toggle-btn {
       position: absolute;
-      top: 96px;
-      right: 16px;
-      z-index: 9;
-      background: var(--card-bg);
-      backdrop-filter: blur(16px);
-      border: 1px solid var(--card-border);
-      color: var(--gold-light);
+      top: 76px;
+      right: 18px;
+      z-index: 19;
+      padding: 9px 15px;
       border-radius: 12px;
-      padding: 10px 14px;
+      background: var(--panel-bg);
+      backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--panel-border);
+      color: var(--gold-light);
+      font-size: 12.5px;
+      font-weight: 800;
       cursor: pointer;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-      font-size: 13px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.25s ease;
+    }
+
+    .drawer-toggle-btn:hover {
+      background: rgba(245, 158, 11, 0.2);
+      border-color: var(--gold-primary);
+      transform: translateY(-2px);
+    }
+
+    /* Drawer Header */
+    .drawer-top-banner {
+      padding: 16px 18px 12px 18px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      background: linear-gradient(180deg, rgba(245, 158, 11, 0.08) 0%, rgba(0, 0, 0, 0) 100%);
+    }
+
+    .plan-meta-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 800;
+      color: #92400e;
+      background: var(--gold-light);
+      padding: 2px 8px;
+      border-radius: 9999px;
+      margin-bottom: 6px;
+    }
+
+    .drawer-top-banner h3 {
+      font-size: 15px;
+      font-weight: 900;
+      color: #ffffff;
+      line-height: 1.35;
+      margin-bottom: 3px;
+    }
+
+    .drawer-top-banner p {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+
+    .drawer-departure-pill {
+      margin-top: 8px;
+      padding: 7px 10px;
+      border-radius: 8px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      font-size: 11.5px;
+      color: #6ee7b7;
       font-weight: 700;
       display: flex;
       align-items: center;
       gap: 6px;
     }
 
-    .drawer-body {
+    /* Drawer Spots Scroll Area */
+    .spots-scroll-container {
       flex: 1;
       overflow-y: auto;
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    /* Itinerary Step Card */
-    .spot-card {
-      background: rgba(30, 32, 42, 0.7);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 14px;
-      padding: 12px;
-      cursor: pointer;
-      transition: all 0.25s ease;
+      padding: 12px 16px;
       display: flex;
       flex-direction: column;
       gap: 10px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(245, 158, 11, 0.3) transparent;
+    }
+
+    .spots-scroll-container::-webkit-scrollbar {
+      width: 4px;
+    }
+    .spots-scroll-container::-webkit-scrollbar-thumb {
+      background: rgba(245, 158, 11, 0.3);
+      border-radius: 9999px;
+    }
+
+    /* Spot Card Item */
+    .spot-card {
+      background: rgba(18, 24, 38, 0.92);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      padding: 12px;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
       position: relative;
       overflow: hidden;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
     }
 
     .spot-card::before {
       content: '';
       position: absolute;
-      top: 0;
       left: 0;
-      width: 4px;
-      height: 100%;
-      background: var(--card-border);
-      transition: background 0.2s;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: transparent;
+      transition: background 0.25s;
     }
 
     .spot-card:hover {
-      border-color: var(--gold-primary);
-      background: rgba(35, 38, 52, 0.95);
+      background: rgba(255, 255, 255, 0.07);
+      border-color: rgba(245, 158, 11, 0.4);
       transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
     }
 
-    .spot-card.active-spot {
+    .spot-card.active {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(0, 0, 0, 0.4));
       border-color: var(--gold-primary);
-      background: rgba(45, 48, 65, 0.95);
-      box-shadow: 0 0 18px rgba(212, 175, 55, 0.25);
+      box-shadow: 0 0 16px rgba(245, 158, 11, 0.2);
     }
 
-    .spot-card.active-spot::before {
+    .spot-card.active::before {
       background: var(--gold-primary);
-      width: 6px;
     }
 
     .spot-card-header {
       display: flex;
-      gap: 12px;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 6px;
     }
 
-    .spot-img-box {
-      width: 86px;
-      height: 64px;
-      border-radius: 8px;
-      overflow: hidden;
-      flex-shrink: 0;
-      position: relative;
-      background: #1e1e24;
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-
-    .spot-img-box img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.3s;
-    }
-
-    .spot-card:hover .spot-img-box img {
-      transform: scale(1.08);
-    }
-
-    .spot-info {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .spot-time-badge {
-      display: inline-block;
-      font-size: 11px;
-      font-weight: 800;
+    .spot-number-badge {
+      width: 22px;
+      height: 22px;
+      border-radius: 5px;
+      background: rgba(245, 158, 11, 0.2);
+      border: 1px solid var(--gold-primary);
       color: var(--gold-light);
-      background: rgba(212, 175, 55, 0.15);
-      border-radius: 4px;
-      padding: 1px 6px;
-      margin-bottom: 4px;
-    }
-
-    .spot-name {
-      font-size: 14px;
-      font-weight: 700;
-      color: #fff;
-      line-height: 1.3;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .spot-subtext {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-top: 2px;
-      line-height: 1.3;
-    }
-
-    .spot-badges-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      font-size: 11px;
-    }
-
-    .badge-transit {
-      background: rgba(6, 182, 212, 0.15);
-      color: #38bdf8;
-      border: 1px solid rgba(6, 182, 212, 0.3);
-      padding: 2px 8px;
-      border-radius: 6px;
-      font-weight: 600;
-    }
-
-    .badge-pass {
-      background: rgba(16, 185, 129, 0.15);
-      color: #34d399;
-      border: 1px solid rgba(16, 185, 129, 0.3);
-      padding: 2px 8px;
-      border-radius: 6px;
-      font-weight: 600;
-    }
-
-    /* 3D Map Custom Marker Styles */
-    .map-custom-marker {
-      cursor: pointer;
-      transform: translate(-50%, -100%);
-      transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-
-    .map-custom-marker:hover {
-      transform: translate(-50%, -115%) scale(1.12);
-      z-index: 50;
-    }
-
-    .marker-pin-body {
-      background: var(--card-bg);
-      border: 2px solid var(--gold-primary);
-      border-radius: 24px;
-      padding: 4px 10px 4px 6px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.8), 0 0 12px rgba(212,175,55,0.4);
-      position: relative;
-      white-space: nowrap;
-    }
-
-    .marker-pin-body::after {
-      content: '';
-      position: absolute;
-      bottom: -8px;
-      left: 50%;
-      transform: translateX(-50%);
-      border-width: 8px 6px 0 6px;
-      border-style: solid;
-      border-color: var(--gold-primary) transparent transparent transparent;
-    }
-
-    .marker-photo-thumb {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      overflow: hidden;
-      border: 1.5px solid #fff;
-      flex-shrink: 0;
-      background: #222;
-    }
-
-    .marker-photo-thumb img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .marker-label-text {
-      font-size: 12px;
-      font-weight: 800;
-      color: #fff;
-      text-shadow: 0 1px 3px rgba(0,0,0,0.8);
-    }
-
-    .marker-order-num {
-      background: var(--gold-primary);
-      color: #0f172a;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 900;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
-    /* Modal for Detailed Spot / Comparison Chart */
+    .spot-time-badge {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--gold-light);
+      background: rgba(0, 0, 0, 0.4);
+      padding: 2px 7px;
+      border-radius: 5px;
+      border: 1px solid rgba(245, 158, 11, 0.25);
+    }
+
+    .spot-title-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .spot-title {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .spot-thumb-box {
+      width: 100%;
+      height: 95px;
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+      margin: 6px 0;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .spot-thumb-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .spot-card:hover .spot-thumb-box img {
+      transform: scale(1.05);
+    }
+
+    .spot-desc {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      line-height: 1.45;
+      margin-bottom: 6px;
+    }
+
+    .spot-transit-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10.5px;
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.1);
+      padding: 2px 7px;
+      border-radius: 5px;
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      font-weight: 600;
+    }
+
+    /* 3D Waypoint Beacons in WebGL */
+    .waypoint-beacon {
+      position: relative;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: max-content;
+      pointer-events: auto;
+      z-index: 10;
+      transform: translate(-50%, -100%);
+    }
+
+    .waypoint-beacon:hover {
+      z-index: 50;
+    }
+
+    /* Ground Radar Ring */
+    .beacon-radar-ring {
+      position: absolute;
+      bottom: -4px;
+      left: 50%;
+      transform: translateX(-50%) rotateX(65deg);
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid var(--gold-primary);
+      background: rgba(245, 158, 11, 0.2);
+      animation: pulse-radar 2.4s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+      pointer-events: none;
+    }
+
+    @keyframes pulse-radar {
+      0% {
+        transform: translateX(-50%) rotateX(65deg) scale(0.4);
+        opacity: 1;
+      }
+      100% {
+        transform: translateX(-50%) rotateX(65deg) scale(2.6);
+        opacity: 0;
+      }
+    }
+
+    /* Vertical Light Spire */
+    .beacon-spire {
+      width: 2px;
+      height: 24px;
+      background: linear-gradient(180deg, var(--gold-light), var(--gold-primary), transparent);
+      box-shadow: 0 0 6px var(--gold-primary);
+      margin-top: 3px;
+    }
+
+    /* Floating Glass Hologram Card */
+    .beacon-pill {
+      padding: 3px 9px;
+      border-radius: 9999px;
+      background: rgba(13, 17, 28, 0.9);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--gold-primary);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6), 0 0 10px rgba(245, 158, 11, 0.4);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      white-space: nowrap;
+      transition: all 0.25s ease;
+    }
+
+    .waypoint-beacon:hover .beacon-pill {
+      transform: scale(1.1) translateY(-2px);
+      border-color: #ffffff;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.8), 0 0 18px var(--gold-primary);
+    }
+
+    .beacon-idx {
+      font-size: 9.5px;
+      font-weight: 900;
+      color: #07090e;
+      background: var(--gold-primary);
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .beacon-name {
+      font-size: 11.5px;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    /* Mobile Bottom Sheet (Compact by default!) */
+    .mobile-bottom-bar {
+      display: none;
+      position: absolute;
+      bottom: 14px;
+      left: 12px;
+      right: 12px;
+      z-index: 25;
+      background: var(--panel-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--panel-border);
+      border-radius: 14px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+      padding: 8px 12px;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+
+    /* Fullscreen Modal for High-Res Photos */
     .photo-modal-overlay {
+      display: none;
       position: fixed;
       top: 0;
       left: 0;
-      right: 0;
-      bottom: 0;
+      width: 100vw;
+      height: 100vh;
       background: rgba(0, 0, 0, 0.88);
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(16px);
       z-index: 100;
-      display: none;
       align-items: center;
       justify-content: center;
       padding: 20px;
     }
 
-    .photo-modal-overlay.open {
-      display: flex;
-    }
-
-    .modal-content-box {
-      background: #13141a;
-      border: 1px solid var(--gold-primary);
-      border-radius: 16px;
-      max-width: 900px;
-      width: 100%;
-      max-height: 90vh;
-      overflow-y: auto;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.9);
-      position: relative;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .modal-img-container {
-      width: 100%;
-      max-height: 520px;
-      background: #000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .photo-modal-card {
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: 18px;
       overflow: hidden;
+      max-width: 620px;
+      width: 100%;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.9);
+      position: relative;
     }
 
-    .modal-img-container img {
-      max-width: 100%;
-      max-height: 520px;
-      object-fit: contain;
-    }
-
-    .modal-detail-panel {
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .modal-close-x {
+    .modal-close-btn {
       position: absolute;
-      top: 14px;
-      right: 14px;
-      background: rgba(0,0,0,0.6);
-      border: 1px solid rgba(255,255,255,0.3);
-      color: #fff;
-      width: 36px;
-      height: 36px;
+      top: 12px;
+      right: 12px;
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
-      cursor: pointer;
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      font-size: 15px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
+      cursor: pointer;
       z-index: 10;
-      transition: all 0.2s;
     }
 
-    .modal-close-x:hover {
-      background: var(--ruby-accent);
-      border-color: var(--ruby-accent);
+    /* Tour Notification Toast */
+    .tour-toast {
+      display: none;
+      position: absolute;
+      top: 76px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 30;
+      padding: 7px 16px;
+      background: linear-gradient(135deg, rgba(180, 83, 9, 0.95), rgba(217, 119, 6, 0.95));
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--gold-light);
+      border-radius: 9999px;
+      color: #ffffff;
+      font-size: 12.5px;
+      font-weight: 800;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 20px rgba(245, 158, 11, 0.5);
+      align-items: center;
+      gap: 10px;
     }
 
-    @media (max-width: 768px) {
-      .top-header {
-        flex-direction: column;
-        align-items: stretch;
+    /* Responsive Adaptation */
+    @media (max-width: 860px) {
+      .header-capsule {
+        top: 8px;
+        padding: 4px 8px;
+        max-width: calc(100vw - 16px);
       }
-      .plan-selector-bar {
-        order: 2;
+      .hud-controls-left {
+        top: 58px;
+        left: 8px;
+        gap: 6px;
       }
-      .brand-badge {
-        order: 1;
-        justify-content: space-between;
+      .hud-btn {
+        padding: 5px 10px;
+        font-size: 11px;
+        border-radius: 8px;
       }
-      .map-tools-box {
-        top: 130px;
+      .style-pill-box {
+        padding: 2px;
       }
-      .side-drawer {
-        width: 100%;
-        max-width: 100%;
+      .style-btn {
+        padding: 4px 8px;
+        font-size: 10.5px;
+      }
+      .executive-drawer {
+        display: none;
+      }
+      .drawer-toggle-btn {
+        display: none;
+      }
+      .mobile-bottom-bar {
+        display: flex;
+      }
+      /* Mobile modal drawer */
+      body.mobile-sheet-open .executive-drawer {
+        display: flex;
+        position: fixed;
+        top: auto;
+        bottom: 0;
         left: 0;
         right: 0;
-        bottom: 0;
-        top: auto;
-        height: 60vh;
+        width: 100%;
+        max-height: 60vh;
         border-radius: 20px 20px 0 0;
         transform: translateY(0);
-      }
-      .side-drawer.collapsed {
-        transform: translateY(calc(100% - 44px));
-      }
-      .view-presets {
-        display: none;
+        opacity: 1;
+        pointer-events: auto;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- Fullscreen 3D Map Container -->
+  <!-- Fullscreen WebGL Map -->
   <div id="map"></div>
 
-  <!-- Top Glass Header Bar -->
-  <header class="top-header">
-    <div class="brand-badge">
-      <a href="index.html" class="back-btn">⬅️ 返回隨身指南</a>
-      <div class="brand-title">SHENG XIN <span>2026 OSAKA 3D</span></div>
-    </div>
+  <!-- Ambient Cinematic Vignette -->
+  <div class="vignette-overlay"></div>
 
-    <!-- Plan Switcher Bar -->
-    <nav class="plan-selector-bar">
-      <button class="plan-tab-btn active" id="tab-planAPlus" onclick="switchPlan('planAPlus')">🏯 Plan A+ 旗艦究極線 (08:00出發)</button>
-      <button class="plan-tab-btn" id="tab-planA" onclick="switchPlan('planA')">🏛️ Plan A 標準文化線 (09:00出發)</button>
-      <button class="plan-tab-btn" id="tab-planB" onclick="switchPlan('planB')">🦈 Plan B：港灣海景 (08:50出發)</button>
-      <button class="plan-tab-btn" id="tab-planC" onclick="switchPlan('planC')">🍁 Plan C：箕面賞楓 (09:30出發)</button>
-      <button class="plan-tab-btn" id="tab-official5d" onclick="switchPlan('official5d')">🗺️ 盛欣五日全景</button>
-      <button class="plan-tab-btn" onclick="openChartModal()" style="color:var(--gold-light);">📊 雙方案決策大圖</button>
-    </nav>
+  <!-- Floating Glass Header Capsule -->
+  <header class="header-capsule">
+    <a href="index.html" class="back-home-pill">⬅️ 返回手冊</a>
+    <div class="brand-divider"></div>
+    <div class="plan-pills-scroll">
+      <button class="plan-pill active" id="tab-planAPlus" onclick="switchPlan('planAPlus')">🏯 Plan A+ (08:00)</button>
+      <button class="plan-pill" id="tab-planA" onclick="switchPlan('planA')">🏛️ Plan A (09:00)</button>
+      <button class="plan-pill" id="tab-planB" onclick="switchPlan('planB')">🦈 Plan B (08:50)</button>
+      <button class="plan-pill" id="tab-planC" onclick="switchPlan('planC')">🍁 Plan C (09:30)</button>
+      <button class="plan-pill" id="tab-official5d" onclick="switchPlan('official5d')">🗺️ 盛欣五日全覽</button>
+    </div>
   </header>
 
-  <!-- Left Map Layer & Camera Tools -->
-  <aside class="map-tools-box">
-    <div class="tool-group">
-      <span style="font-size: 10px; font-weight:800; color: var(--gold-primary); text-transform:uppercase; padding: 2px 6px;">在地圖資切換</span>
-      <button class="tool-btn active" id="btn-layer-satellite" onclick="setMapLayer('satellite')">
-        🛰️ 空拍衛星 3D
-      </button>
-      <button class="tool-btn" id="btn-layer-gsi" onclick="setMapLayer('gsi')">
-        🗾 日本國土地理院
-      </button>
-      <button class="tool-btn" id="btn-layer-voyager" onclick="setMapLayer('voyager')">
-        🗺️ 日系旅人街道
-      </button>
-      <button class="tool-btn" id="btn-layer-dark" onclick="setMapLayer('dark')">
-        🌌 深邃黑曜夜景
-      </button>
+  <!-- Left HUD Controls: Style Switcher & Tour -->
+  <div class="hud-controls-left">
+    <div class="style-pill-box">
+      <button class="style-btn active" id="btn-style-dark" onclick="switchBasemap('dark')">🌌 黑曜極光</button>
+      <button class="style-btn" id="btn-style-satellite" onclick="switchBasemap('satellite')">🛰️ 高空航拍</button>
+      <button class="style-btn" id="btn-style-voyager" onclick="switchBasemap('voyager')">🏛️ 米蘭暖琥珀</button>
     </div>
 
-    <div class="tool-group">
-      <span style="font-size: 10px; font-weight:800; color: var(--gold-primary); text-transform:uppercase; padding: 2px 6px;">視角操控</span>
-      <button class="tool-btn" onclick="toggleTilt()">
-        📐 3D 俯仰切換 (60°)
-      </button>
-      <button class="tool-btn" onclick="startCameraOrbit()">
-        🔄 360° 環繞巡航
-      </button>
-      <button class="tool-btn" onclick="resetToCenter()">
-        🎯 鎖定關西中心
-      </button>
+    <button class="hud-btn" id="btn-drone-tour" onclick="toggleDroneTour()">
+      <span>🎬</span> 3D 航拍巡航
+    </button>
+    
+    <button class="hud-btn" id="btn-orbit" onclick="toggleAutoOrbit()">
+      <span>🔄</span> 360° 空間盤旋
+    </button>
+  </div>
+
+  <!-- Desktop Drawer Toggle Button -->
+  <button class="drawer-toggle-btn" id="drawer-toggle-btn" onclick="toggleDrawer()">
+    <span>📋</span> 隱藏/展開清單
+  </button>
+
+  <!-- Floating Executive Drawer -->
+  <aside class="executive-drawer" id="executiveDrawer">
+    <div class="drawer-top-banner">
+      <div class="plan-meta-badge" id="drawerPlanBadge">✨ 推薦首選方案</div>
+      <h3 id="drawerPlanTitle">Plan A+ 達人旗艦全日究極動線</h3>
+      <p id="drawerPlanSubtitle">晨間海鮮大市場 ➔ 獅子殿 ➔ 雙古蹟 ➔ 今昔館 ➔ 最長商街 ➔ 難波電器 ➔ 百萬夜景</p>
+      <div class="drawer-departure-pill" id="drawerDeparture">
+        <span>⏰</span> 出發：08:00 心齋橋飯店準時出發
+      </div>
+    </div>
+
+    <div class="spots-scroll-container" id="spotsList">
+      <!-- Generated Dynamically -->
     </div>
   </aside>
 
-  <!-- Bottom Quick Camera Angles -->
-  <div class="view-presets">
-    <button class="preset-chip" onclick="flyToCoordinates([135.5036, 34.6738], 16.5, 55, 10)">🏨 心齋橋出發點</button>
-    <button class="preset-chip" onclick="flyToCoordinates([135.4988, 34.6567], 16.2, 58, 20)">🐟 木津海鮮市場</button>
-    <button class="preset-chip" onclick="flyToCoordinates([135.4965, 34.6616], 16.5, 60, 0)">🦁 難波八阪神社</button>
-    <button class="preset-chip" onclick="flyToCoordinates([135.5258, 34.6873], 15.8, 60, 25)">🏯 大阪城天守閣</button>
-    <button class="preset-chip" onclick="flyToCoordinates([135.5133, 34.6976], 16.0, 55, 15)">⛩️ 大阪天滿宮</button>
-    <button class="preset-chip" onclick="flyToCoordinates([135.5140, 34.6460], 16.5, 62, -20)">🌃 HARUKAS 300</button>
-    <button class="preset-chip" onclick="flyToCoordinates([135.4289, 34.6545], 15.5, 60, 45)">🦈 大阪港海遊館</button>
-    <button class="preset-chip" onclick="flyToCoordinates([135.4912, 34.8659], 15.2, 55, 10)">🍁 箕面勝尾寺</button>
+  <!-- Mobile Bottom Quick Bar -->
+  <div class="mobile-bottom-bar" id="mobileBottomBar" onclick="toggleMobileSheet()">
+    <div style="display:flex; align-items:center; gap:8px;">
+      <span style="font-size:16px;">📍</span>
+      <div>
+        <div style="font-size:12px; font-weight:800; color:#fff;" id="mobTitle">Plan A+ 旗艦線 (08:00出發)</div>
+        <div style="font-size:10.5px; color:#cbd5e1;" id="mobSub">點擊查看 8 處完整時程與地圖</div>
+      </div>
+    </div>
+    <span style="font-size:11px; font-weight:800; color:var(--gold-light); background:rgba(245,158,11,0.2); padding:3px 9px; border-radius:9999px;">時程清單 ▲</span>
   </div>
 
-  <!-- Drawer Toggle Handle (when closed) -->
-  <button class="drawer-toggle-tab" onclick="toggleDrawer(true)">
-    📋 查看行程節點
-  </button>
+  <!-- Tour Toast -->
+  <div class="tour-toast" id="tourToast">
+    <span>🎬 3D 航拍巡航中：</span>
+    <span id="tourToastText">第 1 站：木津市場</span>
+    <button onclick="stopDroneTour()" style="background:rgba(0,0,0,0.4); border:1px solid #fff; color:#fff; border-radius:6px; padding:2px 8px; font-size:11px; cursor:pointer;">結束</button>
+  </div>
 
-  <!-- Right Collapsible Interactive Itinerary Drawer -->
-  <section class="side-drawer" id="sideDrawer">
-    <div class="drawer-header">
-      <div class="drawer-title-box">
-        <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
-          <span style="background:var(--gold-primary); color:#0f172a; font-size:10.5px; font-weight:900; padding:2px 7px; border-radius:4px; letter-spacing:0.5px;">⏰ 出發時間</span>
-          <span id="drawerDepartureTime" style="color:#fde68a; font-weight:800; font-size:12px;">08:00 心齋橋飯店出發</span>
-        </div>
-        <h3 id="drawerPlanTitle">🏯 Plan A+：達人旗艦究極線</h3>
-        <p id="drawerPlanSubtitle">文化古蹟 ➔ 日本最長商店街 ➔ 傍晚難波採購電器</p>
-      </div>
-      <button class="drawer-close-btn" onclick="toggleDrawer(false)" title="收合面板">✕</button>
-    </div>
-
-    <div class="drawer-body" id="drawerSpotList">
-      <!-- Dynamically filled with spot cards -->
-    </div>
-  </section>
-
-  <!-- High-Res Detail / Chart Modal -->
-  <div class="photo-modal-overlay" id="photoModal" onclick="closeModalOnBg(event)">
-    <div class="modal-content-box">
-      <button class="modal-close-x" onclick="closeModal()">✕</button>
-      <div class="modal-img-container">
-        <img id="modalImg" src="" alt="詳細圖鑑">
-      </div>
-      <div class="modal-detail-panel">
-        <h3 id="modalTitle" style="color:var(--gold-light); font-size:18px; font-weight:800;"></h3>
-        <p id="modalDesc" style="color:#cbd5e1; font-size:14px; line-height:1.6;"></p>
-        <div id="modalMeta" style="display:flex; gap:10px; flex-wrap:wrap; margin-top:6px;"></div>
+  <!-- Modal for High Res Images -->
+  <div class="photo-modal-overlay" id="photoModal" onclick="closePhotoModal(event)">
+    <div class="photo-modal-card" onclick="event.stopPropagation()">
+      <div class="modal-close-btn" onclick="closePhotoModal()">✕</div>
+      <img id="modalImg" src="" style="width:100%; height:300px; object-fit:cover; display:block;" alt="Spot">
+      <div style="padding:18px;">
+        <h4 id="modalTitle" style="font-size:17px; font-weight:900; color:#ffffff; margin-bottom:5px;"></h4>
+        <p id="modalDesc" style="font-size:12.5px; color:#cbd5e1; line-height:1.55; margin-bottom:10px;"></p>
+        <div id="modalMeta" style="display:flex; gap:8px; flex-wrap:wrap;"></div>
       </div>
     </div>
   </div>
 
   <script>
     /* ========================================================================
-       2026 盛欣大阪五日行在地真實座標與圖資資料庫 (100% 本地 images/ 照片)
+       1. 地理座標資料庫與在地真實相片
        ======================================================================== */
-        const LANDMARKS_DATA = {
+    const LANDMARKS_DATA = {
       planAPlus: {
         title: '🏯 Day 4 Plan A+：達人旗艦全日究極動線',
         subtitle: '晨間海鮮大市場 ➔ 獅子殿 ➔ 雙古蹟 ➔ 今昔館 ➔ 最長商店街 ➔ 難波電器 ➔ 百萬夜景',
@@ -1319,39 +1357,115 @@
     /* ========================================================================
        Map 初始化與底圖圖層配置
        ======================================================================== */
+
+    /* ========================================================================
+       2. 關西 3D Procedural 地標建築幾何模型（立體拔起 Extruded 3D Buildings）
+       ======================================================================== */
+    function generate3DBuildingsGeoJSON() {
+      const features = [];
+
+      function makeSquare(centerLon, centerLat, sizeMeters) {
+        const dLat = (sizeMeters / 2) * 0.000009;
+        const dLon = (sizeMeters / 2) * 0.0000109;
+        return [
+          [centerLon - dLon, centerLat - dLat],
+          [centerLon + dLon, centerLat - dLat],
+          [centerLon + dLon, centerLat + dLat],
+          [centerLon - dLon, centerLat + dLat],
+          [centerLon - dLon, centerLat - dLat]
+        ];
+      }
+
+      // 大阪城天守閣 (Osaka Castle 3-tier Pagoda)
+      const oc = [135.5262, 34.6873];
+      features.push(
+        { type: 'Feature', properties: { height: 25, base: 0, color: '#334155' }, geometry: { type: 'Polygon', coordinates: [makeSquare(oc[0], oc[1], 70)] } },
+        { type: 'Feature', properties: { height: 50, base: 25, color: '#1e293b' }, geometry: { type: 'Polygon', coordinates: [makeSquare(oc[0], oc[1], 46)] } },
+        { type: 'Feature', properties: { height: 75, base: 50, color: '#d97706' }, geometry: { type: 'Polygon', coordinates: [makeSquare(oc[0], oc[1], 28)] } },
+        { type: 'Feature', properties: { height: 88, base: 75, color: '#fbbf24' }, geometry: { type: 'Polygon', coordinates: [makeSquare(oc[0], oc[1], 14)] } }
+      );
+
+      // 阿倍野 HARUKAS 300 (300m Skyscraper)
+      const ab = [135.5134, 34.6460];
+      features.push(
+        { type: 'Feature', properties: { height: 120, base: 0, color: '#0369a1' }, geometry: { type: 'Polygon', coordinates: [makeSquare(ab[0], ab[1], 65)] } },
+        { type: 'Feature', properties: { height: 220, base: 120, color: '#0284c7' }, geometry: { type: 'Polygon', coordinates: [makeSquare(ab[0], ab[1], 45)] } },
+        { type: 'Feature', properties: { height: 300, base: 220, color: '#38bdf8' }, geometry: { type: 'Polygon', coordinates: [makeSquare(ab[0], ab[1], 30)] } }
+      );
+
+      // 通天閣 (Tsutenkaku Lattice Tower 108m)
+      const ttk = [135.5063, 34.6525];
+      features.push(
+        { type: 'Feature', properties: { height: 30, base: 0, color: '#78350f' }, geometry: { type: 'Polygon', coordinates: [makeSquare(ttk[0], ttk[1], 36)] } },
+        { type: 'Feature', properties: { height: 85, base: 30, color: '#b45309' }, geometry: { type: 'Polygon', coordinates: [makeSquare(ttk[0], ttk[1], 18)] } },
+        { type: 'Feature', properties: { height: 108, base: 85, color: '#f59e0b' }, geometry: { type: 'Polygon', coordinates: [makeSquare(ttk[0], ttk[1], 10)] } }
+      );
+
+      // 梅田藍天大廈 (Umeda Sky Building 173m Twin Towers)
+      const um = [135.4897, 34.7052];
+      features.push(
+        { type: 'Feature', properties: { height: 173, base: 0, color: '#0284c7' }, geometry: { type: 'Polygon', coordinates: [makeSquare(um[0] - 0.0003, um[1], 28)] } },
+        { type: 'Feature', properties: { height: 173, base: 0, color: '#0284c7' }, geometry: { type: 'Polygon', coordinates: [makeSquare(um[0] + 0.0003, um[1], 28)] } },
+        { type: 'Feature', properties: { height: 173, base: 145, color: '#38bdf8' }, geometry: { type: 'Polygon', coordinates: [makeSquare(um[0], um[1], 55)] } }
+      );
+
+      // 心齋橋總部飯店大本營 (Shinsaibashi Hub Tower)
+      const sh = [135.5020, 34.6720];
+      features.push(
+        { type: 'Feature', properties: { height: 75, base: 0, color: '#10b981' }, geometry: { type: 'Polygon', coordinates: [makeSquare(sh[0], sh[1], 40)] } },
+        { type: 'Feature', properties: { height: 90, base: 75, color: '#f59e0b' }, geometry: { type: 'Polygon', coordinates: [makeSquare(sh[0], sh[1], 20)] } }
+      );
+
+      // 海遊館 (Kaiyukan Pavilion)
+      const ky = [135.4289, 34.6545];
+      features.push(
+        { type: 'Feature', properties: { height: 45, base: 0, color: '#1d4ed8' }, geometry: { type: 'Polygon', coordinates: [makeSquare(ky[0], ky[1], 65)] } },
+        { type: 'Feature', properties: { height: 60, base: 45, color: '#38bdf8' }, geometry: { type: 'Polygon', coordinates: [makeSquare(ky[0], ky[1], 35)] } }
+      );
+
+      // 咲洲宇宙塔 (Cosmo Tower 256m)
+      const cs = [135.4157, 34.6385];
+      features.push(
+        { type: 'Feature', properties: { height: 256, base: 0, color: '#6366f1' }, geometry: { type: 'Polygon', coordinates: [makeSquare(cs[0], cs[1], 48)] } }
+      );
+
+      return { type: 'FeatureCollection', features };
+    }
+
+    /* ========================================================================
+       3. MapLibre 頂級底圖配置 (預設極致黑曜 Carto Dark Matter @2x)
+       ======================================================================== */
     const TILE_SOURCES = {
+      dark: {
+        type: 'raster',
+        tiles: ['https://services.arcgisonline.com/arcgis/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}'],
+        tileSize: 256,
+        maxzoom: 15,
+        attribution: '&copy; Esri Dark Canvas'
+      },
       satellite: {
         type: 'raster',
         tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'],
         tileSize: 256,
-        attribution: 'Tiles &copy; Esri World Imagery'
-      },
-      gsi: {
-        type: 'raster',
-        tiles: ['https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png'],
-        tileSize: 256,
-        attribution: '國土地理院 (GSI Japan)'
+        attribution: '&copy; Esri World Imagery'
       },
       voyager: {
         type: 'raster',
-        tiles: ['https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}@2x.png'],
+        tiles: ['https://services.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}'],
         tileSize: 256,
-        attribution: '&copy; CartoDB &copy; OpenStreetMap'
-      },
-      dark: {
-        type: 'raster',
-        tiles: ['https://basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}@2x.png'],
-        tileSize: 256,
-        attribution: '&copy; CartoDB &copy; OpenStreetMap'
+        attribution: '&copy; Esri Topo'
       }
     };
 
-    let map;
-    let currentLayerKey = 'satellite';
+    let map; window.map = null;
+    let currentLayerKey = 'dark'; // 預設黑曜夜景，專業度破表
     let currentPlanKey = 'planAPlus';
     let activeMarkers = [];
     let isOrbiting = false;
     let orbitAnimFrame = null;
+    let isDroneTouring = false;
+    let tourStep = 0;
+    let tourTimeout = null;
 
     function createMapStyle(layerKey) {
       return {
@@ -1365,13 +1479,16 @@
             type: 'raster',
             source: 'base-tiles',
             minzoom: 0,
-            maxzoom: 20
+            maxzoom: 16
           }
         ]
       };
     }
 
-    map = new maplibregl.Map({
+    /* ========================================================================
+       4. 初始化 MapLibre
+       ======================================================================== */
+    window.map = map = new maplibregl.Map({
       container: 'map',
       style: createMapStyle(currentLayerKey),
       center: LANDMARKS_DATA.planAPlus.center,
@@ -1381,315 +1498,322 @@
       antialias: true
     });
 
-    map.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), 'top-right');
+    map.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), 'bottom-right');
 
     map.on('load', () => {
+      init3DBuildingsLayer();
+      initRouteLayers();
       renderCurrentPlan();
     });
-    // Ensure UI and markers populate immediately even before remote tiles finish
-    window.addEventListener('DOMContentLoaded', () => {
-      renderCurrentPlan();
-    });
-    setTimeout(() => {
-      renderCurrentPlan();
-    }, 100);
+
+    /* 加入 3D Extruded Buildings 向量層 */
+    function init3DBuildingsLayer() {
+      if (map.getSource('osaka-3d-buildings')) return;
+
+      map.addSource('osaka-3d-buildings', {
+        type: 'geojson',
+        data: generate3DBuildingsGeoJSON()
+      });
+
+      map.addLayer({
+        id: 'osaka-3d-buildings-layer',
+        type: 'fill-extrusion',
+        source: 'osaka-3d-buildings',
+        paint: {
+          'fill-extrusion-color': ['get', 'color'],
+          'fill-extrusion-height': ['get', 'height'],
+          'fill-extrusion-base': ['get', 'base'],
+          'fill-extrusion-opacity': 0.88
+        }
+      });
+    }
+
+    /* 加入動態流光光束路徑 */
+    function initRouteLayers() {
+      if (map.getSource('plan-route-source')) return;
+
+      map.addSource('plan-route-source', {
+        type: 'geojson',
+        data: { type: 'FeatureCollection', features: [] }
+      });
+
+      // 寬幅琥珀色光暈
+      map.addLayer({
+        id: 'route-glow-layer',
+        type: 'line',
+        source: 'plan-route-source',
+        layout: { 'line-join': 'round', 'line-cap': 'round' },
+        paint: {
+          'line-color': '#d97706',
+          'line-width': 9,
+          'line-opacity': 0.45,
+          'line-blur': 5
+        }
+      });
+
+      // 核心金黃光束
+      map.addLayer({
+        id: 'route-core-layer',
+        type: 'line',
+        source: 'plan-route-source',
+        layout: { 'line-join': 'round', 'line-cap': 'round' },
+        paint: {
+          'line-color': '#fde68a',
+          'line-width': 3.2,
+          'line-opacity': 0.95
+        }
+      });
+    }
 
     /* ========================================================================
-       地圖圖層切換 (空拍衛星 / 日本國土地理院 / 旅人街道 / 黑曜夜景)
+       5. 渲染與切換方案 (Plan Switching)
        ======================================================================== */
-    function setMapLayer(layerKey) {
-      if (layerKey === currentLayerKey) return;
-      currentLayerKey = layerKey;
+    function switchPlan(planKey) {
+      if (!LANDMARKS_DATA[planKey]) return;
+      currentPlanKey = planKey;
+      stopDroneTour();
 
-      document.querySelectorAll('.tool-group .tool-btn').forEach(btn => {
-        btn.classList.remove('active');
-      });
-      const activeBtn = document.getElementById('btn-layer-' + layerKey);
+      // 更新按鈕樣式
+      document.querySelectorAll('.plan-pill').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = document.getElementById('tab-' + planKey);
       if (activeBtn) activeBtn.classList.add('active');
 
-      map.setStyle(createMapStyle(layerKey));
+      renderCurrentPlan();
+
+      const plan = LANDMARKS_DATA[planKey];
+      map.flyTo({
+        center: plan.center,
+        zoom: plan.zoom,
+        pitch: plan.pitch,
+        bearing: plan.bearing,
+        duration: 1600,
+        essential: true
+      });
+    }
+
+    function renderCurrentPlan() {
+      const plan = LANDMARKS_DATA[currentPlanKey];
+      if (!plan) return;
+
+      // 更新抽屜標題
+      document.getElementById('drawerPlanTitle').textContent = plan.title;
+      document.getElementById('drawerPlanSubtitle').textContent = plan.subtitle;
+      document.getElementById('drawerDeparture').innerHTML = '<span>⏰</span> 出發：' + (plan.departureInfo || '準時出發');
+      document.getElementById('mobTitle').textContent = plan.title;
+      document.getElementById('mobSub').textContent = '出發：' + (plan.departureInfo || '');
+
+      // 清除舊 Markers
+      activeMarkers.forEach(m => m.remove());
+      activeMarkers = [];
+
+      // 更新路線 GeoJSON
+      const coords = plan.spots.map(s => s.lngLat || s.coords);
+      if (map.getSource && map.getSource('plan-route-source')) {
+        map.getSource('plan-route-source').setData({
+          type: 'FeatureCollection',
+          features: [{
+            type: 'Feature',
+            geometry: {
+              type: 'LineString',
+              coordinates: coords
+            }
+          }]
+        });
+      }
+
+      // 生成抽屜卡片與 WebGL 標記
+      const listContainer = document.getElementById('spotsList');
+      listContainer.innerHTML = '';
+
+      plan.spots.forEach((spot, idx) => {
+        // 1. 生成 3D 全像光柱標記 (DOM Element)
+        const el = document.createElement('div');
+        el.className = 'waypoint-beacon';
+        el.innerHTML = `
+          <div class="beacon-pill">
+            <span class="beacon-idx">${idx === 0 ? '★' : idx}</span>
+            <span class="beacon-name">${spot.name}</span>
+          </div>
+          <div class="beacon-spire"></div>
+          <div class="beacon-radar-ring"></div>
+        `;
+
+        el.addEventListener('click', () => {
+          focusSpot(idx);
+        });
+
+        const marker = new maplibregl.Marker({ element: el, anchor: 'bottom' })
+          .setLngLat(spot.lngLat || spot.coords)
+          .addTo(map);
+
+        activeMarkers.push(marker);
+
+        // 2. 生成抽屜卡片
+        const card = document.createElement('div');
+        card.className = 'spot-card' + (idx === 0 ? ' active' : '');
+        card.id = 'spot-card-' + idx;
+        card.onclick = () => focusSpot(idx);
+
+        card.innerHTML = `
+          <div class="spot-card-header">
+            <div class="spot-title-row">
+              <span class="spot-number-badge">${idx === 0 ? '起點' : idx}</span>
+              <span class="spot-title">${spot.name}</span>
+            </div>
+            <span class="spot-time-badge">${spot.time}</span>
+          </div>
+
+          <div class="spot-thumb-box" onclick="event.stopPropagation(); openPhotoModal(${idx});">
+            <img src="${(spot.image || spot.img)}" alt="${spot.name}" onerror="this.src='images/osaka_castle.jpg'">
+            <div style="position:absolute; bottom:6px; right:6px; background:rgba(0,0,0,0.6); padding:2px 8px; border-radius:6px; font-size:10px; color:#fde68a;">🔍 點擊放大</div>
+          </div>
+
+          <p class="spot-desc">${spot.desc}</p>
+          <div class="spot-transit-tag">🚶 ${(spot.station || spot.transit)}</div>
+        `;
+
+        listContainer.appendChild(card);
+      });
+    }
+
+    function focusSpot(idx) {
+      const plan = LANDMARKS_DATA[currentPlanKey];
+      const spot = plan.spots[idx];
+      if (!spot) return;
+
+      // 高亮卡片
+      document.querySelectorAll('.spot-card').forEach((c, i) => {
+        if (i === idx) c.classList.add('active');
+        else c.classList.remove('active');
+      });
+
+      const card = document.getElementById('spot-card-' + idx);
+      if (card) card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+      map.flyTo({
+        center: (spot.lngLat || spot.coords),
+        zoom: 15.5,
+        pitch: 62,
+        bearing: (map.getBearing() + 35) % 360,
+        duration: 1800,
+        essential: true
+      });
+    }
+
+    /* ========================================================================
+       6. 3D 航拍巡航導覽 (Cinematic Drone Tour)
+       ======================================================================== */
+    function toggleDroneTour() {
+      if (isDroneTouring) {
+        stopDroneTour();
+      } else {
+        startDroneTour();
+      }
+    }
+
+    function startDroneTour() {
+      const plan = LANDMARKS_DATA[currentPlanKey];
+      if (!plan || !plan.spots.length) return;
+
+      isDroneTouring = true;
+      tourStep = 0;
+      document.getElementById('btn-drone-tour').classList.add('cinema-active');
+      document.getElementById('tourToast').style.display = 'flex';
+      runTourStep();
+    }
+
+    function runTourStep() {
+      if (!isDroneTouring) return;
+      const plan = LANDMARKS_DATA[currentPlanKey];
+      if (tourStep >= plan.spots.length) {
+        tourStep = 0; // 循環或結束
+      }
+
+      const spot = plan.spots[tourStep];
+      document.getElementById('tourToastText').textContent = `第 ${tourStep + 1}/${plan.spots.length} 站：${spot.name} (${spot.time})`;
+
+      focusSpot(tourStep);
+
+      tourStep++;
+      tourTimeout = setTimeout(() => {
+        if (isDroneTouring) runTourStep();
+      }, 5000);
+    }
+
+    function stopDroneTour() {
+      isDroneTouring = false;
+      clearTimeout(tourTimeout);
+      document.getElementById('btn-drone-tour').classList.remove('cinema-active');
+      document.getElementById('tourToast').style.display = 'none';
+    }
+
+    /* ========================================================================
+       7. 360° 空間盤旋 (Auto Orbit)
+       ======================================================================== */
+    function toggleAutoOrbit() {
+      isOrbiting = !isOrbiting;
+      const btn = document.getElementById('btn-orbit');
+      if (isOrbiting) {
+        btn.classList.add('cinema-active');
+        orbitLoop();
+      } else {
+        btn.classList.remove('cinema-active');
+        cancelAnimationFrame(orbitAnimFrame);
+      }
+    }
+
+    function orbitLoop() {
+      if (!isOrbiting) return;
+      map.setBearing((map.getBearing() + 0.15) % 360);
+      orbitAnimFrame = requestAnimationFrame(orbitLoop);
+    }
+
+    /* ========================================================================
+       8. 切換底圖 (Basemap Switcher)
+       ======================================================================== */
+    function switchBasemap(key) {
+      if (key === currentLayerKey || !TILE_SOURCES[key]) return;
+      currentLayerKey = key;
+
+      document.querySelectorAll('.style-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('btn-style-' + key).classList.add('active');
+
+      map.setStyle(createMapStyle(key));
       map.once('style.load', () => {
+        init3DBuildingsLayer();
+        initRouteLayers();
         renderCurrentPlan();
       });
     }
 
     /* ========================================================================
-       方案渲染 (在地實體地標標記、抽屜列表、連動 3D 霓虹路線)
+       9. UI 抽屜控制與相片彈窗
        ======================================================================== */
-    function renderCurrentPlan() {
-      const data = LANDMARKS_DATA[currentPlanKey];
-      if (!data) return;
-
-      document.getElementById('drawerPlanTitle').textContent = data.title;
-      document.getElementById('drawerPlanSubtitle').textContent = data.subtitle;
-      const depEl = document.getElementById('drawerDepartureTime');
-      if (depEl) {
-        depEl.textContent = data.departureInfo || '請見節點時程';
-      }
-
-      const spotListEl = document.getElementById('drawerSpotList');
-      spotListEl.innerHTML = '';
-
-      data.spots.forEach(spot => {
-        const card = document.createElement('div');
-        card.className = 'spot-card';
-        card.id = 'card-' + spot.id;
-        card.onclick = () => selectSpot(spot.id);
-
-        card.innerHTML = `
-          <div class="spot-card-header">
-            <div class="spot-img-box">
-              <img src="${spot.image}" alt="${spot.name}" onerror="this.src='images/harukas.jpg'">
-            </div>
-            <div class="spot-info">
-              <span class="spot-time-badge" style="${spot.order === '0' ? 'background:#059669; color:#fff; border:1px solid #34d399;' : ''}">${spot.order === '0' ? '⏰ 出發：' + spot.time : spot.time}</span>
-              <h4 class="spot-name">${spot.order === '0' ? '🏨 出發起點：' + spot.name : spot.order + '. ' + spot.name}</h4>
-              <p class="spot-subtext">${spot.sub}</p>
-            </div>
-          </div>
-          <div class="spot-badges-row">
-            <span class="badge-transit">🚇 ${spot.station}</span>
-            <span class="badge-pass">🎫 ${spot.pass}</span>
-          </div>
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
-            <span style="font-size:12px; color:var(--gold-light); font-weight:600;">🔍 點擊飛入地標</span>
-            <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(spot.googleQuery || spot.name)}" 
-               target="_blank" 
-               onclick="event.stopPropagation();"
-               style="font-size:11px; color:#38bdf8; text-decoration:none; display:inline-flex; align-items:center; gap:4px; padding:3px 8px; background:rgba(56,189,248,0.12); border-radius:6px; border:1px solid rgba(56,189,248,0.3);">
-              📍 Google 導航
-            </a>
-          </div>
-        `;
-
-        spotListEl.appendChild(card);
-      });
-
-      if (!map) return;
-
-      activeMarkers.forEach(m => m.remove());
-      activeMarkers = [];
-
-      data.spots.forEach(spot => {
-        const el = document.createElement('div');
-        el.className = 'map-custom-marker';
-        el.id = 'marker-' + spot.id;
-
-        el.innerHTML = `
-          <div class="marker-pin-body">
-            <span class="marker-order-num" style="${spot.order === '0' ? 'background:#059669; color:#fff;' : ''}">${spot.order === '0' ? '🏨' : spot.order}</span>
-            <div class="marker-photo-thumb">
-              <img src="${spot.image}" alt="${spot.name}" onerror="this.src='images/harukas.jpg'">
-            </div>
-            <span class="marker-label-text">${spot.name.split('（')[0].split(' ＆')[0]}</span>
-          </div>
-        `;
-
-        el.addEventListener('click', (e) => {
-          e.stopPropagation();
-          selectSpot(spot.id);
-        });
-
-        const marker = new maplibregl.Marker({ element: el })
-          .setLngLat(spot.lngLat)
-          .addTo(map);
-
-        activeMarkers.push(marker);
-      });
-
-      const coordinates = data.spots.map(s => s.lngLat);
-      const geojson = {
-        type: 'Feature',
-        geometry: {
-          type: 'LineString',
-          coordinates: coordinates
-        }
-      };
-
-      if (map && map.isStyleLoaded()) {
-        try {
-          const source = map.getSource('route-line-source');
-          if (source) {
-            source.setData(geojson);
-          } else {
-            map.addSource('route-line-source', {
-              type: 'geojson',
-              data: geojson
-            });
-
-            map.addLayer({
-              id: 'route-line-layer',
-              type: 'line',
-              source: 'route-line-source',
-              layout: {
-                'line-join': 'round',
-                'line-cap': 'round'
-              },
-              paint: {
-                'line-color': data.color || '#d4af37',
-                'line-width': 4.5,
-                'line-opacity': 0.85,
-                'line-dasharray': [2, 1.5]
-              }
-            });
-          }
-        } catch (e) {
-          console.warn('MapLibre route layer sync note:', e);
-        }
-      }
+    function toggleDrawer() {
+      const d = document.getElementById('executiveDrawer');
+      d.classList.toggle('collapsed');
     }
 
-    /* ========================================================================
-       切換行程方案 (Plan A, Plan B, Plan C, 官方五日)
-       ======================================================================== */
-    function switchPlan(planKey) {
-      if (!LANDMARKS_DATA[planKey]) return;
-      currentPlanKey = planKey;
-      stopCameraOrbit();
-
-      const buttons = document.querySelectorAll('.plan-selector-bar .plan-tab-btn');
-      buttons.forEach(btn => btn.classList.remove('active'));
-      const activeBtn = document.getElementById('tab-' + planKey);
-      if (activeBtn) {
-        activeBtn.classList.add('active');
-      } else if (window.event && window.event.currentTarget) {
-        window.event.currentTarget.classList.add('active');
-      }
-
-      renderCurrentPlan();
-
-      const target = LANDMARKS_DATA[planKey];
-      map.flyTo({
-        center: target.center,
-        zoom: target.zoom,
-        pitch: target.pitch,
-        bearing: target.bearing,
-        duration: 2200,
-        essential: true
-      });
-
-      toggleDrawer(true);
+    function toggleMobileSheet() {
+      document.body.classList.toggle('mobile-sheet-open');
     }
 
-    /* ========================================================================
-       選定景點：鏡頭平滑飛入 + 卡片高亮 + 放大互動
-       ======================================================================== */
-    function selectSpot(spotId) {
-      stopCameraOrbit();
-      const plan = LANDMARKS_DATA[currentPlanKey];
-      const spot = plan.spots.find(s => s.id === spotId);
+    function openPhotoModal(idx) {
+      const spot = LANDMARKS_DATA[currentPlanKey].spots[idx];
       if (!spot) return;
 
-      document.querySelectorAll('.spot-card').forEach(c => c.classList.remove('active-spot'));
-      const activeCard = document.getElementById('card-' + spotId);
-      if (activeCard) {
-        activeCard.classList.add('active-spot');
-        activeCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }
-
-      map.flyTo({
-        center: spot.lngLat,
-        zoom: 16.5,
-        pitch: 62,
-        bearing: (map.getBearing() + 45) % 360,
-        duration: 2000,
-        essential: true
-      });
-    }
-
-    function flyToCoordinates(lngLat, zoom, pitch, bearing) {
-      stopCameraOrbit();
-      map.flyTo({
-        center: lngLat,
-        zoom: zoom || 15.5,
-        pitch: pitch !== undefined ? pitch : 55,
-        bearing: bearing !== undefined ? bearing : 20,
-        duration: 2200,
-        essential: true
-      });
-    }
-
-    function toggleTilt() {
-      const curPitch = map.getPitch();
-      const nextPitch = curPitch > 30 ? 0 : 62;
-      map.easeTo({ pitch: nextPitch, duration: 1000 });
-    }
-
-    function resetToCenter() {
-      stopCameraOrbit();
-      const p = LANDMARKS_DATA[currentPlanKey];
-      map.flyTo({
-        center: p.center,
-        zoom: p.zoom,
-        pitch: p.pitch,
-        bearing: p.bearing,
-        duration: 1500
-      });
-    }
-
-    function startCameraOrbit() {
-      if (isOrbiting) {
-        stopCameraOrbit();
-        return;
-      }
-      isOrbiting = true;
-      map.easeTo({ pitch: 60, duration: 1000 });
-
-      function orbitLoop() {
-        if (!isOrbiting) return;
-        const curBearing = map.getBearing();
-        map.setBearing((curBearing + 0.15) % 360);
-        orbitAnimFrame = requestAnimationFrame(orbitLoop);
-      }
-      orbitAnimFrame = requestAnimationFrame(orbitLoop);
-    }
-
-    function stopCameraOrbit() {
-      if (isOrbiting) {
-        isOrbiting = false;
-        if (orbitAnimFrame) cancelAnimationFrame(orbitAnimFrame);
-      }
-    }
-
-    map.on('dragstart', stopCameraOrbit);
-    map.on('wheel', stopCameraOrbit);
-
-    function toggleDrawer(forceOpen) {
-      const drawer = document.getElementById('sideDrawer');
-      if (forceOpen === undefined) {
-        drawer.classList.toggle('collapsed');
-      } else if (forceOpen) {
-        drawer.classList.remove('collapsed');
-      } else {
-        drawer.classList.add('collapsed');
-      }
-    }
-
-    function openChartModal() {
-      const modal = document.getElementById('photoModal');
-      const img = document.getElementById('modalImg');
-      const title = document.getElementById('modalTitle');
-      const desc = document.getElementById('modalDesc');
-      const meta = document.getElementById('modalMeta');
-
-      img.src = 'images/PlanA_vs_PlanB_比較圖.png';
-      title.textContent = '📊 Day 4 自由活動雙方案精算決策大圖鑑';
-      desc.textContent = '結合動線順暢度、雨天耐受度、體力負荷、採購電器時間與大阪周遊卡成本回本精算。';
-      meta.innerHTML = `
-        <span class="badge-transit">文化下町線 vs 港灣溫泉線</span>
-        <span class="badge-pass">盛欣網絡科技 2026 員旅指南專用</span>
+      document.getElementById('modalImg').src = (spot.image || spot.img);
+      document.getElementById('modalTitle').textContent = spot.name + ' (' + spot.time + ')';
+      document.getElementById('modalDesc').textContent = spot.desc;
+      document.getElementById('modalMeta').innerHTML = `
+        <span style="background:rgba(245,158,11,0.2); color:#fde68a; padding:4px 10px; border-radius:6px; font-size:12px; font-weight:700;">🚶 ${(spot.station || spot.transit)}</span>
+        <span style="background:rgba(56,189,248,0.2); color:#38bdf8; padding:4px 10px; border-radius:6px; font-size:12px; font-weight:700;">📍 盛欣專案專屬地標</span>
       `;
-      modal.classList.add('open');
+      document.getElementById('photoModal').style.display = 'flex';
     }
 
-    function closeModal() {
-      document.getElementById('photoModal').classList.remove('open');
-    }
-
-    function closeModalOnBg(e) {
-      if (e.target.id === 'photoModal') {
-        closeModal();
-      }
+    function closePhotoModal(e) {
+      document.getElementById('photoModal').style.display = 'none';
     }
   </script>
 </body>
