@@ -3,912 +3,1478 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>盛欣網絡 2026 大阪五日行 ｜ 3D 空間微縮地標沙盒</title>
+  <title>關西在地 3D 互動地理地圖 ｜ 2026 盛欣大阪員工旅遊</title>
+  
+  <!-- MapLibre GL JS 3D WebGL Map Engine -->
+  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css">
+  <script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Noto+Sans+TC:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+
   <style>
     :root {
-      --bg: #080c14;
-      --card-bg: rgba(15, 23, 42, 0.9);
-      --card-border: rgba(255, 255, 255, 0.12);
-      --accent-gold: #f59e0b;
-      --accent-cyan: #06b6d4;
-      --accent-red: #ef4444;
-      --accent-blue: #3b82f6;
-      --accent-emerald: #10b981;
-      --text: #f8fafc;
+      --bg-dark: #0a0a0c;
+      --card-bg: rgba(18, 18, 24, 0.88);
+      --card-border: rgba(212, 175, 55, 0.35);
+      --gold-primary: #d4af37;
+      --gold-light: #fef08a;
+      --amber-accent: #f59e0b;
+      --cyan-accent: #06b6d4;
+      --emerald-accent: #10b981;
+      --ruby-accent: #ef4444;
+      --text-main: #f8fafc;
       --text-muted: #94a3b8;
     }
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      user-select: none;
       -webkit-tap-highlight-color: transparent;
     }
-    body, html {
-      width: 100%;
-      height: 100%;
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       overflow: hidden;
-      background: var(--bg);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif;
-      color: var(--text);
+      width: 100vw;
+      height: 100vh;
     }
-    #canvas-container {
+
+    #map {
       width: 100%;
       height: 100%;
       position: absolute;
       top: 0;
       left: 0;
       z-index: 1;
+      background: #08090d;
     }
 
-    /* 頂部導覽列與方案切換器 */
-    .top-bar {
+    /* Top Glass Navigation Bar */
+    .top-header {
       position: absolute;
-      top: 12px;
-      left: 14px;
-      right: 14px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      z-index: 20;
-      pointer-events: none;
-      flex-wrap: wrap;
-    }
-    .brand-section {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      pointer-events: auto;
-    }
-    .brand-pill {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      padding: 7px 14px;
-      border-radius: 999px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-      text-decoration: none;
-      color: inherit;
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .brand-pill:hover {
-      border-color: var(--accent-gold);
-      transform: translateY(-1px);
-    }
-    .brand-pill .dot {
-      width: 8px;
-      height: 8px;
-      background: #10b981;
-      border-radius: 50%;
-      box-shadow: 0 0 10px #10b981;
-    }
-    .brand-sub {
-      font-size: 11px;
-      color: var(--accent-gold);
-      background: rgba(245, 158, 11, 0.16);
-      padding: 2px 7px;
-      border-radius: 999px;
-      font-weight: 700;
-    }
-
-    /* 方案選擇切換按鈕群 */
-    .plan-selector {
-      display: flex;
-      gap: 6px;
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      padding: 4px;
-      border-radius: 12px;
-      pointer-events: auto;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-      overflow-x: auto;
-      max-width: 100%;
-    }
-    .plan-btn {
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      padding: 7px 12px;
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .plan-btn:hover {
-      color: #fff;
-      background: rgba(255,255,255,0.08);
-    }
-    .plan-btn.active {
-      color: #0b0f17;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.3);
-    }
-    .plan-btn.active.gold { background: var(--accent-gold); }
-    .plan-btn.active.rose { background: #f43f5e; color: #fff; }
-    .plan-btn.active.emerald { background: #10b981; color: #fff; }
-    .plan-btn.active.cyan { background: #06b6d4; color: #0b0f17; }
-
-    /* HUD 3D 地標指引標籤 */
-    #hud-container {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 5;
-    }
-    .hud-marker {
-      position: absolute;
-      transform: translate(-50%, -100%);
-      pointer-events: auto;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      transition: opacity 0.2s, transform 0.2s;
-    }
-    .hud-marker:hover {
-      transform: translate(-50%, -108%) scale(1.08);
+      top: 16px;
+      left: 16px;
+      right: 16px;
       z-index: 10;
-    }
-    .hud-tag {
-      background: rgba(15, 23, 42, 0.92);
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      padding: 5px 10px;
-      border-radius: 8px;
-      font-size: 11.5px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.6);
-      white-space: nowrap;
-    }
-    .hud-marker.active .hud-tag {
-      border-color: var(--accent-gold);
-      box-shadow: 0 0 16px rgba(245, 158, 11, 0.6);
-      background: rgba(30, 41, 59, 0.96);
-    }
-    .hud-pin {
-      width: 2px;
-      height: 14px;
-      background: linear-gradient(to bottom, rgba(255,255,255,0.6), transparent);
-    }
-
-    /* 右側 / 底部 詳細資訊抽屜 */
-    .details-panel {
-      position: absolute;
-      right: 14px;
-      bottom: 14px;
-      width: 360px;
-      max-height: calc(100% - 90px);
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-radius: 16px;
-      padding: 16px;
-      z-index: 15;
-      box-shadow: 0 20px 45px rgba(0,0,0,0.65);
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      pointer-events: auto;
-      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s;
-    }
-    .details-panel.minimized {
-      transform: translateY(calc(100% - 48px));
-      opacity: 0.9;
-    }
-    .panel-top-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      cursor: pointer;
+      gap: 12px;
+      pointer-events: none;
     }
-    .plan-badge {
+
+    .top-header > * {
+      pointer-events: auto;
+    }
+
+    .brand-badge {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: 999px;
+      padding: 8px 18px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6), 0 0 15px rgba(212, 175, 55, 0.15);
+    }
+
+    .back-btn {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      font-size: 11px;
-      font-weight: 800;
-      color: var(--accent-gold);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .btn-toggle-panel {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid var(--card-border);
-      color: var(--text-muted);
-      border-radius: 6px;
-      padding: 3px 8px;
-      font-size: 11px;
-      cursor: pointer;
-    }
-    .btn-toggle-panel:hover {
-      background: rgba(255,255,255,0.16);
-      color: #fff;
-    }
-    .panel-header h2 {
-      font-size: 16px;
-      font-weight: 800;
-      color: #fff;
-      margin-top: 2px;
-      line-height: 1.3;
-    }
-    .panel-header p {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-top: 4px;
-      line-height: 1.45;
+      text-decoration: none;
+      color: var(--gold-light);
+      font-size: 13px;
+      font-weight: 700;
+      transition: all 0.2s;
     }
 
-    /* 時間軸節點列表 */
-    .timeline-list {
+    .back-btn:hover {
+      color: #fff;
+      transform: translateX(-2px);
+    }
+
+    .brand-title {
+      font-family: 'Cinzel', serif;
+      font-weight: 800;
+      font-size: 14px;
+      letter-spacing: 1px;
+      color: #fff;
+      border-left: 1px solid rgba(255, 255, 255, 0.2);
+      padding-left: 12px;
+    }
+
+    .brand-title span {
+      color: var(--gold-primary);
+    }
+
+    /* Plan Switcher Bar */
+    .plan-selector-bar {
+      display: flex;
+      gap: 8px;
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: 999px;
+      padding: 6px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6);
+      overflow-x: auto;
+      max-width: calc(100vw - 32px);
+    }
+
+    .plan-tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 7px 16px;
+      border-radius: 999px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .plan-tab-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .plan-tab-btn.active {
+      background: linear-gradient(135deg, #d4af37, #b45309);
+      color: #0f172a;
+      box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+      font-weight: 900;
+    }
+
+    /* Layer Switcher & Map Tools */
+    .map-tools-box {
+      position: absolute;
+      top: 80px;
+      left: 16px;
+      z-index: 10;
       display: flex;
       flex-direction: column;
       gap: 8px;
-      overflow-y: auto;
-      max-height: 280px;
-      padding-right: 4px;
-    }
-    .timeline-list::-webkit-scrollbar {
-      width: 4px;
-    }
-    .timeline-list::-webkit-scrollbar-thumb {
-      background: rgba(255,255,255,0.2);
-      border-radius: 4px;
-    }
-    .timeline-item {
-      display: flex;
-      gap: 10px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.06);
-      padding: 9px 11px;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .timeline-item:hover, .timeline-item.active {
-      background: rgba(245, 158, 11, 0.12);
-      border-color: rgba(245, 158, 11, 0.45);
-      transform: translateX(3px);
-    }
-    .time-tag {
-      font-size: 10.5px;
-      font-weight: 800;
-      color: var(--accent-gold);
-      min-width: 46px;
-      line-height: 1.3;
-    }
-    .time-content {
-      flex: 1;
-    }
-    .node-title {
-      font-size: 13px;
-      font-weight: 700;
-      color: #fff;
-    }
-    .node-desc {
-      font-size: 11.5px;
-      color: var(--text-muted);
-      margin-top: 2px;
-      line-height: 1.4;
-    }
-    .node-transit {
-      font-size: 10.5px;
-      color: #38bdf8;
-      margin-top: 3px;
-      font-weight: 600;
     }
 
-    /* 底部通訊與行動按鈕 */
-    .action-bar {
+    .tool-group {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+    }
+
+    .tool-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-muted);
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-align: left;
+      transition: all 0.2s;
+    }
+
+    .tool-btn:hover {
+      color: #fff;
+      background: rgba(255,255,255,0.06);
+    }
+
+    .tool-btn.active {
+      background: rgba(212, 175, 55, 0.2);
+      border-color: var(--gold-primary);
+      color: var(--gold-light);
+      font-weight: 800;
+    }
+
+    /* 3D View Presets */
+    .view-presets {
+      position: absolute;
+      bottom: 24px;
+      left: 16px;
+      z-index: 10;
       display: flex;
       gap: 8px;
-      margin-top: 4px;
-      padding-top: 10px;
-      border-top: 1px solid rgba(255,255,255,0.08);
+      flex-wrap: wrap;
     }
-    .btn-action {
-      flex: 1;
-      background: rgba(255,255,255,0.06);
+
+    .preset-chip {
+      background: var(--card-bg);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #e2e8f0;
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+
+    .preset-chip:hover {
+      border-color: var(--gold-primary);
+      color: var(--gold-light);
+      transform: translateY(-2px);
+    }
+
+    /* Interactive Side Drawer */
+    .side-drawer {
+      position: absolute;
+      top: 80px;
+      bottom: 24px;
+      right: 16px;
+      width: 380px;
+      max-width: calc(100vw - 32px);
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       border: 1px solid var(--card-border);
-      color: var(--text);
-      font-size: 11.5px;
-      font-weight: 700;
-      padding: 8px 10px;
-      border-radius: 8px;
+      border-radius: 18px;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      box-shadow: -10px 0 30px rgba(0,0,0,0.7);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow: hidden;
+    }
+
+    .side-drawer.collapsed {
+      transform: translateX(calc(100% + 24px));
+    }
+
+    .drawer-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0,0,0,0.25);
+    }
+
+    .drawer-title-box h3 {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--gold-light);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .drawer-title-box p {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .drawer-close-btn {
+      background: rgba(255,255,255,0.08);
+      border: none;
+      color: #cbd5e1;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 5px;
+      font-size: 14px;
       transition: all 0.2s;
-      text-decoration: none;
-    }
-    .btn-action:hover {
-      background: rgba(255,255,255,0.12);
-    }
-    .btn-action.btn-primary {
-      background: var(--accent-gold);
-      color: #0b0f17;
-      border-color: var(--accent-gold);
-    }
-    .btn-action.btn-primary:hover {
-      background: #d97706;
     }
 
-    .controls-hint {
+    .drawer-close-btn:hover {
+      background: rgba(255,255,255,0.2);
+      color: #fff;
+    }
+
+    .drawer-toggle-tab {
       position: absolute;
-      left: 14px;
-      bottom: 14px;
-      z-index: 10;
-      font-size: 11px;
-      color: var(--text-muted);
+      top: 96px;
+      right: 16px;
+      z-index: 9;
       background: var(--card-bg);
+      backdrop-filter: blur(16px);
       border: 1px solid var(--card-border);
-      backdrop-filter: blur(8px);
-      padding: 5px 12px;
-      border-radius: 999px;
-      pointer-events: none;
+      color: var(--gold-light);
+      border-radius: 12px;
+      padding: 10px 14px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .drawer-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* Itinerary Step Card */
+    .spot-card {
+      background: rgba(30, 32, 42, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 12px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .spot-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--card-border);
+      transition: background 0.2s;
+    }
+
+    .spot-card:hover {
+      border-color: var(--gold-primary);
+      background: rgba(35, 38, 52, 0.95);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    }
+
+    .spot-card.active-spot {
+      border-color: var(--gold-primary);
+      background: rgba(45, 48, 65, 0.95);
+      box-shadow: 0 0 18px rgba(212, 175, 55, 0.25);
+    }
+
+    .spot-card.active-spot::before {
+      background: var(--gold-primary);
+      width: 6px;
+    }
+
+    .spot-card-header {
+      display: flex;
+      gap: 12px;
+    }
+
+    .spot-img-box {
+      width: 86px;
+      height: 64px;
+      border-radius: 8px;
+      overflow: hidden;
+      flex-shrink: 0;
+      position: relative;
+      background: #1e1e24;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .spot-img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s;
+    }
+
+    .spot-card:hover .spot-img-box img {
+      transform: scale(1.08);
+    }
+
+    .spot-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .spot-time-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--gold-light);
+      background: rgba(212, 175, 55, 0.15);
+      border-radius: 4px;
+      padding: 1px 6px;
+      margin-bottom: 4px;
+    }
+
+    .spot-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.3;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .spot-subtext {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+      line-height: 1.3;
+    }
+
+    .spot-badges-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 11px;
+    }
+
+    .badge-transit {
+      background: rgba(6, 182, 212, 0.15);
+      color: #38bdf8;
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+
+    .badge-pass {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+
+    /* 3D Map Custom Marker Styles */
+    .map-custom-marker {
+      cursor: pointer;
+      transform: translate(-50%, -100%);
+      transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .map-custom-marker:hover {
+      transform: translate(-50%, -115%) scale(1.12);
+      z-index: 50;
+    }
+
+    .marker-pin-body {
+      background: var(--card-bg);
+      border: 2px solid var(--gold-primary);
+      border-radius: 24px;
+      padding: 4px 10px 4px 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.8), 0 0 12px rgba(212,175,55,0.4);
+      position: relative;
+      white-space: nowrap;
+    }
+
+    .marker-pin-body::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 8px 6px 0 6px;
+      border-style: solid;
+      border-color: var(--gold-primary) transparent transparent transparent;
+    }
+
+    .marker-photo-thumb {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 1.5px solid #fff;
+      flex-shrink: 0;
+      background: #222;
+    }
+
+    .marker-photo-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .marker-label-text {
+      font-size: 12px;
+      font-weight: 800;
+      color: #fff;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+    }
+
+    .marker-order-num {
+      background: var(--gold-primary);
+      color: #0f172a;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      font-size: 11px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Modal for Detailed Spot / Comparison Chart */
+    .photo-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.88);
+      backdrop-filter: blur(10px);
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .photo-modal-overlay.open {
+      display: flex;
+    }
+
+    .modal-content-box {
+      background: #13141a;
+      border: 1px solid var(--gold-primary);
+      border-radius: 16px;
+      max-width: 900px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.9);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-img-container {
+      width: 100%;
+      max-height: 520px;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .modal-img-container img {
+      max-width: 100%;
+      max-height: 520px;
+      object-fit: contain;
+    }
+
+    .modal-detail-panel {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .modal-close-x {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: rgba(0,0,0,0.6);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: #fff;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      z-index: 10;
+      transition: all 0.2s;
+    }
+
+    .modal-close-x:hover {
+      background: var(--ruby-accent);
+      border-color: var(--ruby-accent);
     }
 
     @media (max-width: 768px) {
-      .top-bar {
+      .top-header {
         flex-direction: column;
         align-items: stretch;
       }
-      .brand-section {
+      .plan-selector-bar {
+        order: 2;
+      }
+      .brand-badge {
+        order: 1;
         justify-content: space-between;
       }
-      .details-panel {
-        width: calc(100% - 28px);
-        max-height: 48%;
-        bottom: 8px;
-        right: 14px;
+      .map-tools-box {
+        top: 130px;
       }
-      .controls-hint {
+      .side-drawer {
+        width: 100%;
+        max-width: 100%;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: auto;
+        height: 60vh;
+        border-radius: 20px 20px 0 0;
+        transform: translateY(0);
+      }
+      .side-drawer.collapsed {
+        transform: translateY(calc(100% - 44px));
+      }
+      .view-presets {
         display: none;
       }
     }
   </style>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 </head>
 <body>
-  <div id="canvas-container"></div>
 
-  <!-- 頂部資訊與切換器 -->
-  <div class="top-bar">
-    <div class="brand-section">
-      <a href="index.html" class="brand-pill" title="返回手冊首頁">
-        <span>⬅️</span>
-        <span>返回隨身指南</span>
-      </a>
-      <div class="brand-pill">
-        <div class="dot"></div>
-        <span>盛欣 2026 關西行</span>
-        <span class="brand-sub">3D 微縮沙盒</span>
+  <!-- Fullscreen 3D Map Container -->
+  <div id="map"></div>
+
+  <!-- Top Glass Header Bar -->
+  <header class="top-header">
+    <div class="brand-badge">
+      <a href="index.html" class="back-btn">⬅️ 返回隨身指南</a>
+      <div class="brand-title">SHENG XIN <span>2026 OSAKA 3D</span></div>
+    </div>
+
+    <!-- Plan Switcher Bar -->
+    <nav class="plan-selector-bar">
+      <button class="plan-tab-btn active" onclick="switchPlan('planA')">🏯 Plan A：歷史商街</button>
+      <button class="plan-tab-btn" onclick="switchPlan('planB')">🦈 Plan B：港灣溫泉</button>
+      <button class="plan-tab-btn" onclick="switchPlan('planC')">🍁 Plan C：箕面勝尾寺</button>
+      <button class="plan-tab-btn" onclick="switchPlan('official5d')">🗺️ 盛欣五日全景</button>
+      <button class="plan-tab-btn" onclick="openChartModal()" style="color:var(--gold-light);">📊 雙方案決策大圖</button>
+    </nav>
+  </header>
+
+  <!-- Left Map Layer & Camera Tools -->
+  <aside class="map-tools-box">
+    <div class="tool-group">
+      <span style="font-size: 10px; font-weight:800; color: var(--gold-primary); text-transform:uppercase; padding: 2px 6px;">在地圖資切換</span>
+      <button class="tool-btn active" id="btn-layer-satellite" onclick="setMapLayer('satellite')">
+        🛰️ 空拍衛星 3D
+      </button>
+      <button class="tool-btn" id="btn-layer-gsi" onclick="setMapLayer('gsi')">
+        🗾 日本國土地理院
+      </button>
+      <button class="tool-btn" id="btn-layer-voyager" onclick="setMapLayer('voyager')">
+        🗺️ 日系旅人街道
+      </button>
+      <button class="tool-btn" id="btn-layer-dark" onclick="setMapLayer('dark')">
+        🌌 深邃黑曜夜景
+      </button>
+    </div>
+
+    <div class="tool-group">
+      <span style="font-size: 10px; font-weight:800; color: var(--gold-primary); text-transform:uppercase; padding: 2px 6px;">視角操控</span>
+      <button class="tool-btn" onclick="toggleTilt()">
+        📐 3D 俯仰切換 (60°)
+      </button>
+      <button class="tool-btn" onclick="startCameraOrbit()">
+        🔄 360° 環繞巡航
+      </button>
+      <button class="tool-btn" onclick="resetToCenter()">
+        🎯 鎖定關西中心
+      </button>
+    </div>
+  </aside>
+
+  <!-- Bottom Quick Camera Angles -->
+  <div class="view-presets">
+    <button class="preset-chip" onclick="flyToCoordinates([135.5258, 34.6873], 15.8, 60, 25)">🏯 大阪城天守閣</button>
+    <button class="preset-chip" onclick="flyToCoordinates([135.5013, 34.6690], 16.5, 55, -30)">🍜 道頓堀運河</button>
+    <button class="preset-chip" onclick="flyToCoordinates([135.4289, 34.6545], 15.5, 60, 45)">🦈 大阪港海遊館</button>
+    <button class="preset-chip" onclick="flyToCoordinates([135.5063, 34.6525], 16.2, 58, 15)">🗼 通天閣新世界</button>
+    <button class="preset-chip" onclick="flyToCoordinates([135.7850, 34.9949], 15.6, 50, -45)">⛩️ 京都清水寺</button>
+    <button class="preset-chip" onclick="flyToCoordinates([135.4912, 34.8659], 15.2, 55, 10)">🍁 箕面勝尾寺</button>
+    <button class="preset-chip" onclick="flyToCoordinates([135.2328, 34.4347], 14.5, 60, 60)">✈️ 關西海上空港</button>
+  </div>
+
+  <!-- Drawer Toggle Handle (when closed) -->
+  <button class="drawer-toggle-tab" onclick="toggleDrawer(true)">
+    📋 查看行程節點
+  </button>
+
+  <!-- Right Collapsible Interactive Itinerary Drawer -->
+  <section class="side-drawer" id="sideDrawer">
+    <div class="drawer-header">
+      <div class="drawer-title-box">
+        <h3 id="drawerPlanTitle">🏯 Plan A：歷史商街線</h3>
+        <p id="drawerPlanSubtitle">文化古蹟 ➔ 日本最長商店街 ➔ 傍晚難波採購電器</p>
+      </div>
+      <button class="drawer-close-btn" onclick="toggleDrawer(false)" title="收合面板">✕</button>
+    </div>
+
+    <div class="drawer-body" id="drawerSpotList">
+      <!-- Dynamically filled with spot cards -->
+    </div>
+  </section>
+
+  <!-- High-Res Detail / Chart Modal -->
+  <div class="photo-modal-overlay" id="photoModal" onclick="closeModalOnBg(event)">
+    <div class="modal-content-box">
+      <button class="modal-close-x" onclick="closeModal()">✕</button>
+      <div class="modal-img-container">
+        <img id="modalImg" src="" alt="詳細圖鑑">
+      </div>
+      <div class="modal-detail-panel">
+        <h3 id="modalTitle" style="color:var(--gold-light); font-size:18px; font-weight:800;"></h3>
+        <p id="modalDesc" style="color:#cbd5e1; font-size:14px; line-height:1.6;"></p>
+        <div id="modalMeta" style="display:flex; gap:10px; flex-wrap:wrap; margin-top:6px;"></div>
       </div>
     </div>
-    <div class="plan-selector">
-      <button class="plan-btn gold active" onclick="switchPlan(0)">🏯 Plan A+ 達人旗艦線</button>
-      <button class="plan-btn rose" onclick="switchPlan(1)">🦈 Plan B 港灣溫泉線</button>
-      <button class="plan-btn emerald" onclick="switchPlan(2)">🍁 Plan C 箕面楓葉線</button>
-      <button class="plan-btn cyan" onclick="switchPlan(3)">🗺️ 盛欣官方五日全覽</button>
-    </div>
-  </div>
-
-  <!-- 3D 浮動標籤容器 -->
-  <div id="hud-container"></div>
-
-  <!-- 右側詳細資訊抽屜 -->
-  <div class="details-panel" id="detailsPanel">
-    <div class="panel-top-row">
-      <div class="plan-badge" id="planBadge">🏯 方案 A • 滿意度冠軍</div>
-      <button class="btn-toggle-panel" id="btnTogglePanel" onclick="toggleDetailsPanel()">收合 ▾</button>
-    </div>
-    <div class="panel-header">
-      <h2 id="planTitle">Plan A+：古城下町・金運開運・百萬夜景究極線</h2>
-      <p id="planDesc">大阪城天守閣 ➔ 大阪歷史博物館 ➔ 狸狸亭大阪燒 ➔ 今昔館 ➔ 天神橋筋 ➔ HARUKAS 300 絕美夕陽夜景 ➔ 難波電器街。</p>
-    </div>
-
-    <div class="timeline-list" id="timelineList"></div>
-
-    <div class="action-bar">
-      <button class="btn-action" data-hermes-send="請以條列方式為我分析 2026 大阪 Day 4 Plan A 與 Plan B 的優缺點與體力消耗">
-        ⚖️ 方案優勢分析
-      </button>
-      <button class="btn-action btn-primary" data-hermes-send="我想了解 2026 盛欣大阪員工旅遊推薦必買的日本電器清單與優惠券折數">
-        🛒 電器採購攻略
-      </button>
-    </div>
-  </div>
-
-  <div class="controls-hint">
-    🖱️ 左鍵拖曳 360° 旋轉 ｜ 滾輪縮放 ｜ 點擊標籤或日程節點自動對焦 3D 地標
   </div>
 
   <script>
-    // --- 盛欣 2026 完整真實方案數據集 ---
-    const PLANS = [
-      {
-        badge: "🏯 Day 4 方案 A • 全團滿意度冠軍",
-        btnClass: "gold",
-        title: "Plan A+：古城下町・金運開運・百萬夜景究極線",
-        desc: "天候晴雨皆宜，涵蓋大阪城、大阪歷史博物館、人氣排隊狸狸亭大阪燒、江戶街道實景今昔館，傍晚直上阿倍野 HARUKAS 300 俯瞰百萬夕陽夜景！",
-        focusLandmark: "osaka_castle",
-        nodes: [
-          { time: "09:30", loc: "osaka_castle", title: "1. 大阪城天守閣 ＆ 大阪城公園", desc: "登天守閣遠眺大阪市景，秋季銀杏大道與壯觀護城河石垣護衛。", transit: "🚶 步行 3 分鐘至谷町四丁目 9 號出口" },
-          { time: "11:30", loc: "osaka_castle", title: "2. 大阪歷史博物館", desc: "電梯直達 10 樓古代難波宮實景還原，俯瞰大阪城全景絕佳角度。", transit: "🚇 谷町線：谷町四丁目 ➔ 谷町九丁目（4 分鐘）" },
-          { time: "12:45", loc: "dotonbori", title: "3. 狸狸亭大阪燒（私房人氣午餐）", desc: "上本町人氣名店，爆量特製炒麵、酥脆牡蠣排、特上摩登大阪燒！", transit: "🚇 谷町線：谷町九丁目 ➔ 天神橋筋六丁目（10 分鐘）" },
-          { time: "13:45", loc: "osaka_castle", title: "4. 大阪生活今昔館", desc: "室內江戶街道 1:1 實物重現，體驗江戶商家古風與晨昏聲光變化。", transit: "🚶 8 樓下電梯直通天神橋筋商店街" },
-          { time: "15:00", loc: "osaka_castle", title: "5. 天神橋筋商店街 ＆ 天滿宮", desc: "日本最長 2.6 km 拱頂遮雨棚商街，朝聖學問之神大阪天滿宮祈求開運。", transit: "🚇 谷町線：南森町 ➔ 天王寺（13 分鐘直達）" },
-          { time: "17:00", loc: "harukas", title: "6. 阿倍野 HARUKAS 300（百萬夜景）", desc: "直上 60 樓 300 米高空玻璃迴廊，同時飽覽大阪港落日與關西絕美夜景！", transit: "🚇 御堂筋線：天王寺 ➔ 難波（6 分鐘直達）" },
-          { time: "18:30", loc: "dotonbori", title: "7. 難波電器街採購 ＆ 道頓堀慶功宴", desc: "Bic Camera 難波店 / EDION 難波本店免稅採購吹風機電鍋，吃一蘭拉麵。" }
-        ],
-        routeCoords: [
-          [1, 2.2, -1],     // 大阪城
-          [0.8, 1.8, 0.5],  // 歷史博物館
-          [-4, 1.5, 3.5],   // 狸狸亭/難波
-          [1.5, 1.5, -3.5], // 今昔館
-          [-1.5, 3.5, 2.8], // Harukas
-          [-5, 1.5, 4]      // 道頓堀電器街
+    /* ========================================================================
+       2026 盛欣大阪五日行在地真實座標與圖資資料庫 (100% 本地 images/ 照片)
+       ======================================================================== */
+    const LANDMARKS_DATA = {
+      planA: {
+        title: "🏯 Plan A：歷史文化與下町商街線",
+        subtitle: "動線極度順暢、晴雨皆宜！深度參觀古蹟與名店，保留充裕時間採購電器",
+        center: [135.518, 34.685],
+        zoom: 14.2,
+        pitch: 55,
+        bearing: 20,
+        routeColor: "#f59e0b",
+        spots: [
+          {
+            id: "osaka_castle",
+            order: "1",
+            time: "09:30 - 11:30",
+            name: "大阪城天守閣 ＆ 大阪城公園",
+            sub: "登天守閣俯瞰全景，護城河巨石垣與古城建築群",
+            lngLat: [135.5258, 34.6873],
+            image: "images/osaka_castle.jpg",
+            station: "Osaka Metro 谷町四丁目站 9 號出口步行 10 分",
+            pass: "周遊券免費入場（原價 ¥600）",
+            desc: "豐臣秀吉天下統一大本營，五層八階壯麗天守閣。秋季城池周邊金黃銀杏與紅葉交織，護城河倒影極美。",
+            googleQuery: "大阪城天守閣"
+          },
+          {
+            id: "history_museum",
+            order: "2",
+            time: "11:30 - 12:45",
+            name: "大阪歷史博物館",
+            sub: "9 號出口直達！冷氣舒適、古大阪奈良時代至近代街景實體比例復原",
+            lngLat: [135.5209, 34.6828],
+            image: "images/history_museum.jpg",
+            station: "谷町四丁目站 9 號出口直結",
+            pass: "周遊券免費入場（原價 ¥600）",
+            desc: "由高樓層難波宮大極殿向下參觀，巨型實物等比例模型還原江戶與昭和時代水都繁華，窗外更能平視大阪城全景。",
+            googleQuery: "大阪歴史博物館"
+          },
+          {
+            id: "ponpocotei",
+            order: "3",
+            time: "12:45 - 13:45",
+            name: "狸狸亭大阪燒（天滿橋OMMビル店）",
+            sub: "Google 4.7⭐ 高評價！在地人私房鐵板燒，外酥內嫩高麗菜甜脆",
+            lngLat: [135.5175, 34.6908],
+            image: "images/ponpocotei.jpg",
+            station: "天滿橋站直結 OMM大樓 B2F",
+            pass: "自費午餐推薦",
+            desc: "圍著滾燙鐵板現點現煎，享受正宗大阪燒、螢烏賊燒、豚平燒與特製海鮮炒麵，徹底補充體力！",
+            googleQuery: "狸狸亭 天滿橋OMM"
+          },
+          {
+            id: "konjakukan",
+            order: "4",
+            time: "14:00 - 15:00",
+            name: "大阪生活今昔館（くらしの今昔館）",
+            sub: "大樓 8 樓室內江戶街道造景！日夜燈光投影體驗昔日庶民日常",
+            lngLat: [135.5113, 34.7107],
+            image: "images/konjakukan.jpg",
+            station: "天神橋筋六丁目站 3 號出口直結大樓",
+            pass: "周遊券免費入場（原價 ¥600）",
+            desc: "全日本首座以居住歷史為主題的博物館，完整復原天保年間（1830年代）大阪老街商鋪、澡堂與民宅，室內完全免受雨淋。",
+            googleQuery: "大阪くらしの今昔館"
+          },
+          {
+            id: "tenjinbashisuji",
+            order: "5",
+            time: "15:00 - 16:30",
+            name: "天神橋筋商店街（日本最長 2.6 km）",
+            sub: "全覆蓋拱頂雨棚免日曬雨淋！平價庶民小吃（可樂餅、春駒壽司）與藥妝",
+            lngLat: [135.5118, 34.7050],
+            image: "images/tenjinbashisuji.jpg",
+            station: "橫跨天神橋筋六丁目至南森町站",
+            pass: "自由散策推薦",
+            desc: "從 1 丁目綿延到 7 丁目的庶民生活長廊，價格比心齋橋便宜 15~20%，炸肉餅中村屋、章魚燒與在地平價藥妝店林立。",
+            googleQuery: "天神橋筋商店街"
+          },
+          {
+            id: "shopping_namba",
+            order: "6",
+            time: "17:00 - 19:30",
+            name: "購物黃金檔：Bic Camera 難波 / EDION 旗艦",
+            sub: "電器大採購：吹風機、象印電鍋、刮鬍刀，免稅 10% + 折扣 7%",
+            lngLat: [135.5015, 34.6658],
+            image: "images/harukas.jpg",
+            station: "難波站步行 3 分 / 日本橋站步行 4 分",
+            pass: "退稅優惠卷適用",
+            desc: "大型家電買完直接送回心齋橋飯店放好，免去一整天扛行李的負擔，輕裝前往道頓堀吃晚餐！",
+            googleQuery: "Bic Camera 難波店"
+          }
         ]
       },
-      {
-        badge: "🦈 Day 4 方案 B • 景觀反差最大",
-        btnClass: "rose",
-        title: "Plan B：港灣海景・日落帆船・住之江露天溫泉線",
-        desc: "避開廟宇人群！直衝世界級水族館看巨大鯨鯊，搭乘聖瑪利亞號帆船出海，傍晚在天然露天溫泉住之江洗去疲憊，再至通天閣吃串炸！",
-        focusLandmark: "bay_kaiyukan",
-        nodes: [
-          { time: "09:30", loc: "bay_kaiyukan", title: "1. 海遊館（世界級大型水族館）", desc: "9 米高超震撼深海巨槽，近距離觀賞溫和鯨鯊、國王企鵝與海豹悠游。", transit: "🚶 步行 2 分鐘直達天保山碼頭" },
-          { time: "12:15", loc: "bay_kaiyukan", title: "2. 天保山觀光船「聖瑪利亞號」+ 午餐", desc: "仿哥倫布旗艦雙桅帆船出海巡航 45 分鐘，飽覽大阪港海景與跨海大橋。", transit: "🚇 中央線：大阪港 ➔ 宇宙廣場（3 分鐘）" },
-          { time: "14:00", loc: "bay_kaiyukan", title: "3. 咲州宇宙展望台（大阪灣夕陽）", desc: "西日本最高高空玻璃帷幕，360 度俯瞰大阪灣與明石海峽大橋日落絕景。", transit: "🚇 港城線：貿易中心前 ➔ 住之江公園（16 分鐘）" },
-          { time: "16:00", loc: "bay_kaiyukan", title: "4. 天然露天溫泉住之江", desc: "森林庭園露天風呂、日式壺湯與三溫暖，徹底消除前幾天步行疲憊！", transit: "🚇 四橋線：住之江公園 ➔ 難波（12 分鐘直達）" },
-          { time: "18:15", loc: "dotonbori", title: "5. 難波電器街 ＆ 新世界通天閣夜景", desc: "EDION 難波旗艦店血拼，走訪通天閣巨型看板品嘗道地元祖串炸。" }
-        ],
-        routeCoords: [
-          [-5, 1.2, 4],     // 難波出發
-          [6, 1.4, 2],      // 海遊館
-          [7, 1.2, 0.5],    // 聖瑪利亞號
-          [5.5, 2.2, 3.5],  // 咲州宇宙展望台
-          [4.5, 1.0, 5.5],  // 住之江溫泉
-          [-5, 1.5, 4]      // 難波電器街/通天閣
+
+      planB: {
+        title: "🦈 Plan B：港灣海景・日落溫泉線",
+        subtitle: "景觀反差大、遠離喧囂！搭乘帆船出海，俯瞰大阪灣日落，享受森林露天溫泉",
+        center: [135.45, 34.64],
+        zoom: 13.5,
+        pitch: 58,
+        bearing: 35,
+        routeColor: "#06b6d4",
+        spots: [
+          {
+            id: "kaiyukan",
+            order: "1",
+            time: "09:30 - 12:00",
+            name: "海遊館（世界級大型水族館）",
+            sub: "超震撼 9 米巨型水槽看鯨鯊、企鵝、海獺與海豹",
+            lngLat: [135.4289, 34.6545],
+            image: "images/kaiyukan.jpg",
+            station: "中央線大阪港站 1 號出口步行 5 分",
+            pass: "門票 ¥2,700（建議先網路預約入場）",
+            desc: "環太平洋火山帶造景，螺旋式下潛參觀動線。中心「太平洋」巨型水槽擁有兩頭鯨鯊悠游，是全球公認最壯觀的水族館之一。",
+            googleQuery: "海遊館"
+          },
+          {
+            id: "santamaria",
+            order: "2",
+            time: "12:15 - 13:30",
+            name: "天保山觀光船「聖瑪利亞號」+ 午餐",
+            sub: "搭乘仿哥倫布旗艦雙桅帆船出海巡航 45 分鐘，飽覽大阪港海景",
+            lngLat: [135.4294, 34.6558],
+            image: "images/santamaria.jpg",
+            station: "海遊館西碼頭直結",
+            pass: "周遊券免費搭乘（原價 ¥1,800）",
+            desc: "以哥倫布發現新大陸時的旗艦放大兩倍建造，頂層露天甲板海風吹拂，航行穿過港大橋與天保山摩天輪，視野極佳。",
+            googleQuery: "大阪港帆船型観光船 サンタマリア"
+          },
+          {
+            id: "cosmotower",
+            order: "3",
+            time: "14:00 - 15:30",
+            name: "咲州宇宙展望台（大阪府咲洲廳舍）",
+            sub: "西日本頂級高空景觀！360 度俯瞰大阪灣、明石海峽大橋日落",
+            lngLat: [135.4156, 34.6385],
+            image: "images/cosmotower.jpg",
+            station: "南港 Port Town 線「貿易中心前站」徒步 3 分",
+            pass: "周遊券免費入場（原價 ¥1,000）",
+            desc: "高達 256 公尺的 55 層展望台，斜面玻璃帷幕讓視線無死角延伸至神戶六甲山與淡路島，人潮比梅田少很多、非常安靜舒適。",
+            googleQuery: "咲洲コスモタワー 展望台"
+          },
+          {
+            id: "suminoe_onsen",
+            order: "4",
+            time: "16:00 - 17:45",
+            name: "天然露天溫泉 住之江",
+            sub: "森林庭園風呂、香湯、三溫暖，徹底洗去前三天步行疲憊！",
+            lngLat: [135.4746, 34.6111],
+            image: "images/suminoe_onsen.jpg",
+            station: "四橋線住之江公園站 2 號出口步行 3 分",
+            pass: "周遊券免費入浴（原價 ¥850）",
+            desc: "隱身於市區的竹林造景露天風呂，地下深層天然溫泉泉質滑嫩，配有冷泉、超音波按摩池與烤箱，泡完極度放鬆舒暢。",
+            googleQuery: "天然温泉 スパ住之江"
+          },
+          {
+            id: "tsutenkaku",
+            order: "5",
+            time: "18:15 - 20:30",
+            name: "新世界通天閣 ＆ 難波電器街夜景",
+            sub: "品嚐通天閣巨型看板老街炸串（八重勝、元祖達摩），兼逛電器街",
+            lngLat: [135.5063, 34.6525],
+            image: "images/tsutenkaku.jpg",
+            station: "堺筋線惠美須町站步行 3 分",
+            pass: "周遊券通天閣免費入場（原價 ¥900）",
+            desc: "戰後復興的浪速下町地標，摸摸幸運神比利肯（Billiken）腳底祈願，夜間霓虹閃爍，滿街元祖炸串香氣四溢。",
+            googleQuery: "通天閣"
+          }
         ]
       },
-      {
-        badge: "🍁 Day 4 方案 C • 北攝秋季自然",
-        btnClass: "emerald",
-        title: "Plan C：箕面勝尾寺不倒翁楓葉秘境",
-        desc: "2024 北大阪急行全新延伸通車！直抵箕面萱野轉乘，探訪滿山遍野必勝達摩不倒翁與楓葉瀑布，下午回梅田百貨大買伴手禮。",
-        focusLandmark: "minoo",
-        nodes: [
-          { time: "09:00", loc: "minoo", title: "1. 梅田 ➔ 箕面萱野 ➔ 勝尾寺", desc: "搭乘地下鐵御堂筋線直通北大阪急行，輕鬆前往勝尾寺賞楓。", transit: "🚌 專線巴士 20 分鐘抵達山門" },
-          { time: "10:00", loc: "minoo", title: "2. 勝尾寺（應頂山達摩總本山）", desc: "八萬個紅色開運不倒翁散佈山林岩壁與石階，壯觀紅葉如詩如畫。", transit: "🚶 箕面山步道或專車至瀑布" },
-          { time: "13:00", loc: "minoo", title: "3. 箕面大瀑布 ＆ 楓葉天婦羅", desc: "名列日本瀑布百選，品嘗傳承千年將真實紅葉裹粉酥炸的特色名物。", transit: "🚇 阪急箕面線 ➔ 梅田（28 分鐘）" },
-          { time: "16:00", loc: "dotonbori", title: "4. 梅田百貨商圈（大丸・阪急・Yodobashi）", desc: "全日本最大規模 Yodobashi 梅田店採購 3C，梅田地下街美食。" }
-        ],
-        routeCoords: [
-          [-5, 1.2, 4],     // 難波出發
-          [-2, 1.4, 0],     // 梅田樞紐
-          [3, 2.5, -8],     // 箕面勝尾寺
-          [2, 1.8, -6],     // 箕面瀑布
-          [-2, 1.5, 0]      // 梅田百貨
+
+      planC: {
+        title: "🍁 Plan C：箕面勝尾寺必勝賞楓線",
+        subtitle: "秋季北攝秘境！滿山遍野赤紅楓葉與上萬尊祈願「勝利達摩」不倒翁",
+        center: [135.495, 34.86],
+        zoom: 14.0,
+        pitch: 60,
+        bearing: -15,
+        routeColor: "#ef4444",
+        spots: [
+          {
+            id: "katsuoji",
+            order: "1",
+            time: "09:30 - 13:00",
+            name: "箕面勝尾寺（勝運の寺）",
+            sub: "滿山紅葉倒映弁天池，石階與樹梢放滿數萬尊必勝達摩",
+            lngLat: [135.4912, 34.8659],
+            image: "images/katsuoji.webp",
+            station: "北大阪急行箕面萱野站轉乘路線巴士約 20 分",
+            pass: "門票 ¥500",
+            desc: "平安時代起天皇祈求病癒的勝運名剎。11 月下旬正值楓紅巔峰，漫步在鋪滿紅葉的山門與石階，親手點睛供奉勝利達摩祈求事業大旺。",
+            googleQuery: "勝尾寺"
+          },
+          {
+            id: "minoo_falls",
+            order: "2",
+            time: "13:30 - 15:30",
+            name: "箕面大瀑布與楓葉天婦羅",
+            sub: "日本瀑布百選！落差 33 米瀑布水氣磅礴，品嚐油炸楓葉酥",
+            lngLat: [135.4725, 34.8519],
+            image: "images/itinerary_photo_6.jpg",
+            station: "阪急箕面站沿溪流步道散策",
+            pass: "免費自然景觀",
+            desc: "沿著箕面川清幽步道散步，兩旁古雅茶屋現炸醃製一年的食用楓葉脆餅（もみじの天ぷら），景色宛如世外桃源。",
+            googleQuery: "箕面大滝"
+          },
+          {
+            id: "umeda_shopping",
+            order: "3",
+            time: "16:30 - 19:30",
+            name: "梅田 Yodobashi 友都八喜 ＆ 藍天大廈",
+            sub: "全日本最大規模電器王國！直通梅田空中庭園欣賞百萬夜景",
+            lngLat: [135.4965, 34.7042],
+            image: "images/harukas.jpg",
+            station: "JR 大阪站 / 地鐵梅田站直結",
+            pass: "採購與觀景首選",
+            desc: "樓高 13 層的巨型商場，耳機音響、相機與家電零件最齊全，地下美食街更匯聚各國料理。",
+            googleQuery: "ヨドバシカメラ 梅田"
+          }
         ]
       },
-      {
-        badge: "🗺️ 官方五日行程 • 盛欣 11/25 - 11/29 全覽",
-        btnClass: "cyan",
-        title: "盛欣網絡 2026 關西大阪五日官方行程全覽",
-        desc: "高雄直飛關西（AK170/AK171，旅天下承辦）。清水寺、伊根舟屋、天橋立、美山町合掌村、Day 4 全日自由行、臨空城 Outlet。",
-        focusLandmark: "kix",
-        nodes: [
-          { time: "11/25 (三)", loc: "kix", title: "D1：高雄 KHH ✈ 關西 KIX ➔ 世界遺產清水寺", desc: "AK170 (08:30-12:40) 抵達關西機場，造訪清水舞台、二三年坂老街，宿京都。", transit: "🚌 專車直達京都" },
-          { time: "11/26 (四)", loc: "kyoto", title: "D2：伊根灣舟屋搭船 ➔ 日本三景天橋立纜車", desc: "米其林星級伊根舟屋餵海鷗，搭纜車上傘松公園俯瞰「升天之龍」，宿京都。", transit: "🚌 丹後半島景觀線" },
-          { time: "11/27 (五)", loc: "osaka_castle", title: "D3：美山町茅葺之里合掌村 ➔ 心齋橋道頓堀", desc: "探訪三大合掌村秘境美山町，下午進駐大阪五星飯店，心齋橋自由漫步吃拉麵。", transit: "🚌 移轉大阪市區" },
-          { time: "11/28 (六)", loc: "dotonbori", title: "D4：大阪全日自由活動（Plan A vs Plan B vs Plan C）", desc: "完全自由探索！可選歷史文化線、海遊館溫泉線或勝尾寺賞楓，宿大阪。", transit: "🚇 大眾運輸一日券全日自由跑" },
-          { time: "11/29 (日)", loc: "kix", title: "D5：臨空城 Outlet ➔ 關西 KIX ✈ 高雄 KHH", desc: "臨空城掃貨最後衝刺，搭乘 AK171 (13:45-16:00) 平安返抵高雄小港。", transit: "✈️ 賦歸台灣" }
-        ],
-        routeCoords: [
-          [9, 1.2, 7],     // 關西機場
-          [-6, 1.8, -7],   // 京都清水寺
-          [-5, 2.2, -10],  // 天橋立/伊根
-          [0, 2.0, -8],    // 美山町
-          [1, 2.2, -1],    // 大阪城
-          [-5, 1.5, 4],    // 心齋橋道頓堀
-          [9, 1.2, 7]      // 關西機場回程
+
+      official5d: {
+        title: "🗺️ 盛欣官方五日全景動線",
+        subtitle: "高雄小港 ✈ 關西空港 ➔ 京都世界遺產 ➔ 海之京都 ➔ 美山町 ➔ 自由日 ➔ 賦歸",
+        center: [135.45, 35.15],
+        zoom: 9.2,
+        pitch: 45,
+        bearing: 0,
+        routeColor: "#10b981",
+        spots: [
+          {
+            id: "d1_kix",
+            order: "D1",
+            time: "11/25 12:40 抵達",
+            name: "關西國際機場 (KIX) ➔ 京都",
+            sub: "搭乘亞洲航空 AK170 抵達海上人工浮島空港，專車前往京都",
+            lngLat: [135.2328, 34.4347],
+            image: "images/kix_airport.jpg",
+            station: "關西海上國際空港",
+            pass: "公司專車接送",
+            desc: "由建築大師倫佐·皮亞諾設計的全球首座完全填海造陸海上機場，跑道兩側盡是一望無際的蔚藍海洋。",
+            googleQuery: "關西國際機場"
+          },
+          {
+            id: "d1_kiyomizu",
+            order: "D1",
+            time: "11/25 下午",
+            name: "世界文化遺產：京都清水寺",
+            sub: "國寶清水舞台懸空崖壁、二年坂三年坂京風老街散策",
+            lngLat: [135.7850, 34.9949],
+            image: "images/kiyomizudera.jpg",
+            station: "京都東山區清水",
+            pass: "團體行程已含",
+            desc: "建於 778 年的千年古剎，全木榫接結構未用一根鐵釘。11 月下旬被萬株火紅楓樹緊緊擁抱，氣勢雄渾。",
+            googleQuery: "清水寺"
+          },
+          {
+            id: "d2_ine",
+            order: "D2",
+            time: "11/26 上午",
+            name: "伊根町舟屋（日本最美水上村落）",
+            sub: "搭乘海上觀光遊覽船，成群海鷗隨船翱翔，近距離欣賞 230 棟舟屋",
+            lngLat: [135.2974, 35.6715],
+            image: "images/itinerary_photo_5.jpg",
+            station: "京都府丹後半島伊根町",
+            pass: "遊覽船體驗已含",
+            desc: "一樓停泊漁船、二樓作為起居空間的獨特傳統木造建築群，被譽為「日本威尼斯」，保留了最純樸的漁村生活。",
+            googleQuery: "伊根舟屋"
+          },
+          {
+            id: "d2_amanohashidate",
+            order: "D2",
+            time: "11/26 下午",
+            name: "日本三景：天橋立（傘松公園）",
+            sub: "搭纜車登上傘松公園，從胯下倒看如同青龍騰空飛向天際的白砂青松",
+            lngLat: [135.1912, 35.5694],
+            image: "images/itinerary_photo_6.jpg",
+            station: "京都府宮津市",
+            pass: "纜車券已含",
+            desc: "長約 3.6 公里的沙洲長堤上生長著約 8,000 棵松樹，與宮島、松島並稱「日本三景」，景色幽靜秀麗。",
+            googleQuery: "天橋立 傘松公園"
+          },
+          {
+            id: "d3_miyama",
+            order: "D3",
+            time: "11/27 上午",
+            name: "美山町茅葺之里（三大合掌村）",
+            sub: "群山環繞的古樸茅草屋頂秘境，保留江戶中晚期農村原始風貌",
+            lngLat: [135.5262, 35.3117],
+            image: "images/itinerary_photo_1.jpg",
+            station: "京都府南丹市美山町",
+            pass: "團體行程已含",
+            desc: "隱世獨立的世外桃源，數十棟傳統覆頂茅草屋參差錯落於山谷之間，純淨的溪流與裊裊炊煙令人忘卻煩囂。",
+            googleQuery: "美山町 茅葺之里"
+          },
+          {
+            id: "d3_dotonbori",
+            order: "D3",
+            time: "11/27 傍晚",
+            name: "道頓堀 ＆ 心齋橋筋老街",
+            sub: "固力果跑跑人招牌打卡、一蘭拉麵、巨蟹招牌與熱鬧商圈",
+            lngLat: [135.5013, 34.6690],
+            image: "images/dotonbori.jpg",
+            station: "難波站 14 號出口步行 3 分",
+            pass: "散策購物",
+            desc: "大阪最具代表性的美食與購物動脈，運河兩側霓虹招牌爭奇鬥艷，聚集了全關西最道地的章魚燒與炸串小吃。",
+            googleQuery: "道頓堀 固力果"
+          },
+          {
+            id: "d4_freeday",
+            order: "D4",
+            time: "11/28 全天",
+            name: "全日自由活動（Plan A / Plan B / Plan C）",
+            sub: "自主規劃！歷史商街、港灣海景或北攝賞楓自由二選一",
+            lngLat: [135.502, 34.675],
+            image: "images/PlanA_vs_PlanB_比較圖.png",
+            station: "大阪市中心",
+            pass: "自由行程",
+            desc: "請利用上方 Plan A / Plan B 切換晶片切換詳細動線與參觀時間表。",
+            googleQuery: "心齋橋"
+          },
+          {
+            id: "d5_rinku",
+            order: "D5",
+            time: "11/29 10:30 - 13:00",
+            name: "臨空城 Rinku Premium Outlets ➔ 返台",
+            sub: "關西空港對岸海景 Outlet，採購運動品牌、精品，搭 AK171 賦歸小港",
+            lngLat: [135.2954, 34.4072],
+            image: "images/kix_airport.jpg",
+            station: "JR / 南海電鐵「臨空城站」徒步 6 分",
+            pass: "專車前往空港",
+            desc: "兩百多家國際精品與知名日系品牌林立，緊鄰大阪灣畔，登機前最後一站盡情免稅掃貨！",
+            googleQuery: "臨空城 Outlet"
+          }
         ]
       }
-    ];
+    };
 
-    // --- 3D 地標清單 ---
-    const LANDMARKS = [
-      { id: "kix", name: "關西國際機場 (KIX)", pos: [9, 1.2, 7], color: 0x06b6d4, icon: "✈️" },
-      { id: "kyoto", name: "京都古都特區 (清水寺/二三年坂)", pos: [-6, 1.8, -7], color: 0xef4444, icon: "⛩️" },
-      { id: "osaka_castle", name: "大阪城 ＆ 歷史博物館", pos: [1, 2.2, -1], color: 0x10b981, icon: "🏯" },
-      { id: "dotonbori", name: "道頓堀・難波電器街", pos: [-5, 1.5, 4], color: 0xf59e0b, icon: "🏙️" },
-      { id: "harukas", name: "阿倍野 HARUKAS 300 高空夜景", pos: [-1.5, 3.6, 2.8], color: 0xfbbf24, icon: "🌃" },
-      { id: "bay_kaiyukan", name: "大阪港・海遊館・住之江溫泉", pos: [6, 1.4, 2], color: 0x38bdf8, icon: "🦈" },
-      { id: "minoo", name: "箕面勝尾寺・達摩賞楓", pos: [3, 2.4, -8], color: 0xf43f5e, icon: "🍁" }
-    ];
+    /* ========================================================================
+       MapLibre GL 3D Map 初始化與底圖圖層配置
+       ======================================================================== */
+    const TILE_SOURCES = {
+      satellite: {
+        type: 'raster',
+        tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'],
+        tileSize: 256,
+        attribution: 'Tiles &copy; Esri World Imagery'
+      },
+      gsi: {
+        type: 'raster',
+        tiles: ['https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png'],
+        tileSize: 256,
+        attribution: '國土地理院 (GSI Japan)'
+      },
+      voyager: {
+        type: 'raster',
+        tiles: ['https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}@2x.png'],
+        tileSize: 256,
+        attribution: '&copy; CartoDB &copy; OpenStreetMap'
+      },
+      dark: {
+        type: 'raster',
+        tiles: ['https://basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}@2x.png'],
+        tileSize: 256,
+        attribution: '&copy; CartoDB &copy; OpenStreetMap'
+      }
+    };
 
-    let currentPlanIdx = 0;
-    let selectedLandmark = "osaka_castle";
+    let currentLayerKey = 'satellite';
+    let currentPlanKey = 'planA';
+    let activeMarkers = [];
+    let isOrbiting = false;
+    let orbitAnimFrame = null;
 
-    // --- Three.js 初始化 ---
-    const container = document.getElementById("canvas-container");
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x080c14);
-    scene.fog = new THREE.FogExp2(0x080c14, 0.02);
-
-    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.set(22, 20, 26);
-
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    container.appendChild(renderer.domElement);
-
-    const controls = new THREE.OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.05;
-    controls.maxPolarAngle = Math.PI / 2.15; // 限制不翻入地底
-    controls.minDistance = 8;
-    controls.maxDistance = 60;
-    controls.target.set(0, 1.5, 0);
-
-    // 光照系統
-    const hemiLight = new THREE.HemisphereLight(0xffffff, 0x1e293b, 0.65);
-    scene.add(hemiLight);
-
-    const dirLight = new THREE.DirectionalLight(0xffffff, 1.1);
-    dirLight.position.set(16, 25, 14);
-    dirLight.castShadow = true;
-    dirLight.shadow.mapSize.width = 2048;
-    dirLight.shadow.mapSize.height = 2048;
-    scene.add(dirLight);
-
-    const amberLight = new THREE.PointLight(0xf59e0b, 1.6, 32);
-    amberLight.position.set(2, 6, 2);
-    scene.add(amberLight);
-
-    // --- 3D 模型群組 ---
-    const islandGroup = new THREE.Group();
-    scene.add(islandGroup);
-
-    // 1. 六角階梯浮島地表
-    const groundGeo = new THREE.CylinderGeometry(19, 20, 2, 6);
-    const groundMat = new THREE.MeshStandardMaterial({ color: 0x111827, roughness: 0.8, metalness: 0.2 });
-    const ground = new THREE.Mesh(groundGeo, groundMat);
-    ground.position.y = -1;
-    ground.receiveShadow = true;
-    islandGroup.add(ground);
-
-    const baseGeo = new THREE.CylinderGeometry(20, 18, 3.5, 6);
-    const baseMat = new THREE.MeshStandardMaterial({ color: 0x070b12, roughness: 0.95 });
-    const base = new THREE.Mesh(baseGeo, baseMat);
-    base.position.y = -3.5;
-    islandGroup.add(base);
-
-    const grid = new THREE.GridHelper(34, 24, 0xf59e0b, 0x1e293b);
-    grid.position.y = 0.02;
-    grid.material.opacity = 0.4;
-    grid.material.transparent = true;
-    islandGroup.add(grid);
-
-    // 2. 地標：關西國際機場 (KIX)
-    const kixGroup = new THREE.Group();
-    kixGroup.position.set(9, 0, 7);
-    const runway = new THREE.Mesh(new THREE.BoxGeometry(7.5, 0.12, 1.8), new THREE.MeshStandardMaterial({ color: 0x1e293b }));
-    runway.receiveShadow = true;
-    kixGroup.add(runway);
-    // AirAsia 客機
-    const plane = new THREE.Mesh(new THREE.ConeGeometry(0.35, 1.5, 8), new THREE.MeshStandardMaterial({ color: 0xef4444 }));
-    plane.rotation.z = Math.PI / 2;
-    plane.rotation.y = -Math.PI / 6;
-    plane.position.set(-0.8, 0.55, 0);
-    const wings = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.05, 1.4), new THREE.MeshStandardMaterial({ color: 0xffffff }));
-    wings.position.set(-0.8, 0.55, 0);
-    kixGroup.add(plane, wings);
-    islandGroup.add(kixGroup);
-
-    // 3. 地標：大阪城天守閣 (Osaka Castle)
-    const castleGroup = new THREE.Group();
-    castleGroup.position.set(1, 0, -1);
-    const stoneBase = new THREE.Mesh(new THREE.ConeGeometry(2.6, 1.2, 4), new THREE.MeshStandardMaterial({ color: 0x475569, roughness: 0.8 }));
-    stoneBase.rotation.y = Math.PI / 4;
-    stoneBase.position.y = 0.6;
-    const c1 = new THREE.Mesh(new THREE.BoxGeometry(1.8, 0.8, 1.8), new THREE.MeshStandardMaterial({ color: 0xf8fafc }));
-    c1.position.y = 1.4;
-    const r1 = new THREE.Mesh(new THREE.ConeGeometry(2.1, 0.45, 4), new THREE.MeshStandardMaterial({ color: 0x059669 }));
-    r1.rotation.y = Math.PI / 4;
-    r1.position.y = 1.9;
-    const c2 = new THREE.Mesh(new THREE.BoxGeometry(1.3, 0.7, 1.3), new THREE.MeshStandardMaterial({ color: 0xf8fafc }));
-    c2.position.y = 2.3;
-    const r2 = new THREE.Mesh(new THREE.ConeGeometry(1.5, 0.5, 4), new THREE.MeshStandardMaterial({ color: 0x059669 }));
-    r2.rotation.y = Math.PI / 4;
-    r2.position.y = 2.85;
-    const goldTop = new THREE.Mesh(new THREE.SphereGeometry(0.2, 8, 8), new THREE.MeshStandardMaterial({ color: 0xf59e0b, metalness: 0.9 }));
-    goldTop.position.y = 3.25;
-    castleGroup.add(stoneBase, c1, r1, c2, r2, goldTop);
-    islandGroup.add(castleGroup);
-
-    // 4. 地標：阿倍野 HARUKAS 300 摩天大樓
-    const harukasGroup = new THREE.Group();
-    harukasGroup.position.set(-1.5, 0, 2.8);
-    const harukasMesh = new THREE.Mesh(
-      new THREE.BoxGeometry(1.1, 4.6, 1.1),
-      new THREE.MeshStandardMaterial({ color: 0x1e3a8a, metalness: 0.8, roughness: 0.2, transparent: true, opacity: 0.88 })
-    );
-    harukasMesh.position.y = 2.3;
-    const harukasTop = new THREE.Mesh(
-      new THREE.BoxGeometry(0.8, 0.3, 0.8),
-      new THREE.MeshBasicMaterial({ color: 0xfbbf24 })
-    );
-    harukasTop.position.y = 4.75;
-    harukasGroup.add(harukasMesh, harukasTop);
-    islandGroup.add(harukasGroup);
-
-    // 5. 地標：道頓堀商圈與電器街
-    const dotonGroup = new THREE.Group();
-    dotonGroup.position.set(-5, 0, 4);
-    const bldColors = [0x3b82f6, 0x06b6d4, 0x8b5cf6, 0xf59e0b];
-    for (let i = 0; i < 4; i++) {
-      const h = 2.4 + (i % 3) * 1.3;
-      const bld = new THREE.Mesh(new THREE.BoxGeometry(0.9, h, 0.9), new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.3 }));
-      bld.position.set((i % 2) * 1.3 - 0.7, h / 2, Math.floor(i / 2) * 1.4 - 0.7);
-      const glow = new THREE.Mesh(new THREE.BoxGeometry(0.85, 0.1, 0.85), new THREE.MeshBasicMaterial({ color: bldColors[i] }));
-      glow.position.set((i % 2) * 1.3 - 0.7, h + 0.05, Math.floor(i / 2) * 1.4 - 0.7);
-      dotonGroup.add(bld, glow);
-    }
-    islandGroup.add(dotonGroup);
-
-    // 6. 地標：大阪港海遊館 ＆ 天保山
-    const bayGroup = new THREE.Group();
-    bayGroup.position.set(6, 0, 2);
-    const aqua = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.6, 1.4, 8), new THREE.MeshStandardMaterial({ color: 0x0284c7, metalness: 0.6, roughness: 0.3 }));
-    aqua.position.y = 0.7;
-    const wheel = new THREE.Mesh(new THREE.TorusGeometry(1.1, 0.08, 8, 24), new THREE.MeshStandardMaterial({ color: 0x38bdf8 }));
-    wheel.position.set(0, 1.9, 0);
-    wheel.rotation.y = Math.PI / 4;
-    bayGroup.add(aqua, wheel);
-    islandGroup.add(bayGroup);
-
-    // 7. 地標：箕面勝尾寺與紅葉山林
-    const minooGroup = new THREE.Group();
-    minooGroup.position.set(3, 0, -8);
-    const hill = new THREE.Mesh(new THREE.ConeGeometry(2.4, 1.8, 6), new THREE.MeshStandardMaterial({ color: 0x991b1b, roughness: 0.8 }));
-    hill.position.y = 0.9;
-    const daruma = new THREE.Mesh(new THREE.SphereGeometry(0.35, 12, 12), new THREE.MeshStandardMaterial({ color: 0xd97706, roughness: 0.3 }));
-    daruma.position.set(0, 2.0, 0);
-    minooGroup.add(hill, daruma);
-    islandGroup.add(minooGroup);
-
-    // 8. 地標：京都特區 (清水寺與鳥居)
-    const kyotoGroup = new THREE.Group();
-    kyotoGroup.position.set(-6, 0, -7);
-    const toriiMat = new THREE.MeshStandardMaterial({ color: 0xef4444, roughness: 0.4 });
-    const p1 = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 2.4), toriiMat);
-    p1.position.set(-0.8, 1.2, 0);
-    const p2 = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 2.4), toriiMat);
-    p2.position.set(0.8, 1.2, 0);
-    const topBar = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.2, 0.3), toriiMat);
-    topBar.position.set(0, 2.3, 0);
-    kyotoGroup.add(p1, p2, topBar);
-    islandGroup.add(kyotoGroup);
-
-    // --- 動態光流軌跡線 ---
-    let currentRouteMesh = null;
-    let trainMesh = null;
-    let routeCurve = null;
-    let trainT = 0;
-
-    function buildRouteLine(coords, colorHex) {
-      if (currentRouteMesh) islandGroup.remove(currentRouteMesh);
-      if (trainMesh) islandGroup.remove(trainMesh);
-
-      const vPoints = coords.map(c => new THREE.Vector3(c[0], c[1], c[2]));
-      routeCurve = new THREE.CatmullRomCurve3(vPoints);
-      const sampled = routeCurve.getPoints(80);
-
-      const lineGeo = new THREE.BufferGeometry().setFromPoints(sampled);
-      const lineMat = new THREE.LineDashedMaterial({
-        color: colorHex,
-        dashSize: 0.8,
-        gapSize: 0.4,
-        linewidth: 2.5
-      });
-      currentRouteMesh = new THREE.Line(lineGeo, lineMat);
-      currentRouteMesh.computeLineDistances();
-      islandGroup.add(currentRouteMesh);
-
-      const tGeo = new THREE.SphereGeometry(0.28, 12, 12);
-      const tMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
-      trainMesh = new THREE.Mesh(tGeo, tMat);
-      islandGroup.add(trainMesh);
-      trainT = 0;
-    }
-
-    // --- HUD 2D/3D 投影系統 ---
-    const hudContainer = document.getElementById("hud-container");
-    const hudElements = {};
-
-    LANDMARKS.forEach(lm => {
-      const el = document.createElement("div");
-      el.className = "hud-marker";
-      el.id = `hud-${lm.id}`;
-      el.innerHTML = `
-        <div class="hud-tag">
-          <span>${lm.icon}</span>
-          <span>${lm.name}</span>
-        </div>
-        <div class="hud-pin"></div>
-      `;
-      el.onclick = () => {
-        focusLandmark(lm.id);
+    function createMapStyle(layerKey) {
+      return {
+        version: 8,
+        sources: {
+          'base-tiles': TILE_SOURCES[layerKey]
+        },
+        layers: [
+          {
+            id: 'base-tiles-layer',
+            type: 'raster',
+            source: 'base-tiles',
+            minzoom: 0,
+            maxzoom: 20
+          }
+        ]
       };
-      hudContainer.appendChild(el);
-      hudElements[lm.id] = { el, pos: new THREE.Vector3(...lm.pos) };
+    }
+
+    const map = new maplibregl.Map({
+      container: 'map',
+      style: createMapStyle(currentLayerKey),
+      center: LANDMARKS_DATA.planA.center,
+      zoom: LANDMARKS_DATA.planA.zoom,
+      pitch: LANDMARKS_DATA.planA.pitch,
+      bearing: LANDMARKS_DATA.planA.bearing,
+      antialias: true
     });
 
-    const tempV = new THREE.Vector3();
-    function updateHUD() {
-      LANDMARKS.forEach(lm => {
-        const item = hudElements[lm.id];
-        tempV.copy(item.pos);
-        tempV.applyMatrix4(islandGroup.matrixWorld);
+    map.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), 'top-right');
 
-        tempV.project(camera);
-        if (tempV.z > 1) {
-          item.el.style.opacity = "0";
-          return;
-        }
+    map.on('load', () => {
+      renderCurrentPlan();
+    });
+    // Ensure UI and markers populate immediately even before remote tiles finish
+    window.addEventListener('DOMContentLoaded', () => {
+      renderCurrentPlan();
+    });
+    setTimeout(() => {
+      renderCurrentPlan();
+    }, 100);
 
-        const x = (tempV.x * 0.5 + 0.5) * window.innerWidth;
-        const y = (-(tempV.y * 0.5) + 0.5) * window.innerHeight;
+    /* ========================================================================
+       地圖圖層切換 (空拍衛星 / 日本國土地理院 / 旅人街道 / 黑曜夜景)
+       ======================================================================== */
+    function setMapLayer(layerKey) {
+      if (layerKey === currentLayerKey) return;
+      currentLayerKey = layerKey;
 
-        item.el.style.left = `${x}px`;
-        item.el.style.top = `${y}px`;
-        item.el.style.opacity = "1";
+      document.querySelectorAll('.tool-group .tool-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      const activeBtn = document.getElementById('btn-layer-' + layerKey);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      map.setStyle(createMapStyle(layerKey));
+      map.once('style.load', () => {
+        renderCurrentPlan();
       });
     }
 
-    // --- 鏡頭平滑飛行對焦 ---
-    let targetCameraPos = new THREE.Vector3();
-    let targetLookAt = new THREE.Vector3();
-    let isMovingCamera = false;
+    /* ========================================================================
+       方案渲染 (在地實體地標標記、抽屜列表、連動 3D 霓虹路線)
+       ======================================================================== */
+    function renderCurrentPlan() {
+      const data = LANDMARKS_DATA[currentPlanKey];
+      if (!data) return;
 
-    function focusLandmark(id) {
-      selectedLandmark = id;
-      const lm = LANDMARKS.find(item => item.id === id);
-      if (!lm) return;
+      activeMarkers.forEach(m => m.remove());
+      activeMarkers = [];
 
-      Object.keys(hudElements).forEach(key => {
-        hudElements[key].el.classList.toggle("active", key === id);
-      });
+      data.spots.forEach(spot => {
+        const el = document.createElement('div');
+        el.className = 'map-custom-marker';
+        el.id = 'marker-' + spot.id;
 
-      const lx = lm.pos[0];
-      const ly = lm.pos[1];
-      const lz = lm.pos[2];
-
-      targetLookAt.set(lx, ly, lz);
-      targetCameraPos.set(lx + 9, ly + 8, lz + 10);
-      isMovingCamera = true;
-    }
-
-    // --- 方案切換核心邏輯 ---
-    function switchPlan(index) {
-      currentPlanIdx = index;
-      const p = PLANS[index];
-
-      document.querySelectorAll(".plan-btn").forEach((btn, i) => {
-        btn.classList.toggle("active", i === index);
-      });
-
-      const badgeEl = document.getElementById("planBadge");
-      badgeEl.innerText = p.badge;
-      if (index === 0) badgeEl.style.color = "var(--accent-gold)";
-      else if (index === 1) badgeEl.style.color = "#f43f5e";
-      else if (index === 2) badgeEl.style.color = "#10b981";
-      else badgeEl.style.color = "#06b6d4";
-
-      document.getElementById("planTitle").innerText = p.title;
-      document.getElementById("planDesc").innerText = p.desc;
-
-      const timelineEl = document.getElementById("timelineList");
-      timelineEl.innerHTML = "";
-      p.nodes.forEach((n, i) => {
-        const item = document.createElement("div");
-        item.className = "timeline-item" + (i === 0 ? " active" : "");
-        item.innerHTML = `
-          <div class="time-tag">${n.time}</div>
-          <div class="time-content">
-            <div class="node-title">${n.title}</div>
-            <div class="node-desc">${n.desc}</div>
-            ${n.transit ? `<div class="node-transit">🚇 ${n.transit}</div>` : ""}
+        el.innerHTML = `
+          <div class="marker-pin-body">
+            <span class="marker-order-num">${spot.order}</span>
+            <div class="marker-photo-thumb">
+              <img src="${spot.image}" alt="${spot.name}" onerror="this.src='images/harukas.jpg'">
+            </div>
+            <span class="marker-label-text">${spot.name.split('（')[0].split(' ＆')[0]}</span>
           </div>
         `;
-        item.onclick = () => {
-          document.querySelectorAll(".timeline-item").forEach(el => el.classList.remove("active"));
-          item.classList.add("active");
-          focusLandmark(n.loc);
-        };
-        timelineEl.appendChild(item);
+
+        el.addEventListener('click', (e) => {
+          e.stopPropagation();
+          selectSpot(spot.id);
+        });
+
+        const marker = new maplibregl.Marker({ element: el })
+          .setLngLat(spot.lngLat)
+          .addTo(map);
+
+        activeMarkers.push(marker);
       });
 
-      const colors = [0xf59e0b, 0xf43f5e, 0x10b981, 0x06b6d4];
-      buildRouteLine(p.routeCoords, colors[index]);
+      const coordinates = data.spots.map(s => s.lngLat);
+      const geojson = {
+        type: 'Feature',
+        geometry: {
+          type: 'LineString',
+          coordinates: coordinates
+        }
+      };
 
-      focusLandmark(p.focusLandmark);
-    }
+      if (map && map.isStyleLoaded()) {
+        try {
+          if (map.getSource('route-line')) {
+            map.getSource('route-line').setData(geojson);
+          } else {
+            map.addSource('route-line', {
+              type: 'geojson',
+              data: geojson
+            });
 
-    function toggleDetailsPanel() {
-      const panel = document.getElementById("detailsPanel");
-      const btn = document.getElementById("btnTogglePanel");
-      panel.classList.toggle("minimized");
-      btn.innerText = panel.classList.contains("minimized") ? "展開 ▴" : "收合 ▾";
-    }
+            map.addLayer({
+              id: 'route-line-glow',
+              type: 'line',
+              source: 'route-line',
+              layout: { 'line-join': 'round', 'line-cap': 'round' },
+              paint: {
+                'line-color': data.routeColor,
+                'line-width': 10,
+                'line-opacity': 0.35,
+                'line-blur': 4
+              }
+            });
 
-    switchPlan(0);
+            map.addLayer({
+              id: 'route-line-core',
+              type: 'line',
+              source: 'route-line',
+              layout: { 'line-join': 'round', 'line-cap': 'round' },
+              paint: {
+                'line-color': '#ffffff',
+                'line-width': 3,
+                'line-opacity': 0.95
+              }
+            });
+          }
 
-    const clock = new THREE.Clock();
-
-    function animate() {
-      requestAnimationFrame(animate);
-
-      if (routeCurve && trainMesh) {
-        trainT = (trainT + 0.002) % 1;
-        const pt = routeCurve.getPoint(trainT);
-        trainMesh.position.copy(pt);
-      }
-
-      if (isMovingCamera) {
-        camera.position.lerp(targetCameraPos, 0.05);
-        controls.target.lerp(targetLookAt, 0.05);
-        if (camera.position.distanceTo(targetCameraPos) < 0.1) {
-          isMovingCamera = false;
+          if (map.getLayer('route-line-glow')) {
+            map.setPaintProperty('route-line-glow', 'line-color', data.routeColor);
+          }
+        } catch (err) {
+          console.warn("Map line update deferred:", err);
         }
       }
 
-      controls.update();
-      updateHUD();
-      renderer.render(scene, camera);
-    }
-    animate();
+      document.getElementById('drawerPlanTitle').textContent = data.title;
+      document.getElementById('drawerPlanSubtitle').textContent = data.subtitle;
 
-    window.addEventListener("resize", () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    });
+      const spotListEl = document.getElementById('drawerSpotList');
+      spotListEl.innerHTML = '';
 
-    document.querySelectorAll("[data-hermes-send]").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const text = btn.getAttribute("data-hermes-send");
-        if (window.hermes && typeof window.hermes.send === "function") {
-          window.hermes.send(text);
-        } else {
-          console.log("[Hermes Send]:", text);
-        }
+      data.spots.forEach(spot => {
+        const card = document.createElement('div');
+        card.className = 'spot-card';
+        card.id = 'card-' + spot.id;
+        card.onclick = () => selectSpot(spot.id);
+
+        card.innerHTML = `
+          <div class="spot-card-header">
+            <div class="spot-img-box">
+              <img src="${spot.image}" alt="${spot.name}" onerror="this.src='images/harukas.jpg'">
+            </div>
+            <div class="spot-info">
+              <span class="spot-time-badge">${spot.time}</span>
+              <h4 class="spot-name">${spot.order}. ${spot.name}</h4>
+              <p class="spot-subtext">${spot.sub}</p>
+            </div>
+          </div>
+          <div class="spot-badges-row">
+            <span class="badge-transit">🚇 ${spot.station}</span>
+            <span class="badge-pass">🎫 ${spot.pass}</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
+            <span style="font-size:12px; color:var(--gold-light); font-weight:600;">🔍 點擊飛入地標</span>
+            <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(spot.googleQuery || spot.name)}" 
+               target="_blank" 
+               onclick="event.stopPropagation();"
+               style="font-size:11px; color:#38bdf8; text-decoration:none; display:inline-flex; align-items:center; gap:4px; padding:3px 8px; background:rgba(56,189,248,0.12); border-radius:6px; border:1px solid rgba(56,189,248,0.3);">
+              📍 Google 導航
+            </a>
+          </div>
+        `;
+
+        spotListEl.appendChild(card);
       });
-    });
+    }
+
+    /* ========================================================================
+       切換行程方案 (Plan A, Plan B, Plan C, 官方五日)
+       ======================================================================== */
+    function switchPlan(planKey) {
+      if (!LANDMARKS_DATA[planKey]) return;
+      currentPlanKey = planKey;
+      stopCameraOrbit();
+
+      const buttons = document.querySelectorAll('.plan-selector-bar .plan-tab-btn');
+      buttons.forEach(btn => btn.classList.remove('active'));
+      if (window.event && window.event.currentTarget) {
+        window.event.currentTarget.classList.add('active');
+      }
+
+      renderCurrentPlan();
+
+      const target = LANDMARKS_DATA[planKey];
+      map.flyTo({
+        center: target.center,
+        zoom: target.zoom,
+        pitch: target.pitch,
+        bearing: target.bearing,
+        duration: 2200,
+        essential: true
+      });
+
+      toggleDrawer(true);
+    }
+
+    /* ========================================================================
+       選定景點：鏡頭平滑飛入 + 卡片高亮 + 放大互動
+       ======================================================================== */
+    function selectSpot(spotId) {
+      stopCameraOrbit();
+      const plan = LANDMARKS_DATA[currentPlanKey];
+      const spot = plan.spots.find(s => s.id === spotId);
+      if (!spot) return;
+
+      document.querySelectorAll('.spot-card').forEach(c => c.classList.remove('active-spot'));
+      const activeCard = document.getElementById('card-' + spotId);
+      if (activeCard) {
+        activeCard.classList.add('active-spot');
+        activeCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+
+      map.flyTo({
+        center: spot.lngLat,
+        zoom: 16.5,
+        pitch: 62,
+        bearing: (map.getBearing() + 45) % 360,
+        duration: 2000,
+        essential: true
+      });
+    }
+
+    function flyToCoordinates(lngLat, zoom, pitch, bearing) {
+      stopCameraOrbit();
+      map.flyTo({
+        center: lngLat,
+        zoom: zoom || 15.5,
+        pitch: pitch !== undefined ? pitch : 55,
+        bearing: bearing !== undefined ? bearing : 20,
+        duration: 2200,
+        essential: true
+      });
+    }
+
+    function toggleTilt() {
+      const curPitch = map.getPitch();
+      const nextPitch = curPitch > 30 ? 0 : 62;
+      map.easeTo({ pitch: nextPitch, duration: 1000 });
+    }
+
+    function resetToCenter() {
+      stopCameraOrbit();
+      const p = LANDMARKS_DATA[currentPlanKey];
+      map.flyTo({
+        center: p.center,
+        zoom: p.zoom,
+        pitch: p.pitch,
+        bearing: p.bearing,
+        duration: 1500
+      });
+    }
+
+    function startCameraOrbit() {
+      if (isOrbiting) {
+        stopCameraOrbit();
+        return;
+      }
+      isOrbiting = true;
+      map.easeTo({ pitch: 60, duration: 1000 });
+
+      function orbitLoop() {
+        if (!isOrbiting) return;
+        const curBearing = map.getBearing();
+        map.setBearing((curBearing + 0.15) % 360);
+        orbitAnimFrame = requestAnimationFrame(orbitLoop);
+      }
+      orbitAnimFrame = requestAnimationFrame(orbitLoop);
+    }
+
+    function stopCameraOrbit() {
+      if (isOrbiting) {
+        isOrbiting = false;
+        if (orbitAnimFrame) cancelAnimationFrame(orbitAnimFrame);
+      }
+    }
+
+    map.on('dragstart', stopCameraOrbit);
+    map.on('wheel', stopCameraOrbit);
+
+    function toggleDrawer(forceOpen) {
+      const drawer = document.getElementById('sideDrawer');
+      if (forceOpen === undefined) {
+        drawer.classList.toggle('collapsed');
+      } else if (forceOpen) {
+        drawer.classList.remove('collapsed');
+      } else {
+        drawer.classList.add('collapsed');
+      }
+    }
+
+    function openChartModal() {
+      const modal = document.getElementById('photoModal');
+      const img = document.getElementById('modalImg');
+      const title = document.getElementById('modalTitle');
+      const desc = document.getElementById('modalDesc');
+      const meta = document.getElementById('modalMeta');
+
+      img.src = 'images/PlanA_vs_PlanB_比較圖.png';
+      title.textContent = '📊 Day 4 自由活動雙方案精算決策大圖鑑';
+      desc.textContent = '結合動線順暢度、雨天耐受度、體力負荷、採購電器時間與大阪周遊卡成本回本精算。';
+      meta.innerHTML = `
+        <span class="badge-transit">文化下町線 vs 港灣溫泉線</span>
+        <span class="badge-pass">盛欣網絡科技 2026 員旅指南專用</span>
+      `;
+      modal.classList.add('open');
+    }
+
+    function closeModal() {
+      document.getElementById('photoModal').classList.remove('open');
+    }
+
+    function closeModalOnBg(e) {
+      if (e.target.id === 'photoModal') {
+        closeModal();
+      }
+    }
   </script>
 </body>
 </html>
