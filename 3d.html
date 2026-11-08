@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026 日本關西行程 3D 空間微縮展示</title>
+  <style>
+    :root {
+      --bg: #0b0f17;
+      --card-bg: rgba(15, 23, 42, 0.78);
+      --card-border: rgba(255, 255, 255, 0.12);
+      --accent: #f59e0b;
+      --accent-cyan: #06b6d4;
+      --accent-red: #ef4444;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+    body, html {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: var(--bg);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      color: var(--text);
+    }
+    #canvas-container {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+
+    /* 頂部導覽列與方案切換器 */
+    .top-bar {
+      position: absolute;
+      top: 14px;
+      left: 16px;
+      right: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+      pointer-events: none;
+    }
+    .brand-pill {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(12px);
+      padding: 8px 16px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      pointer-events: auto;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+    .brand-pill .dot {
+      width: 8px;
+      height: 8px;
+      background: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #10b981;
+    }
+    .brand-title {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    .brand-sub {
+      font-size: 11px;
+      color: var(--accent);
+      background: rgba(245, 158, 11, 0.15);
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+
+    .plan-selector {
+      display: flex;
+      gap: 8px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(12px);
+      padding: 5px;
+      border-radius: 14px;
+      pointer-events: auto;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+    .plan-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 7px 14px;
+      border-radius: 9px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .plan-btn.active {
+      background: var(--accent);
+      color: #000;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
+    }
+    .plan-btn:hover:not(.active) {
+      color: #fff;
+      background: rgba(255,255,255,0.06);
+    }
+
+    /* 3D 浮動標籤 (2D HUD Overlays) */
+    .hud-label {
+      position: absolute;
+      transform: translate(-50%, -100%);
+      z-index: 5;
+      cursor: pointer;
+      pointer-events: auto;
+      transition: opacity 0.25s, transform 0.25s;
+    }
+    .hud-bubble {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(15, 23, 42, 0.88);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(8px);
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.6);
+      transition: all 0.2s;
+    }
+    .hud-label:hover .hud-bubble, .hud-label.active .hud-bubble {
+      border-color: var(--accent);
+      transform: scale(1.08);
+      background: rgba(30, 41, 59, 0.95);
+    }
+    .hud-line {
+      width: 1px;
+      height: 18px;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+      margin: 0 auto;
+    }
+
+    /* 右側 / 底部 詳情卡片 */
+    .details-panel {
+      position: absolute;
+      right: 16px;
+      bottom: 16px;
+      width: 340px;
+      max-height: calc(100% - 100px);
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(20px);
+      border-radius: 18px;
+      padding: 18px;
+      z-index: 10;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      overflow-y: auto;
+      pointer-events: auto;
+      animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes slideIn {
+      from { transform: translateX(20px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    .plan-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .panel-header h2 {
+      font-size: 17px;
+      font-weight: 700;
+      color: #fff;
+      margin-top: 4px;
+    }
+    .panel-header p {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+
+    .timeline-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 4px;
+    }
+    .timeline-item {
+      display: flex;
+      gap: 10px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      padding: 10px 12px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .timeline-item:hover, .timeline-item.active {
+      background: rgba(245, 158, 11, 0.1);
+      border-color: rgba(245, 158, 11, 0.4);
+    }
+    .day-tag {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--accent);
+      min-width: 42px;
+    }
+    .day-content {
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .day-title {
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 2px;
+    }
+    .day-desc {
+      color: var(--text-muted);
+      font-size: 11px;
+    }
+
+    .action-bar {
+      display: flex;
+      gap: 8px;
+      margin-top: 6px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .btn-action {
+      flex: 1;
+      padding: 9px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 10px;
+      border: 1px solid var(--card-border);
+      background: rgba(255,255,255,0.06);
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .btn-action:hover {
+      background: var(--accent);
+      color: #000;
+      border-color: var(--accent);
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #000;
+      font-weight: 700;
+      border: none;
+    }
+    .btn-primary:hover {
+      filter: brightness(1.1);
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    }
+
+    /* 視角與控制器提示 */
+    .controls-hint {
+      position: absolute;
+      left: 16px;
+      bottom: 16px;
+      z-index: 10;
+      font-size: 11px;
+      color: var(--text-muted);
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(8px);
+      padding: 6px 12px;
+      border-radius: 999px;
+      pointer-events: none;
+    }
+
+    /* RWD 適應 */
+    @media (max-width: 768px) {
+      .top-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+      .details-panel {
+        width: calc(100% - 32px);
+        max-height: 40%;
+        bottom: 10px;
+        right: 16px;
+      }
+      .controls-hint {
+        display: none;
+      }
+    }
+  </style>
+  <!-- Three.js & Controls -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body>
+  <div id="canvas-container"></div>
+
+  <!-- 頂部資訊與切換器 -->
+  <div class="top-bar">
+    <div style="display: flex; gap: 8px; align-items: center; pointer-events: auto;">
+      <a href="index.html" class="brand-pill" style="text-decoration: none; color: inherit; cursor: pointer; transition: transform 0.2s;" title="返回手冊首頁">
+        <span style="font-size: 14px;">⬅️</span>
+        <span class="brand-title">返回隨身指南</span>
+      </a>
+      <div class="brand-pill">
+        <div class="dot"></div>
+        <div class="brand-title">盛欣網絡 2026 關西行</div>
+        <div class="brand-sub">3D 微縮浮島</div>
+      </div>
+    </div>
+    <div class="plan-selector">
+      <button class="plan-btn active" onclick="switchPlan(0)">方案 A：盛欣秋行 (11/25-29)</button>
+      <button class="plan-btn" onclick="switchPlan(1)">方案 B：經典京都包車</button>
+      <button class="plan-btn" onclick="switchPlan(2)">方案 C：大阪潮遊+USJ</button>
+    </div>
+  </div>
+
+  <!-- 3D 浮動標籤容器 -->
+  <div id="hud-container"></div>
+
+  <!-- 右側詳細資訊抽屜 -->
+  <div class="details-panel" id="detailsPanel">
+    <div class="panel-header">
+      <div class="plan-badge" id="planBadge">✈️ 盛欣官方指定</div>
+      <h2 id="planTitle">2026/11/25 - 11/29 盛欣秋行五日</h2>
+      <p id="planDesc">高雄直飛關西 (AK170/AK171)，京都兩晚人文散策＋大阪兩晚商業購物，兼顧商務交流與自由放鬆。</p>
+    </div>
+
+    <div class="timeline-list" id="timelineList">
+      <!-- 動態插入日程 -->
+    </div>
+
+    <div class="action-bar">
+      <button class="btn-action" data-hermes-send="請幫我以 Markdown 整理本行程的行李檢查與注意事項清單">
+        📋 注意事項
+      </button>
+      <button class="btn-action btn-primary" data-hermes-send="我想針對這個 2026 行程方案進行預算與交通卡配置建議">
+        💬 與 Hermes 深入討論
+      </button>
+    </div>
+  </div>
+
+  <div class="controls-hint">
+    🖱️ 左鍵拖曳 360° 旋轉 ｜ 滾輪縮放 ｜ 右鍵平移 ｜ 點擊地標自動對焦
+  </div>
+
+  <script>
+    // --- 方案數據集 ---
+    const PLANS = [
+      {
+        badge: "✈️ 盛欣網絡秋季員工海外研修",
+        title: "2026 盛欣關西秋行 5 日 (11/25 - 11/29)",
+        desc: "高雄出發 AirAsia AK170/171 直飛，旅天下承辦。前兩天品味京都古韻，後兩天進駐大阪梅田商圈，第 4 天自由日彈性極高。",
+        focusLandmark: "kix",
+        days: [
+          { day: "D1", date: "11/25", loc: "kix", title: "高雄 KHH ✈️ 關西 KIX → 京都", desc: "06:30 高雄機場集合，搭乘 AK170 (08:30-12:40)。專車接送至京都飯店，晚間鴨川先斗町迎賓宴。" },
+          { day: "D2", date: "11/26", loc: "kyoto", title: "京都楓紅古都巡禮", desc: "專車暢遊清水寺、伏見稻荷千本鳥居、嵐山竹林步道。夜宿京都精品飯店。" },
+          { day: "D3", date: "11/27", loc: "osaka_castle", title: "京都移轉 → 大阪城公園 → 心齋橋", desc: "參訪大阪城天守閣與商業園區，下午入住大阪市區五星飯店，心齋橋自由漫步晚餐。" },
+          { day: "D4", date: "11/28", loc: "dotonbori", title: "大阪全日自由活動 (自由配)", desc: "可選 A：日本環球影城 USJ 快速通關體驗；或 B：梅田百貨購物＋黑門市場極上和牛饕客行。" },
+          { day: "D5", date: "11/29", loc: "kix", title: "臨空城 Outlet → 關西 KIX ✈️ 高雄", desc: "臨空城最後掃貨，11:30 抵達 KIX 辦理登機手續，搭乘 AK171 (13:45-16:00) 滿載賦歸。" }
+        ]
+      },
+      {
+        badge: "🏯 尊榮長輩／深度文化首選",
+        title: "方案 B：京都古風庭園尊榮包車",
+        desc: "全程 Alphard 專車點對點直達，免走地鐵長階梯。嚴選米其林懷石料理與私人町家茶道席位，節奏緩慢雅致。",
+        focusLandmark: "kyoto",
+        days: [
+          { day: "D1", date: "Day 1", loc: "kix", title: "HARUKA 特急直達京都・入住麗思卡爾頓", desc: "專屬禮賓接送，悠閒散步三條名店街，夜間享用鴨川川床料理。" },
+          { day: "D2", date: "Day 2", loc: "kyoto", title: "金閣寺晨間包場・龍安寺枯山水", desc: "避開人潮獨享石庭禪宗美學，午後享用米其林一星「無礙山房」抹茶聖代。" },
+          { day: "D3", date: "Day 3", loc: "kyoto", title: "宇治平等院鳳凰堂・源氏物語文化散策", desc: "探訪國寶級古蹟與百年茶莊「伊藤久右衛門」，體驗石臼手磨抹茶。" },
+          { day: "D4", date: "Day 4", loc: "osaka_castle", title: "大阪水上巴士漫遊・中之島美術館", desc: "安藤忠雄建築巡禮，晚間於阿倍野 Harukas 300 俯瞰百萬夜景。" },
+          { day: "D5", date: "Day 5", loc: "kix", title: "關西國際機場貴賓室・優雅返程", desc: "免稅精品專人提貨服務，輕鬆平穩返抵國門。" }
+        ]
+      },
+      {
+        badge: "⚡ 潮流快節奏／年輕探索者",
+        title: "方案 C：大阪極速都會＋USJ 冒險",
+        desc: "專注於最新沉浸娛樂、動漫潮流聖地、潮流選品店（Orange Street）與環球影城超級任天堂世界/哈利波特狂歡。",
+        focusLandmark: "dotonbori",
+        days: [
+          { day: "D1", date: "Day 1", loc: "dotonbori", title: "直衝難波心齋橋・道頓堀霓虹夜跑", desc: "固力果跑跑人打卡、一蘭拉麵、千日前道具街挖寶與最新任天堂旗艦店。" },
+          { day: "D2", date: "Day 2", loc: "osaka_castle", title: "日本環球影城 USJ 全日狂歡", desc: "持 Express 7 特快通關：瑪利歐賽車庫巴的挑戰書、大白鯊、飛天翼龍。" },
+          { day: "D3", date: "Day 3", loc: "dotonbori", title: "南船場＋堀江 Orange Street 設計選品", desc: "探訪 Supreme、Human Made、日本新銳工藝器皿與職人精品咖啡手沖。" },
+          { day: "D4", date: "Day 4", loc: "kyoto", title: "快閃京都清水寺＋二年坂和服體驗", desc: "搭乘京阪特急直達祇園，一日穿梭傳統江戶町家巷弄與拍照打卡。" },
+          { day: "D5", date: "Day 5", loc: "kix", title: "臨空城 Outlet 潮牌採購・回程", desc: "最後衝刺運動潮鞋與精品折扣，充實結束 2026 日本探險。" }
+        ]
+      }
+    ];
+
+    // --- 3D 場景地標節點定義 ---
+    const LANDMARKS = [
+      { id: "kix", name: "關西國際機場 (KIX)", pos: [9, 1.2, 7], color: 0x06b6d4, icon: "✈️" },
+      { id: "kyoto", name: "京都古典特區 (伏見稻荷/五重塔)", pos: [-6, 1.8, -7], color: 0xef4444, icon: "⛩️" },
+      { id: "osaka_castle", name: "大阪城歷史特區", pos: [1, 2.2, -1], color: 0x10b981, icon: "🏯" },
+      { id: "dotonbori", name: "道頓堀／梅田都會特區", pos: [-5, 1.5, 4], color: 0xf59e0b, icon: "🏙️" }
+    ];
+
+    let currentPlanIdx = 0;
+    let selectedLandmark = "kix";
+
+    // --- Three.js 初始化 ---
+    const container = document.getElementById("canvas-container");
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x080c14);
+    scene.fog = new THREE.FogExp2(0x080c14, 0.022);
+
+    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.set(24, 22, 28);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    container.appendChild(renderer.domElement);
+
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.maxPolarAngle = Math.PI / 2.15; // 不穿入地底
+    controls.minDistance = 10;
+    controls.maxDistance = 65;
+    controls.target.set(0, 0, 0);
+
+    // --- 燈光配置 ---
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.85);
+    scene.add(ambientLight);
+
+    const dirLight = new THREE.DirectionalLight(0xfff8eb, 1.4);
+    dirLight.position.set(20, 35, 15);
+    dirLight.castShadow = true;
+    dirLight.shadow.mapSize.width = 2048;
+    dirLight.shadow.mapSize.height = 2048;
+    dirLight.shadow.bias = -0.0005;
+    scene.add(dirLight);
+
+    // 科技感底層補光
+    const bluePoint = new THREE.PointLight(0x06b6d4, 2, 40);
+    bluePoint.position.set(0, -2, 0);
+    scene.add(bluePoint);
+
+    const amberPoint = new THREE.PointLight(0xf59e0b, 1.8, 35);
+    amberPoint.position.set(5, 8, 5);
+    scene.add(amberPoint);
+
+    // --- 3D 程序化建模 (Zero-GLTF) ---
+
+    // 1. 底座：六角形階梯浮島
+    const islandGroup = new THREE.Group();
+    scene.add(islandGroup);
+
+    // 頂層地表（墨黑科技石材）
+    const groundGeo = new THREE.CylinderGeometry(18, 19, 1.8, 6);
+    const groundMat = new THREE.MeshStandardMaterial({
+      color: 0x111827,
+      roughness: 0.7,
+      metalness: 0.2
+    });
+    const ground = new THREE.Mesh(groundGeo, groundMat);
+    ground.position.y = -0.9;
+    ground.receiveShadow = true;
+    islandGroup.add(ground);
+
+    // 中層基底（深藍色層次）
+    const baseGeo = new THREE.CylinderGeometry(19, 17, 3, 6);
+    const baseMat = new THREE.MeshStandardMaterial({
+      color: 0x090e17,
+      roughness: 0.9,
+      metalness: 0.1
+    });
+    const base = new THREE.Mesh(baseGeo, baseMat);
+    base.position.y = -3.2;
+    islandGroup.add(base);
+
+    // 科技座標網格
+    const grid = new THREE.GridHelper(32, 24, 0xf59e0b, 0x1e293b);
+    grid.position.y = 0.05;
+    grid.material.opacity = 0.45;
+    grid.material.transparent = true;
+    islandGroup.add(grid);
+
+    // 2. 地標：關西國際機場 (KIX) 浮島端
+    const kixGroup = new THREE.Group();
+    kixGroup.position.set(9, 0, 7);
+    // 跑道
+    const runwayGeo = new THREE.BoxGeometry(7, 0.12, 1.8);
+    const runwayMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.5 });
+    const runway = new THREE.Mesh(runwayGeo, runwayMat);
+    runway.receiveShadow = true;
+    kixGroup.add(runway);
+    // 跑道標線
+    const stripeGeo = new THREE.BoxGeometry(0.8, 0.14, 0.15);
+    const stripeMat = new THREE.MeshBasicMaterial({ color: 0xf8fafc });
+    for (let i = -2.5; i <= 2.5; i += 1.3) {
+      const s = new THREE.Mesh(stripeGeo, stripeMat);
+      s.position.x = i;
+      kixGroup.add(s);
+    }
+    // 迷你客機 (AirAsia 紅白塗裝程序化)
+    const planeGeo = new THREE.ConeGeometry(0.35, 1.5, 8);
+    const planeMat = new THREE.MeshStandardMaterial({ color: 0xef4444, roughness: 0.3 });
+    const plane = new THREE.Mesh(planeGeo, planeMat);
+    plane.rotation.z = Math.PI / 2;
+    plane.rotation.y = -Math.PI / 6;
+    plane.position.set(-1, 0.6, 0);
+    // 機翼
+    const wingGeo = new THREE.BoxGeometry(0.3, 0.06, 1.4);
+    const wingMat = new THREE.MeshStandardMaterial({ color: 0xffffff });
+    const wings = new THREE.Mesh(wingGeo, wingMat);
+    wings.position.set(-1, 0.6, 0);
+    kixGroup.add(plane, wings);
+    islandGroup.add(kixGroup);
+
+    // 3. 地標：京都文化特區 (紅色鳥居 + 五重塔)
+    const kyotoGroup = new THREE.Group();
+    kyotoGroup.position.set(-6, 0, -7);
+
+    // 紅色鳥居 (Torii)
+    const postGeo = new THREE.CylinderGeometry(0.12, 0.12, 2.4);
+    const toriiMat = new THREE.MeshStandardMaterial({ color: 0xef4444, roughness: 0.4 });
+    const p1 = new THREE.Mesh(postGeo, toriiMat);
+    p1.position.set(-0.8, 1.2, 0);
+    const p2 = new THREE.Mesh(postGeo, toriiMat);
+    p2.position.set(0.8, 1.2, 0);
+    const topBarGeo = new THREE.BoxGeometry(2.4, 0.2, 0.3);
+    const topBar = new THREE.Mesh(topBarGeo, toriiMat);
+    topBar.position.set(0, 2.3, 0);
+    kyotoGroup.add(p1, p2, topBar);
+
+    // 五重塔 (Pagoda) 程序化多層屋簷
+    const pagodaBase = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.4, 1.6), new THREE.MeshStandardMaterial({ color: 0x334155 }));
+    pagodaBase.position.set(2.2, 0.2, -1);
+    kyotoGroup.add(pagodaBase);
+
+    for (let lvl = 0; lvl < 4; lvl++) {
+      const roofSize = 1.8 - lvl * 0.3;
+      const roof = new THREE.Mesh(
+        new THREE.ConeGeometry(roofSize, 0.4, 4),
+        new THREE.MeshStandardMaterial({ color: 0xb45309, roughness: 0.5 })
+      );
+      roof.rotation.y = Math.PI / 4;
+      roof.position.set(2.2, 0.6 + lvl * 0.65, -1);
+      kyotoGroup.add(roof);
+
+      const body = new THREE.Mesh(
+        new THREE.BoxGeometry(roofSize * 0.55, 0.45, roofSize * 0.55),
+        new THREE.MeshStandardMaterial({ color: 0x78350f })
+      );
+      body.position.set(2.2, 0.35 + lvl * 0.65, -1);
+      kyotoGroup.add(body);
+    }
+    // 相輪 (尖頂金針)
+    const spire = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.04, 0.08, 1.2),
+      new THREE.MeshStandardMaterial({ color: 0xf59e0b, metalness: 0.8, roughness: 0.2 })
+    );
+    spire.position.set(2.2, 3.4, -1);
+    kyotoGroup.add(spire);
+    islandGroup.add(kyotoGroup);
+
+    // 4. 地標：大阪城 (Osaka Castle)
+    const castleGroup = new THREE.Group();
+    castleGroup.position.set(1, 0, -1);
+
+    // 石垣石台 (Stone Base)
+    const stoneBase = new THREE.Mesh(
+      new THREE.ConeGeometry(2.6, 1.2, 4),
+      new THREE.MeshStandardMaterial({ color: 0x475569, roughness: 0.8 })
+    );
+    stoneBase.rotation.y = Math.PI / 4;
+    stoneBase.position.y = 0.6;
+    castleGroup.add(stoneBase);
+
+    // 白牆主殿與青綠屋頂
+    const c1 = new THREE.Mesh(new THREE.BoxGeometry(1.8, 0.8, 1.8), new THREE.MeshStandardMaterial({ color: 0xf8fafc }));
+    c1.position.y = 1.4;
+    const r1 = new THREE.Mesh(new THREE.ConeGeometry(2.1, 0.45, 4), new THREE.MeshStandardMaterial({ color: 0x059669 }));
+    r1.rotation.y = Math.PI / 4;
+    r1.position.y = 1.9;
+
+    const c2 = new THREE.Mesh(new THREE.BoxGeometry(1.3, 0.7, 1.3), new THREE.MeshStandardMaterial({ color: 0xf8fafc }));
+    c2.position.y = 2.3;
+    const r2 = new THREE.Mesh(new THREE.ConeGeometry(1.5, 0.5, 4), new THREE.MeshStandardMaterial({ color: 0x059669 }));
+    r2.rotation.y = Math.PI / 4;
+    r2.position.y = 2.85;
+
+    // 金鯱 (金色裝飾頂)
+    const goldTop = new THREE.Mesh(new THREE.SphereGeometry(0.2, 8, 8), new THREE.MeshStandardMaterial({ color: 0xf59e0b, metalness: 0.9, roughness: 0.2 }));
+    goldTop.position.y = 3.25;
+
+    castleGroup.add(c1, r1, c2, r2, goldTop);
+    islandGroup.add(castleGroup);
+
+    // 5. 地標：道頓堀／梅田摩天商圈 (現代透明發光建築群)
+    const dotonGroup = new THREE.Group();
+    dotonGroup.position.set(-5, 0, 4);
+
+    const bldColors = [0x3b82f6, 0x06b6d4, 0x8b5cf6, 0xf59e0b];
+    for (let i = 0; i < 5; i++) {
+      const h = 2.5 + (i % 3) * 1.5;
+      const bGeo = new THREE.BoxGeometry(0.9, h, 0.9);
+      const bMat = new THREE.MeshStandardMaterial({
+        color: 0x1e293b,
+        roughness: 0.2,
+        metalness: 0.6
+      });
+      const bld = new THREE.Mesh(bGeo, bMat);
+      bld.position.set((i % 3) * 1.2 - 1, h / 2, Math.floor(i / 3) * 1.3 - 0.5);
+      dotonGroup.add(bld);
+
+      // 發光頂部線條
+      const glowTop = new THREE.Mesh(
+        new THREE.BoxGeometry(0.85, 0.1, 0.85),
+        new THREE.MeshBasicMaterial({ color: bldColors[i % bldColors.length] })
+      );
+      glowTop.position.set((i % 3) * 1.2 - 1, h + 0.05, Math.floor(i / 3) * 1.3 - 0.5);
+      dotonGroup.add(glowTop);
+    }
+    islandGroup.add(dotonGroup);
+
+    // 6. 動態航線／新幹線軌跡線 (Connecting Curves)
+    const routePoints = [
+      new THREE.Vector3(9, 0.4, 7),     // KIX
+      new THREE.Vector3(4, 0.6, 2),
+      new THREE.Vector3(1, 0.8, -1),    // Osaka Castle
+      new THREE.Vector3(-5, 0.6, 4),    // Dotonbori
+      new THREE.Vector3(-2, 1.2, -4),
+      new THREE.Vector3(-6, 0.6, -7)    // Kyoto
+    ];
+    const curve = new THREE.CatmullRomCurve3(routePoints);
+    const points = curve.getPoints(70);
+    const lineGeo = new THREE.BufferGeometry().setFromPoints(points);
+    const lineMat = new THREE.LineDashedMaterial({
+      color: 0xf59e0b,
+      dashSize: 0.8,
+      gapSize: 0.4,
+      linewidth: 2
+    });
+    const routeLine = new THREE.Line(lineGeo, lineMat);
+    routeLine.computeLineDistances();
+    islandGroup.add(routeLine);
+
+    // 浮動列車/光點粒子
+    const trainMesh = new THREE.Mesh(
+      new THREE.SphereGeometry(0.28, 16, 16),
+      new THREE.MeshBasicMaterial({ color: 0x38bdf8 })
+    );
+    scene.add(trainMesh);
+
+    // 櫻花／星光粒子
+    const particleCount = 120;
+    const partGeo = new THREE.BufferGeometry();
+    const partPositions = new Float32Array(particleCount * 3);
+    for (let i = 0; i < particleCount * 3; i += 3) {
+      partPositions[i] = (Math.random() - 0.5) * 36;
+      partPositions[i + 1] = Math.random() * 14 + 1;
+      partPositions[i + 2] = (Math.random() - 0.5) * 36;
+    }
+    partGeo.setAttribute('position', new THREE.BufferAttribute(partPositions, 3));
+    const partMat = new THREE.PointsMaterial({
+      color: 0xf472b6,
+      size: 0.22,
+      transparent: true,
+      opacity: 0.75
+    });
+    const sakuraParticles = new THREE.Points(partGeo, partMat);
+    scene.add(sakuraParticles);
+
+    // --- 2D HUD 標籤生成 ---
+    const hudContainer = document.getElementById("hud-container");
+    const hudElements = {};
+
+    LANDMARKS.forEach(lm => {
+      const el = document.createElement("div");
+      el.className = "hud-label";
+      el.id = `hud-${lm.id}`;
+      el.innerHTML = `
+        <div class="hud-bubble">
+          <span>${lm.icon}</span>
+          <span>${lm.name}</span>
+        </div>
+        <div class="hud-line"></div>
+      `;
+      el.onclick = () => focusLandmark(lm.id);
+      hudContainer.appendChild(el);
+      hudElements[lm.id] = { el, pos: new THREE.Vector3(...lm.pos) };
+    });
+
+    // --- 鏡頭平滑移動對焦 ---
+    let targetCameraPos = camera.position.clone();
+    let targetLookAt = controls.target.clone();
+    let isMovingCamera = false;
+
+    function focusLandmark(id) {
+      selectedLandmark = id;
+      const lm = LANDMARKS.find(item => item.id === id);
+      if (!lm) return;
+
+      // 更新 HUD active 狀態
+      Object.keys(hudElements).forEach(key => {
+        hudElements[key].el.classList.toggle("active", key === id);
+      });
+
+      // 設定鏡頭與目標焦點
+      const [lx, ly, lz] = lm.pos;
+      targetLookAt.set(lx, ly, lz);
+      targetCameraPos.set(lx + 10, ly + 8, lz + 10);
+      isMovingCamera = true;
+    }
+
+    // --- 方案切換邏輯 ---
+    function switchPlan(index) {
+      currentPlanIdx = index;
+      const p = PLANS[index];
+
+      // 切換按鈕狀態
+      document.querySelectorAll(".plan-btn").forEach((btn, i) => {
+        btn.classList.toggle("active", i === index);
+      });
+
+      // 更新側邊資訊欄
+      document.getElementById("planBadge").innerText = p.badge;
+      document.getElementById("planTitle").innerText = p.title;
+      document.getElementById("planDesc").innerText = p.desc;
+
+      const timelineEl = document.getElementById("timelineList");
+      timelineEl.innerHTML = "";
+      p.days.forEach((d, i) => {
+        const item = document.createElement("div");
+        item.className = "timeline-item";
+        item.innerHTML = `
+          <div class="day-tag">${d.day}<br><span style="font-size:9px;color:#94a3b8;font-weight:normal">${d.date}</span></div>
+          <div class="day-content">
+            <div class="day-title">${d.title}</div>
+            <div class="day-desc">${d.desc}</div>
+          </div>
+        `;
+        item.onclick = () => {
+          document.querySelectorAll(".timeline-item").forEach(el => el.classList.remove("active"));
+          item.classList.add("active");
+          focusLandmark(d.loc);
+        };
+        timelineEl.appendChild(item);
+      });
+
+      // 自動對焦方案核心地標
+      focusLandmark(p.focusLandmark);
+    }
+
+    // 初始化載入第一方案
+    switchPlan(0);
+
+    // --- 動畫渲染循環 ---
+    let trainT = 0;
+    const clock = new THREE.Clock();
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      const delta = clock.getDelta();
+      const time = clock.getElapsedTime();
+
+      // 微幅自轉島嶼（若未手動拖曳）
+      islandGroup.rotation.y += 0.0006;
+
+      // 移動新幹線列車
+      trainT = (trainT + 0.0018) % 1;
+      const tPos = curve.getPoint(trainT);
+      trainMesh.position.copy(tPos);
+
+      // 飄動櫻花粒子
+      const pArr = sakuraParticles.geometry.attributes.position.array;
+      for (let i = 1; i < particleCount * 3; i += 3) {
+        pArr[i] -= 0.02;
+        if (pArr[i] < 0) pArr[i] = 14;
+      }
+      sakuraParticles.geometry.attributes.position.needsUpdate = true;
+
+      // 鏡頭平滑插值 (Lerp)
+      if (isMovingCamera) {
+        camera.position.lerp(targetCameraPos, 0.045);
+        controls.target.lerp(targetLookAt, 0.045);
+        if (camera.position.distanceTo(targetCameraPos) < 0.2) {
+          isMovingCamera = false;
+        }
+      }
+
+      controls.update();
+
+      // 更新 2D HUD 浮動標籤屏幕座標 (Project)
+      const tempVec = new THREE.Vector3();
+      Object.keys(hudElements).forEach(key => {
+        const item = hudElements[key];
+        tempVec.copy(item.pos);
+        // 與島嶼自轉同步
+        tempVec.applyAxisAngle(new THREE.Vector3(0, 1, 0), islandGroup.rotation.y);
+        tempVec.project(camera);
+
+        // 視野背後裁切
+        if (tempVec.z > 1) {
+          item.el.style.opacity = "0";
+          return;
+        }
+        item.el.style.opacity = "1";
+        const x = (tempVec.x * 0.5 + 0.5) * window.innerWidth;
+        const y = (-tempVec.y * 0.5 + 0.5) * window.innerHeight;
+        item.el.style.left = `${x}px`;
+        item.el.style.top = `${y}px`;
+      });
+
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    // 視窗自適應縮放
+    window.addEventListener("resize", () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // Hermes 雙向通訊按鈕綁定
+    document.querySelectorAll("[data-hermes-send]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const text = btn.getAttribute("data-hermes-send");
+        if (window.hermes && typeof window.hermes.send === "function") {
+          window.hermes.send(text);
+        } else {
+          console.log("[Hermes Send]:", text);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
