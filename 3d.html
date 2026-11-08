@@ -672,10 +672,11 @@
 
     <!-- Plan Switcher Bar -->
     <nav class="plan-selector-bar">
-      <button class="plan-tab-btn active" onclick="switchPlan('planA')">🏯 Plan A：歷史商街</button>
-      <button class="plan-tab-btn" onclick="switchPlan('planB')">🦈 Plan B：港灣溫泉</button>
-      <button class="plan-tab-btn" onclick="switchPlan('planC')">🍁 Plan C：箕面勝尾寺</button>
-      <button class="plan-tab-btn" onclick="switchPlan('official5d')">🗺️ 盛欣五日全景</button>
+      <button class="plan-tab-btn active" id="tab-planAPlus" onclick="switchPlan('planAPlus')">🏯 Plan A+ 旗艦究極線 (08:00出發)</button>
+      <button class="plan-tab-btn" id="tab-planA" onclick="switchPlan('planA')">🏛️ Plan A 標準文化線 (09:00出發)</button>
+      <button class="plan-tab-btn" id="tab-planB" onclick="switchPlan('planB')">🦈 Plan B：港灣海景 (08:50出發)</button>
+      <button class="plan-tab-btn" id="tab-planC" onclick="switchPlan('planC')">🍁 Plan C：箕面賞楓 (09:30出發)</button>
+      <button class="plan-tab-btn" id="tab-official5d" onclick="switchPlan('official5d')">🗺️ 盛欣五日全景</button>
       <button class="plan-tab-btn" onclick="openChartModal()" style="color:var(--gold-light);">📊 雙方案決策大圖</button>
     </nav>
   </header>
@@ -714,13 +715,14 @@
 
   <!-- Bottom Quick Camera Angles -->
   <div class="view-presets">
+    <button class="preset-chip" onclick="flyToCoordinates([135.5036, 34.6738], 16.5, 55, 10)">🏨 心齋橋出發點</button>
+    <button class="preset-chip" onclick="flyToCoordinates([135.4988, 34.6567], 16.2, 58, 20)">🐟 木津海鮮市場</button>
+    <button class="preset-chip" onclick="flyToCoordinates([135.4965, 34.6616], 16.5, 60, 0)">🦁 難波八阪神社</button>
     <button class="preset-chip" onclick="flyToCoordinates([135.5258, 34.6873], 15.8, 60, 25)">🏯 大阪城天守閣</button>
-    <button class="preset-chip" onclick="flyToCoordinates([135.5013, 34.6690], 16.5, 55, -30)">🍜 道頓堀運河</button>
+    <button class="preset-chip" onclick="flyToCoordinates([135.5133, 34.6976], 16.0, 55, 15)">⛩️ 大阪天滿宮</button>
+    <button class="preset-chip" onclick="flyToCoordinates([135.5140, 34.6460], 16.5, 62, -20)">🌃 HARUKAS 300</button>
     <button class="preset-chip" onclick="flyToCoordinates([135.4289, 34.6545], 15.5, 60, 45)">🦈 大阪港海遊館</button>
-    <button class="preset-chip" onclick="flyToCoordinates([135.5063, 34.6525], 16.2, 58, 15)">🗼 通天閣新世界</button>
-    <button class="preset-chip" onclick="flyToCoordinates([135.7850, 34.9949], 15.6, 50, -45)">⛩️ 京都清水寺</button>
     <button class="preset-chip" onclick="flyToCoordinates([135.4912, 34.8659], 15.2, 55, 10)">🍁 箕面勝尾寺</button>
-    <button class="preset-chip" onclick="flyToCoordinates([135.2328, 34.4347], 14.5, 60, 60)">✈️ 關西海上空港</button>
   </div>
 
   <!-- Drawer Toggle Handle (when closed) -->
@@ -732,7 +734,11 @@
   <section class="side-drawer" id="sideDrawer">
     <div class="drawer-header">
       <div class="drawer-title-box">
-        <h3 id="drawerPlanTitle">🏯 Plan A：歷史商街線</h3>
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+          <span style="background:var(--gold-primary); color:#0f172a; font-size:10.5px; font-weight:900; padding:2px 7px; border-radius:4px; letter-spacing:0.5px;">⏰ 出發時間</span>
+          <span id="drawerDepartureTime" style="color:#fde68a; font-weight:800; font-size:12px;">08:00 心齋橋飯店出發</span>
+        </div>
+        <h3 id="drawerPlanTitle">🏯 Plan A+：達人旗艦究極線</h3>
         <p id="drawerPlanSubtitle">文化古蹟 ➔ 日本最長商店街 ➔ 傍晚難波採購電器</p>
       </div>
       <button class="drawer-close-btn" onclick="toggleDrawer(false)" title="收合面板">✕</button>
@@ -762,344 +768,556 @@
     /* ========================================================================
        2026 盛欣大阪五日行在地真實座標與圖資資料庫 (100% 本地 images/ 照片)
        ======================================================================== */
-    const LANDMARKS_DATA = {
-      planA: {
-        title: "🏯 Plan A：歷史文化與下町商街線",
-        subtitle: "動線極度順暢、晴雨皆宜！深度參觀古蹟與名店，保留充裕時間採購電器",
-        center: [135.518, 34.685],
-        zoom: 14.2,
-        pitch: 55,
-        bearing: 20,
-        routeColor: "#f59e0b",
+        const LANDMARKS_DATA = {
+      planAPlus: {
+        title: '🏯 Day 4 Plan A+：達人旗艦全日究極動線',
+        subtitle: '晨間海鮮大市場 ➔ 獅子殿 ➔ 雙古蹟 ➔ 今昔館 ➔ 最長商店街 ➔ 難波電器 ➔ 百萬夜景',
+        departureInfo: '08:00 心齋橋飯店準時出發（御堂筋線搭2站至大國町）',
+        center: [135.5080, 34.6820],
+        zoom: 13.8,
+        pitch: 58,
+        bearing: 15,
+        color: '#f59e0b',
         spots: [
           {
-            id: "osaka_castle",
-            order: "1",
-            time: "09:30 - 11:30",
-            name: "大阪城天守閣 ＆ 大阪城公園",
-            sub: "登天守閣俯瞰全景，護城河巨石垣與古城建築群",
-            lngLat: [135.5258, 34.6873],
-            image: "images/osaka_castle.jpg",
-            station: "Osaka Metro 谷町四丁目站 9 號出口步行 10 分",
-            pass: "周遊券免費入場（原價 ¥600）",
-            desc: "豐臣秀吉天下統一大本營，五層八階壯麗天守閣。秋季城池周邊金黃銀杏與紅葉交織，護城河倒影極美。",
-            googleQuery: "大阪城天守閣"
+            id: 'aplus-hotel',
+            order: '0',
+            name: '心齋橋 Grand Hotel 出發起點',
+            time: '08:00 - 08:15',
+            station: '御堂筋線心齋橋站 ➔ 大國町站 (2站4分)',
+            pass: '地下鐵一日券 / IC卡',
+            image: 'images/dotonbori.jpg',
+            googleQuery: '心齋橋站 大阪',
+            sub: '【準時出發】晨間提早出發避開人潮，地鐵直通大國町站步行 3 分抵達木津批發市場。',
+            desc: '全體集結於心齋橋 Grand Hotel 大廳，搭乘御堂筋線往南 2 站至大國町站（1號出口），步行 3 分鐘即可抵達擁有三百多年歷史的木津卸賣市場。早起是為了搶進名店海鮮丼與第一批產地直送草莓！',
+            lngLat: [135.5036, 34.6738]
           },
           {
-            id: "history_museum",
-            order: "2",
-            time: "11:30 - 12:45",
-            name: "大阪歷史博物館",
-            sub: "9 號出口直達！冷氣舒適、古大阪奈良時代至近代街景實體比例復原",
-            lngLat: [135.5209, 34.6828],
-            image: "images/history_museum.jpg",
-            station: "谷町四丁目站 9 號出口直結",
-            pass: "周遊券免費入場（原價 ¥600）",
-            desc: "由高樓層難波宮大極殿向下參觀，巨型實物等比例模型還原江戶與昭和時代水都繁華，窗外更能平視大阪城全景。",
-            googleQuery: "大阪歴史博物館"
+            id: 'aplus-kizu',
+            order: '1',
+            name: '木津批發市場（頂級海鮮早餐＆雙色草莓）',
+            time: '08:15 - 09:15',
+            station: '大國町站 (步行3分)',
+            pass: '自費品嚐 (約¥2,000~3,500)',
+            image: 'images/dotonbori.jpg',
+            googleQuery: '木津卸売市場 大阪',
+            sub: '【晨間神級加碼】在地人的隱藏版廚房！海鮮丼魚市食堂、生魚片刺身與奈良淡雪草莓。',
+            desc: '擁有三百多年歷史的大阪市民廚房，清晨湧入職人與在地老饕！推薦直奔「魚市食堂」或「海鮮丼専門店 魚市」，享用滿滿海膽、厚切鮭魚與鮪魚大腹的極品海鮮丼；市場外圍鮮果攤更可買到比市區便宜三成的熊本白草莓與奈良淡雪！',
+            lngLat: [135.4988, 34.6567]
           },
           {
-            id: "ponpocotei",
-            order: "3",
-            time: "12:45 - 13:45",
-            name: "狸狸亭大阪燒（天滿橋OMMビル店）",
-            sub: "Google 4.7⭐ 高評價！在地人私房鐵板燒，外酥內嫩高麗菜甜脆",
-            lngLat: [135.5175, 34.6908],
-            image: "images/ponpocotei.jpg",
-            station: "天滿橋站直結 OMM大樓 B2F",
-            pass: "自費午餐推薦",
-            desc: "圍著滾燙鐵板現點現煎，享受正宗大阪燒、螢烏賊燒、豚平燒與特製海鮮炒麵，徹底補充體力！",
-            googleQuery: "狸狸亭 天滿橋OMM"
+            id: 'aplus-yasaka',
+            order: '2',
+            name: '難波八阪神社（朝聖 12 米巨型金牙大獅子殿）',
+            time: '09:15 - 09:45',
+            station: '難波站 / 大國町站 (步行6分)',
+            pass: '境內自由參拜 (御守自理)',
+            image: 'images/dotonbori.jpg',
+            googleQuery: '難波八阪神社 大阪',
+            sub: '【鎮煞開運打卡】高12公尺金牙獅子頭！吞噬厄運招來事業運與勝運。',
+            desc: '隱身在難波寧靜住宅區的千年古社，境內最震撼人心的莫過於高達 12 公尺、寬 11 公尺的巨型「獅子殿」。張開巨口威風凜凜，傳聞能「將勝利招來、將厄運與邪氣全部吞噬」，是大阪當地企業主祈求商貿繁盛與員旅必拍的鎮煞名景點！',
+            lngLat: [135.4965, 34.6616]
           },
           {
-            id: "konjakukan",
-            order: "4",
-            time: "14:00 - 15:00",
-            name: "大阪生活今昔館（くらしの今昔館）",
-            sub: "大樓 8 樓室內江戶街道造景！日夜燈光投影體驗昔日庶民日常",
-            lngLat: [135.5113, 34.7107],
-            image: "images/konjakukan.jpg",
-            station: "天神橋筋六丁目站 3 號出口直結大樓",
-            pass: "周遊券免費入場（原價 ¥600）",
-            desc: "全日本首座以居住歷史為主題的博物館，完整復原天保年間（1830年代）大阪老街商鋪、澡堂與民宅，室內完全免受雨淋。",
-            googleQuery: "大阪くらしの今昔館"
+            id: 'aplus-castle',
+            order: '3',
+            name: '大阪城天守閣 ＆ 大阪城公園 ＋ 金箔御座船',
+            time: '09:45 - 11:45',
+            station: '森之宮站 / 谷町四丁目站',
+            pass: '周遊卡免費 (天守閣¥600+御座船¥1,500)',
+            image: 'images/osaka_castle.jpg',
+            googleQuery: '大阪城天守閣',
+            sub: '【天下第一名城】搭乘黃金御座船巡護城河，登天守閣8F俯瞰大阪全景。',
+            desc: '豐臣秀吉一統天下的歷史霸業核心。持大阪周遊卡可免費搭乘貼滿純金箔的「大阪城御座船」（現省 ¥1,500），從護城河水面仰望石垣之美與天下名城倒影；接著直上天守閣 8 樓展望台，將大阪全景盡收眼底。',
+            lngLat: [135.5258, 34.6873]
           },
           {
-            id: "tenjinbashisuji",
-            order: "5",
-            time: "15:00 - 16:30",
-            name: "天神橋筋商店街（日本最長 2.6 km）",
-            sub: "全覆蓋拱頂雨棚免日曬雨淋！平價庶民小吃（可樂餅、春駒壽司）與藥妝",
-            lngLat: [135.5118, 34.7050],
-            image: "images/tenjinbashisuji.jpg",
-            station: "橫跨天神橋筋六丁目至南森町站",
-            pass: "自由散策推薦",
-            desc: "從 1 丁目綿延到 7 丁目的庶民生活長廊，價格比心齋橋便宜 15~20%，炸肉餅中村屋、章魚燒與在地平價藥妝店林立。",
-            googleQuery: "天神橋筋商店街"
+            id: 'aplus-tanukitei',
+            order: '4',
+            name: '狸狸亭大阪燒（天滿橋OMMビル店）★名店午餐',
+            time: '11:45 - 13:00',
+            station: '天滿橋站 (地下鐵谷町線直通)',
+            pass: '自費 (約¥1,500/人)',
+            image: 'images/history_museum.jpg',
+            googleQuery: 'お好み焼き 狸狸亭 天満橋OMMビル店',
+            sub: '【大阪地道鐵板焦香】特製秘醬汁海鮮大阪燒＋現代燒，天滿橋站內直通免排隊。',
+            desc: '大阪在地老字號御好燒名店！以高麗菜的鮮甜搭配獨家甘口秘製醬汁、厚切豬五花與新鮮花枝蝦仁，鐵板上滋滋作響香氣四溢。OMM 分店空間寬敞舒適且與地下鐵天滿橋站直通，避開市區觀光客排隊人潮！',
+            lngLat: [135.5186, 34.6908]
           },
           {
-            id: "shopping_namba",
-            order: "6",
-            time: "17:00 - 19:30",
-            name: "購物黃金檔：Bic Camera 難波 / EDION 旗艦",
-            sub: "電器大採購：吹風機、象印電鍋、刮鬍刀，免稅 10% + 折扣 7%",
-            lngLat: [135.5015, 34.6658],
-            image: "images/harukas.jpg",
-            station: "難波站步行 3 分 / 日本橋站步行 4 分",
-            pass: "退稅優惠卷適用",
-            desc: "大型家電買完直接送回心齋橋飯店放好，免去一整天扛行李的負擔，輕裝前往道頓堀吃晚餐！",
-            googleQuery: "Bic Camera 難波店"
+            id: 'aplus-konjakukan',
+            order: '5',
+            name: '大阪生活今昔館（くらしの今昔館）',
+            time: '13:15 - 14:15',
+            station: '天神橋筋六丁目站 (3號出口直通大樓8F)',
+            pass: '周遊卡免費 (門票原價¥600)',
+            image: 'images/history_museum.jpg',
+            googleQuery: '大阪くらしの今昔館',
+            sub: '【穿越江戶繁華街道】日本第一座以住宅生活為主題的時光隧道博物館。',
+            desc: '位於天神橋筋六丁目站共構大樓 8 樓，完整重現了 1830 年代江戶時代末期的大阪下町街景！場館內設有日夜晨昏聲光特效循環，漫步於町家造商家、藥鋪、書塾之間，感受昔日「天下廚房」的庶民生活韻味。',
+            lngLat: [135.5118, 34.7082]
+          },
+          {
+            id: 'aplus-tenmangu',
+            order: '6',
+            name: '天神橋筋商店街 ➔ 大阪天滿宮 ＆ 中村屋可樂餅',
+            time: '14:15 - 16:30',
+            station: '南森町站 / 大阪天滿宮站',
+            pass: '散策自由 / 中村屋可樂餅¥100',
+            image: 'images/temmangu.jpg',
+            googleQuery: '大阪天満宮',
+            sub: '【日本最長商店街】長達 2.6 公里！參拜學問之神菅原道真與品嚐關西第一可樂餅。',
+            desc: '橫跨三個地鐵站的大阪神級平民商圈！首先朝聖千年歷史的「大阪天滿宮」，祭祀學問之神菅原道真，祈求工作升遷與智慧；隨後品嚐旁邊「中村屋」剛起鍋香酥燙口的金牌可樂餅（一枚僅¥100），一路逛過藥妝、刀具、喫茶店。',
+            lngLat: [135.5133, 34.6976]
+          },
+          {
+            id: 'aplus-biccamera',
+            order: '7',
+            name: '購物黃金檔：Bic Camera 難波旗艦店 / EDION',
+            time: '17:00 - 19:30',
+            station: '難波站 / 日本橋站',
+            pass: '免稅10% + 優惠券7%折扣',
+            image: 'images/dotonbori.jpg',
+            googleQuery: 'Bic Camera 難波店',
+            sub: '【掃貨黃金時段】吹風機、保溫杯、保養品、相機鏡頭與限定伴手禮一網打盡。',
+            desc: '來到大阪自由行不可或缺的採購重頭戲！Bic Camera 難波旗艦店整棟 8 層樓，提供最齊全的吹風機、清淨機、刮鬍刀、SWITCH遊戲與日系藥妝。搭配盛欣指南專屬免稅條碼（10%退稅 + 額外最高 7% 折扣），滿載而歸！',
+            lngLat: [135.5015, 34.6668]
+          },
+          {
+            id: 'aplus-harukas',
+            order: '8',
+            name: '阿倍野 HARUKAS 300 展望台（60F 百萬夜景）',
+            time: '20:00 - 21:30',
+            station: '天王寺站 (直結大樓B1)',
+            pass: '門票約¥1,800 / Klook預約',
+            image: 'images/harukas.jpg',
+            googleQuery: '阿倍野 HARUKAS 300 展望台',
+            sub: '【日本第一高樓】高達 300 公尺！落地全玻璃 360 度俯瞰關西平原百萬璀璨星海。',
+            desc: '樓高 300 公尺的日本第一摩天大樓！搭乘超高速光影電梯直上 60 樓天上迴廊，四面全景落地玻璃讓視野毫無死角，從大阪灣、通天閣到生駒山脈燈火如寶石般鋪展，是全天行程最震撼視覺的極致高潮！',
+            lngLat: [135.5140, 34.6460]
+          },
+          {
+            id: 'aplus-ichiran',
+            order: '9',
+            name: '一蘭拉麵（心齋橋店 / 道頓堀運河店）★暖胃消夜',
+            time: '21:45 - 22:30',
+            station: '心齋橋站 / 難波站',
+            pass: '自費 (約¥1,100/碗)',
+            image: 'images/dotonbori.jpg',
+            googleQuery: '一蘭 心斎橋店',
+            sub: '【完美句點】濃郁豚骨湯頭、特製赤紅秘醬與天然拉麵，為熱血充實的一天暖胃。',
+            desc: '結束整天 2 萬多步的熱血行軍後，回到心齋橋道頓堀商圈。坐在獨立個人座品嚐濃郁熱騰騰的經典豚骨拉麵，客製化硬麵、秘製辣醬與翠綠青蔥撫慰身心，心滿意足步行回飯店休息！',
+            lngLat: [135.5020, 34.6698]
+          }
+        ]
+      },
+
+      planA: {
+        title: '🏛️ Day 4 Plan A：歷史文化 × 經典下町漫遊',
+        subtitle: '獨立詳解大圖動線：天守閣 ➔ 歷史博 ➔ 今昔館 ➔ 天神橋筋 ➔ 難波採購',
+        departureInfo: '09:00 心齋橋飯店準時出發（地下鐵直達谷町四丁目）',
+        center: [135.5160, 34.6930],
+        zoom: 14.0,
+        pitch: 58,
+        bearing: 20,
+        color: '#eab308',
+        spots: [
+          {
+            id: 'spot-hotel-a',
+            order: '0',
+            name: '心齋橋飯店出發起點',
+            time: '09:00 - 09:15',
+            station: '心齋橋站 ➔ 谷町四丁目站 (12分)',
+            pass: '地下鐵一日券 / IC卡',
+            image: 'images/dotonbori.jpg',
+            googleQuery: '心齋橋站 大阪',
+            sub: '【標準出發時間】09:00 飯店大廳集結出發，搭地鐵直奔大阪城。',
+            desc: '依標準方案於 09:00 在飯店大廳集合，搭乘長堀鶴見綠地線至森之宮站，或轉乘谷町線至谷町四丁目站，展開輕鬆從容的歷史文化漫遊行程。',
+            lngLat: [135.5036, 34.6738]
+          },
+          {
+            id: 'spot-osaka-castle',
+            order: '1',
+            name: '大阪城天守閣 ＆ 大阪城公園',
+            time: '09:30 - 11:30',
+            station: '谷町四丁目站 / 森之宮站',
+            pass: '周遊卡免費 (門票¥600+御座船¥1,500)',
+            image: 'images/osaka_castle.jpg',
+            googleQuery: '大阪城天守閣',
+            sub: '【天下名城】豐臣秀吉歷史霸業象徵，極樂橋與西之丸庭園絕美視角。',
+            desc: '豐臣秀吉一統天下的象徵，登天守閣 8 樓展望台俯瞰大阪全景，持周遊卡可免費搭乘貼滿純金箔的「大阪城御座船」（現省 ¥1,500），體驗戰國大名的奢華水路巡視。',
+            lngLat: [135.5258, 34.6873]
+          },
+          {
+            id: 'spot-history-museum',
+            order: '2',
+            name: '大阪歷史博物館',
+            time: '11:30 - 12:45',
+            station: '谷町四丁目站 9號出口直通',
+            pass: '周遊卡免費 (門票原價¥600)',
+            image: 'images/history_museum.jpg',
+            googleQuery: '大阪歴史博物館',
+            sub: '【俯瞰名城全景】從 10 樓難波宮原尺寸重現，一路穿越至江戶天下廚房。',
+            desc: '坐落於大阪城大手門正對面，搭乘專用高速電梯直達 10 樓，巨幅落地玻璃窗是拍攝「大阪城天守閣全景」無死角的私房機位！展館依年代從古代難波宮、中世本願寺到大正昭和逐層體驗。',
+            lngLat: [135.5208, 34.6830]
+          },
+          {
+            id: 'spot-konjakukan-a',
+            order: '3',
+            name: '大阪生活今昔館（くらしの今昔館）',
+            time: '13:00 - 14:30',
+            station: '天神橋筋六丁目站 3號出口',
+            pass: '周遊卡免費 (門票原價¥600)',
+            image: 'images/history_museum.jpg',
+            googleQuery: '大阪くらしの今昔館',
+            sub: '【江戶實景街道】日本首座住宅專題博物館，聲光日夜交替體感極佳。',
+            desc: '搭乘谷町線至天神橋筋六丁目站。完整重現 1830 年代江戶街景的實景博物館，館內有晨昏日夜燈光音效變化，逼真穿梭昔日商家街道，拍照打卡人氣極高。',
+            lngLat: [135.5118, 34.7082]
+          },
+          {
+            id: 'spot-tenjinbashi-a',
+            order: '4',
+            name: '天神橋筋商店街 ＆ 大阪天滿宮',
+            time: '14:30 - 16:30',
+            station: '南森町站 / 大阪天滿宮站',
+            pass: '散策自由 / 必吃中村屋可樂餅',
+            image: 'images/temmangu.jpg',
+            googleQuery: '天神橋筋商店街 大阪',
+            sub: '【日本最長商店街】全長 2.6 公里！在地庶民排隊美食、藥妝小舖巡禮。',
+            desc: '從一丁目漫步至六丁目，長達 2.6 公里的日本第一長商店街。參拜學問之神大阪天滿宮，必吃關西排隊名物「中村屋可樂餅」（一枚¥100外酥內軟），享受濃厚關西人情味。',
+            lngLat: [135.5133, 34.6976]
+          },
+          {
+            id: 'spot-bic-camera-a',
+            order: '5',
+            name: '購物黃金檔：Bic Camera 難波旗艦店',
+            time: '17:00 - 19:30',
+            station: '難波站 (地鐵御堂筋線直達)',
+            pass: '免稅10% + 7%優惠券折抵',
+            image: 'images/dotonbori.jpg',
+            googleQuery: 'Bic Camera 難波店',
+            sub: '【免稅購物黃金時段】日系小家電、吹風機、保溫杯與美妝專賣一網打盡。',
+            desc: '自由行壓軸購物站！集中於 8 層樓高的難波 Bic Camera 旗艦店，免稅 10% 加上 7% 折扣優惠券，一次買齊所有親友托買的電器與藥妝伴手禮，戰利品直接打包帶回飯店。',
+            lngLat: [135.5015, 34.6668]
           }
         ]
       },
 
       planB: {
-        title: "🦈 Plan B：港灣海景・日落溫泉線",
-        subtitle: "景觀反差大、遠離喧囂！搭乘帆船出海，俯瞰大阪灣日落，享受森林露天溫泉",
-        center: [135.45, 34.64],
-        zoom: 13.5,
+        title: '🦈 Day 4 Plan B：港灣海景 × 露天溫泉舒活線',
+        subtitle: '世界最大級水族館 ➔ 帆船型觀光船 ➔ 咲洲高空景觀 ➔ 天然溫泉泡湯',
+        departureInfo: '08:50 心齋橋飯店準時出發（中央線直達大阪港站）',
+        center: [135.4330, 34.6470],
+        zoom: 13.8,
         pitch: 58,
-        bearing: 35,
-        routeColor: "#06b6d4",
+        bearing: -35,
+        color: '#06b6d4',
         spots: [
           {
-            id: "kaiyukan",
-            order: "1",
-            time: "09:30 - 12:00",
-            name: "海遊館（世界級大型水族館）",
-            sub: "超震撼 9 米巨型水槽看鯨鯊、企鵝、海獺與海豹",
-            lngLat: [135.4289, 34.6545],
-            image: "images/kaiyukan.jpg",
-            station: "中央線大阪港站 1 號出口步行 5 分",
-            pass: "門票 ¥2,700（建議先網路預約入場）",
-            desc: "環太平洋火山帶造景，螺旋式下潛參觀動線。中心「太平洋」巨型水槽擁有兩頭鯨鯊悠游，是全球公認最壯觀的水族館之一。",
-            googleQuery: "海遊館"
+            id: 'spot-hotel-b',
+            order: '0',
+            name: '心齋橋飯店出發起點',
+            time: '08:50 - 09:15',
+            station: '心齋橋站 ➔ 本町轉中央線至大阪港站',
+            pass: '地下鐵中央線 / 周遊卡乘車券',
+            image: 'images/dotonbori.jpg',
+            googleQuery: '心齋橋站 大阪',
+            sub: '【08:50 飯店準時出發】避開海遊館 10:00 團客大潮，搶先入館看鯨鯊餵食。',
+            desc: '08:50 於飯店大廳集合出發，搭乘御堂筋線 1 站至本町，轉乘中央線直達大阪港站（1號出口），步行 5 分鐘即可抵達港灣海遊館售票廣場。',
+            lngLat: [135.5036, 34.6738]
           },
           {
-            id: "santamaria",
-            order: "2",
-            time: "12:15 - 13:30",
-            name: "天保山觀光船「聖瑪利亞號」+ 午餐",
-            sub: "搭乘仿哥倫布旗艦雙桅帆船出海巡航 45 分鐘，飽覽大阪港海景",
-            lngLat: [135.4294, 34.6558],
-            image: "images/santamaria.jpg",
-            station: "海遊館西碼頭直結",
-            pass: "周遊券免費搭乘（原價 ¥1,800）",
-            desc: "以哥倫布發現新大陸時的旗艦放大兩倍建造，頂層露天甲板海風吹拂，航行穿過港大橋與天保山摩天輪，視野極佳。",
-            googleQuery: "大阪港帆船型観光船 サンタマリア"
+            id: 'spot-kaiyukan',
+            order: '1',
+            name: '海遊館（KAIYUKAN）世界級水族館',
+            time: '09:30 - 12:00',
+            station: '大阪港站 (中央線) 步行5分',
+            pass: '門票約¥2,700 (建議官網先預約時段)',
+            image: 'images/kaiyukan.jpg',
+            googleQuery: '海遊館 大阪',
+            sub: '【全球最巨型水槽】直徑 34 米、深 9 米太平洋水槽，近距離仰望悠游鯨鯊。',
+            desc: '世界規模頂級水族館！螺旋式動線帶領訪客由環太平洋火山帶由上而下漫步，深入重達 5,400 噸的太平洋巨槽。與巨大鯨鯊、魟魚、國王企鵝面對面，震撼度滿分！',
+            lngLat: [135.4289, 34.6545]
           },
           {
-            id: "cosmotower",
-            order: "3",
-            time: "14:00 - 15:30",
-            name: "咲州宇宙展望台（大阪府咲洲廳舍）",
-            sub: "西日本頂級高空景觀！360 度俯瞰大阪灣、明石海峽大橋日落",
-            lngLat: [135.4156, 34.6385],
-            image: "images/cosmotower.jpg",
-            station: "南港 Port Town 線「貿易中心前站」徒步 3 分",
-            pass: "周遊券免費入場（原價 ¥1,000）",
-            desc: "高達 256 公尺的 55 層展望台，斜面玻璃帷幕讓視線無死角延伸至神戶六甲山與淡路島，人潮比梅田少很多、非常安靜舒適。",
-            googleQuery: "咲洲コスモタワー 展望台"
+            id: 'spot-santamaria',
+            order: '2',
+            name: '聖瑪利亞號帆船型觀光船 ＋ 天保山午餐',
+            time: '12:15 - 13:30',
+            station: '海遊館西側海港乘船處',
+            pass: '周遊卡免費 (日間巡航原價¥1,600)',
+            image: 'images/santamaria.jpg',
+            googleQuery: '帆船型観光船 サンタマリア',
+            sub: '【乘風破浪巡航】以哥倫布旗艦 2 倍大復刻，45 分鐘漫遊大阪灣海風明媚。',
+            desc: '以哥倫布發現新大陸時的旗艦為原型放大 2 倍打造的帆船型豪華觀光船！持周遊卡可免費搭乘 45 分鐘日間航程，從海上遠眺天保山大橋與整個大阪港灣壯麗全景。',
+            lngLat: [135.4285, 34.6560]
           },
           {
-            id: "suminoe_onsen",
-            order: "4",
-            time: "16:00 - 17:45",
-            name: "天然露天溫泉 住之江",
-            sub: "森林庭園風呂、香湯、三溫暖，徹底洗去前三天步行疲憊！",
-            lngLat: [135.4746, 34.6111],
-            image: "images/suminoe_onsen.jpg",
-            station: "四橋線住之江公園站 2 號出口步行 3 分",
-            pass: "周遊券免費入浴（原價 ¥850）",
-            desc: "隱身於市區的竹林造景露天風呂，地下深層天然溫泉泉質滑嫩，配有冷泉、超音波按摩池與烤箱，泡完極度放鬆舒暢。",
-            googleQuery: "天然温泉 スパ住之江"
+            id: 'spot-cosmotower',
+            order: '3',
+            name: '咲州宇宙塔展望台（Cosmo Tower）',
+            time: '14:00 - 15:30',
+            station: '宇宙廣場站 / 貿易中心前站',
+            pass: '周遊卡免費 (門票原價¥800)',
+            image: 'images/cosmotower.jpg',
+            googleQuery: '咲洲コスモタワー展望台',
+            sub: '【252 米高空落地斜窗】搭乘 42 秒透明景觀電梯直達 55 樓，360 度環視明石海峽。',
+            desc: '西日本第二高樓！搭乘透明全景電梯一路攀升至 252 米高空，展望台擁有罕見的 360 度無死角傾斜玻璃窗，往西遠眺明石海峽大橋與神戶六甲山，往東飽覽大阪市中心天際線。',
+            lngLat: [135.4158, 34.6385]
           },
           {
-            id: "tsutenkaku",
-            order: "5",
-            time: "18:15 - 20:30",
-            name: "新世界通天閣 ＆ 難波電器街夜景",
-            sub: "品嚐通天閣巨型看板老街炸串（八重勝、元祖達摩），兼逛電器街",
-            lngLat: [135.5063, 34.6525],
-            image: "images/tsutenkaku.jpg",
-            station: "堺筋線惠美須町站步行 3 分",
-            pass: "周遊券通天閣免費入場（原價 ¥900）",
-            desc: "戰後復興的浪速下町地標，摸摸幸運神比利肯（Billiken）腳底祈願，夜間霓虹閃爍，滿街元祖炸串香氣四溢。",
-            googleQuery: "通天閣"
+            id: 'spot-suminoe',
+            order: '4',
+            name: '天然露天溫泉 住之江（SPA 舒活放鬆）',
+            time: '16:00 - 17:45',
+            station: '住之江公園站 (四橋線) 2號出口步行3分',
+            pass: '周遊卡免費 (入浴料原價¥750~850)',
+            image: 'images/history_museum.jpg',
+            googleQuery: '天然露天温泉 スパスミノエ',
+            sub: '【地下湧出天然溫泉】森之壺湯、絹之肌白湯與竹林露天風呂，徹底洗滌旅行疲憊。',
+            desc: '隱身在綠意盎然中的天然溫泉館，持周遊卡可享免費入浴。露天風呂設有森林壺湯、碳酸泉與流水步道，在茂密竹林微風下泡湯放鬆，舒緩連續幾日健行疲累。',
+            lngLat: [135.4740, 34.6105]
+          },
+          {
+            id: 'spot-shinsekai-b',
+            order: '5',
+            name: '難波電器街 ＆ 新世界通天閣串炸夜景',
+            time: '18:15 - 20:30',
+            station: '惠美須町站 / 日本橋站',
+            pass: '串炸晚餐自費 (約¥2,000~3,000)',
+            image: 'images/tsutenkaku.jpg',
+            googleQuery: '通天閣',
+            sub: '【昭和下町熱鬧復刻】巨型河豚與比利肯福神，元祖串炸達摩沾醬大快朵頤。',
+            desc: '傍晚搭乘地鐵回歸市區。走訪大阪昭和懷舊發源地「新世界」，仰望通天閣璀璨霓虹燈光，享用熱騰騰金黃香酥的大阪名物串炸與生啤酒，感受最純粹接地氣的大阪夜生活。',
+            lngLat: [135.5063, 34.6525]
           }
         ]
       },
 
       planC: {
-        title: "🍁 Plan C：箕面勝尾寺必勝賞楓線",
-        subtitle: "秋季北攝秘境！滿山遍野赤紅楓葉與上萬尊祈願「勝利達摩」不倒翁",
-        center: [135.495, 34.86],
-        zoom: 14.0,
-        pitch: 60,
-        bearing: -15,
-        routeColor: "#ef4444",
+        title: '🍁 Day 4 Plan C：北攝勝運 × 箕面賞楓祈福線',
+        subtitle: '8萬達摩不倒翁勝運寺 ➔ 箕面大瀑布 ➔ 楓葉天婦羅 ➔ 梅田夜景',
+        departureInfo: '09:30 心齋橋飯店出發（御堂筋線直通北大阪急行）',
+        center: [135.4912, 34.8659],
+        zoom: 13.0,
+        pitch: 55,
+        bearing: 10,
+        color: '#ef4444',
         spots: [
           {
-            id: "katsuoji",
-            order: "1",
-            time: "09:30 - 13:00",
-            name: "箕面勝尾寺（勝運の寺）",
-            sub: "滿山紅葉倒映弁天池，石階與樹梢放滿數萬尊必勝達摩",
-            lngLat: [135.4912, 34.8659],
-            image: "images/katsuoji.webp",
-            station: "北大阪急行箕面萱野站轉乘路線巴士約 20 分",
-            pass: "門票 ¥500",
-            desc: "平安時代起天皇祈求病癒的勝運名剎。11 月下旬正值楓紅巔峰，漫步在鋪滿紅葉的山門與石階，親手點睛供奉勝利達摩祈求事業大旺。",
-            googleQuery: "勝尾寺"
+            id: 'spot-hotel-c',
+            order: '0',
+            name: '心齋橋出發 ➔ 千里中央站',
+            time: '09:30 - 10:35',
+            station: '御堂筋線直通北大阪急行線',
+            pass: '地鐵＋阪急巴士 (車資單程¥520)',
+            image: 'images/dotonbori.jpg',
+            googleQuery: '千里中央站',
+            sub: '【09:30 出發直奔北攝】御堂筋線一路往北直達千里中央站，轉乘勝尾寺直通巴士。',
+            desc: '從心齋橋站搭乘御堂筋線直達千里中央站（約 25 分鐘），於 4 號公車站牌轉乘阪急巴士 29 號線直接抵達勝尾寺山門口。',
+            lngLat: [135.5036, 34.6738]
           },
           {
-            id: "minoo_falls",
-            order: "2",
-            time: "13:30 - 15:30",
-            name: "箕面大瀑布與楓葉天婦羅",
-            sub: "日本瀑布百選！落差 33 米瀑布水氣磅礴，品嚐油炸楓葉酥",
-            lngLat: [135.4725, 34.8519],
-            image: "images/itinerary_photo_6.jpg",
-            station: "阪急箕面站沿溪流步道散策",
-            pass: "免費自然景觀",
-            desc: "沿著箕面川清幽步道散步，兩旁古雅茶屋現炸醃製一年的食用楓葉脆餅（もみじの天ぷら），景色宛如世外桃源。",
-            googleQuery: "箕面大滝"
+            id: 'spot-katsuoji',
+            order: '1',
+            name: '箕面勝尾寺（勝運之寺・八萬達摩祈福）',
+            time: '10:45 - 13:00',
+            station: '勝尾寺巴士站直達',
+            pass: '入山料約¥500 (達摩自購¥500~¥2000)',
+            image: 'images/kiyomizudera.jpg',
+            googleQuery: '勝尾寺',
+            sub: '【祈求勝運聖地】全山遍布超過八萬個朱紅達摩不倒翁，氣勢宏偉山林環抱。',
+            desc: '擁有 1300 年歷史的古剎，歷代武將皆來此祈求勝運。寺院階梯、石燈籠與樹枝上放滿信眾供奉的點睛達摩不倒翁，滿山艷紅楓葉襯托古寺，是關西秋季絕美秘境！',
+            lngLat: [135.4912, 34.8659]
           },
           {
-            id: "umeda_shopping",
-            order: "3",
-            time: "16:30 - 19:30",
-            name: "梅田 Yodobashi 友都八喜 ＆ 藍天大廈",
-            sub: "全日本最大規模電器王國！直通梅田空中庭園欣賞百萬夜景",
-            lngLat: [135.4965, 34.7042],
-            image: "images/harukas.jpg",
-            station: "JR 大阪站 / 地鐵梅田站直結",
-            pass: "採購與觀景首選",
-            desc: "樓高 13 層的巨型商場，耳機音響、相機與家電零件最齊全，地下美食街更匯聚各國料理。",
-            googleQuery: "ヨドバシカメラ 梅田"
+            id: 'spot-minoo-falls',
+            order: '2',
+            name: '箕面大瀑布（日本名瀑百選）＆ 楓葉天婦羅',
+            time: '13:30 - 15:30',
+            station: '箕面站 沿溪谷步道健行',
+            pass: '免費入山 / 必吃炸楓葉¥500',
+            image: 'images/kiyomizudera.jpg',
+            googleQuery: '箕面大滝',
+            sub: '【森林芬多精療癒】落差 33 米壯觀瀑布，品嚐用真楓葉裹糖粉油炸的百年名物。',
+            desc: '沿著清澈清涼的箕面川溪谷步道漫步，沿途經過瀧安寺與古樸茶屋。欣賞飛流直下的箕面大瀑布；路旁傳統老舖手工現炸的「紅葉天婦羅」（もみじの天ぷら），香脆微甜回味無窮。',
+            lngLat: [135.4725, 34.8519]
+          },
+          {
+            id: 'spot-umeda-sky',
+            order: '3',
+            name: '梅田 Yodobashi 友都八喜 ＆ 藍天大廈空中庭園',
+            time: '16:30 - 19:30',
+            station: '梅田站 / 大阪站 (步行7分)',
+            pass: '周遊卡免費入場 (16:00前免費/之後自費折抵)',
+            image: 'images/cosmotower.jpg',
+            googleQuery: '梅田藍天大廈 空中庭園展望台',
+            sub: '【未來感建築指標】173米高空雙子塔環形展望台，360度俯瞰淀川夕陽夜景。',
+            desc: '回到梅田商圈，逛爆日本最大電器百貨 Yodobashi-Umeda，傍晚前往知名英國建築大師設計的「梅田藍天大廈空中庭園」，漫步在星空步道上，飽覽淀川與大阪市夜景。',
+            lngLat: [135.4904, 34.7059]
           }
         ]
       },
 
       official5d: {
-        title: "🗺️ 盛欣官方五日全景動線",
-        subtitle: "高雄小港 ✈ 關西空港 ➔ 京都世界遺產 ➔ 海之京都 ➔ 美山町 ➔ 自由日 ➔ 賦歸",
-        center: [135.45, 35.15],
-        zoom: 9.2,
-        pitch: 45,
-        bearing: 0,
-        routeColor: "#10b981",
+        title: '🗺️ 2026 盛欣網絡大阪 5 日全景官方動線',
+        subtitle: '高雄小港 ➔ 關西機場 ➔ 京都古都 ➔ 大阪市區 ➔ 難波心齋橋凱旋',
+        departureInfo: 'Day 1 ~ Day 5 全程官方巴士與精選地標排程',
+        center: [135.6000, 34.7500],
+        zoom: 10.2,
+        pitch: 52,
+        bearing: 15,
+        color: '#10b981',
         spots: [
           {
-            id: "d1_kix",
-            order: "D1",
-            time: "11/25 12:40 抵達",
-            name: "關西國際機場 (KIX) ➔ 京都",
-            sub: "搭乘亞洲航空 AK170 抵達海上人工浮島空港，專車前往京都",
-            lngLat: [135.2328, 34.4347],
-            image: "images/kix_airport.jpg",
-            station: "關西海上國際空港",
-            pass: "公司專車接送",
-            desc: "由建築大師倫佐·皮亞諾設計的全球首座完全填海造陸海上機場，跑道兩側盡是一望無際的蔚藍海洋。",
-            googleQuery: "關西國際機場"
+            id: 'off-d1-kix',
+            order: 'D1-1',
+            name: '關西國際機場（KIX）抵達出關',
+            time: 'Day 1 12:40 抵達',
+            station: '關西空港第一航廈 2F 鐵道大廳',
+            pass: '專屬遊覽車接駁 / HARUKA',
+            image: 'images/kix_airport.jpg',
+            googleQuery: '關西國際機場',
+            sub: '【全員集結出發】搭乘 AirAsia AK170 抵達，專車迎接直奔千禧古都京都。',
+            desc: '盛欣全員於關西國際機場順利集結出關！由專屬遊覽車迎接，經由阪神高速公路直奔京都，開啟五天四夜的日本關西文化與商貿交流盛會。',
+            lngLat: [135.2440, 34.4347]
           },
           {
-            id: "d1_kiyomizu",
-            order: "D1",
-            time: "11/25 下午",
-            name: "世界文化遺產：京都清水寺",
-            sub: "國寶清水舞台懸空崖壁、二年坂三年坂京風老街散策",
-            lngLat: [135.7850, 34.9949],
-            image: "images/kiyomizudera.jpg",
-            station: "京都東山區清水",
-            pass: "團體行程已含",
-            desc: "建於 778 年的千年古剎，全木榫接結構未用一根鐵釘。11 月下旬被萬株火紅楓樹緊緊擁抱，氣勢雄渾。",
-            googleQuery: "清水寺"
+            id: 'off-d1-fushimi',
+            order: 'D1-2',
+            name: '伏見稻荷大社（千本鳥居千億朱紅）',
+            time: 'Day 1 15:00 - 17:00',
+            station: 'JR 稻荷站 / 京阪伏見稻荷站',
+            pass: '境內自由參拜',
+            image: 'images/fushimi_inari.jpg',
+            googleQuery: '伏見稲荷大社',
+            sub: '【千本鳥居神蹟】全國三萬稻荷神社總本宮，祈求公司業務蒸蒸日上商業繁盛。',
+            desc: '綿延整座稻荷山的朱紅色千本鳥居，在陽光穿透下灑下夢幻光斑。全體同仁於本殿參拜，祈願盛欣網絡業務破千軍、財源廣進。',
+            lngLat: [135.7727, 34.9671]
           },
           {
-            id: "d2_ine",
-            order: "D2",
-            time: "11/26 上午",
-            name: "伊根町舟屋（日本最美水上村落）",
-            sub: "搭乘海上觀光遊覽船，成群海鷗隨船翱翔，近距離欣賞 230 棟舟屋",
-            lngLat: [135.2974, 35.6715],
-            image: "images/itinerary_photo_5.jpg",
-            station: "京都府丹後半島伊根町",
-            pass: "遊覽船體驗已含",
-            desc: "一樓停泊漁船、二樓作為起居空間的獨特傳統木造建築群，被譽為「日本威尼斯」，保留了最純樸的漁村生活。",
-            googleQuery: "伊根舟屋"
+            id: 'off-d1-kyoto-hotel',
+            order: 'D1-3',
+            name: '京都特色酒店入住 ＆ 祇園先斗町迎賓宴',
+            time: 'Day 1 18:00 - 21:00',
+            station: '祇園四條站 / 河原町站',
+            pass: '公司全額招待 (京都名物料理)',
+            image: 'images/kiyomizudera.jpg',
+            googleQuery: '先斗町 京都',
+            sub: '【京都夜宴雅集】漫步石板路鴨川畔，享用正統京都湯豆腐與懷石風味宴。',
+            desc: '辦理京都特色酒店 Check-in 後，全體漫步前往先斗町花街。在古色古香的町家建築中享用京都名物料理，為第一天接風洗塵。',
+            lngLat: [135.7710, 35.0037]
           },
           {
-            id: "d2_amanohashidate",
-            order: "D2",
-            time: "11/26 下午",
-            name: "日本三景：天橋立（傘松公園）",
-            sub: "搭纜車登上傘松公園，從胯下倒看如同青龍騰空飛向天際的白砂青松",
-            lngLat: [135.1912, 35.5694],
-            image: "images/itinerary_photo_6.jpg",
-            station: "京都府宮津市",
-            pass: "纜車券已含",
-            desc: "長約 3.6 公里的沙洲長堤上生長著約 8,000 棵松樹，與宮島、松島並稱「日本三景」，景色幽靜秀麗。",
-            googleQuery: "天橋立 傘松公園"
+            id: 'off-d2-kiyomizu',
+            order: 'D2-1',
+            name: '清水寺・清水舞台 ＆ 二三年坂散策',
+            time: 'Day 2 08:30 - 11:30',
+            station: '清水五條站 步行15分',
+            pass: '門票¥400 (公司團體券)',
+            image: 'images/kiyomizudera.jpg',
+            googleQuery: '清水寺 京都',
+            sub: '【世界文化遺產】懸空 13 米棟樑建造木造舞台，音羽瀑布品嚐智慧與健康靈水。',
+            desc: '不用一根釘子、全由榫卯結構支撐的國寶清水舞台。遠眺京都市街絕景，順路走訪產寧坂與二年坂石板小徑，感受濃濃江戶古韻。',
+            lngLat: [135.7850, 34.9949]
           },
           {
-            id: "d3_miyama",
-            order: "D3",
-            time: "11/27 上午",
-            name: "美山町茅葺之里（三大合掌村）",
-            sub: "群山環繞的古樸茅草屋頂秘境，保留江戶中晚期農村原始風貌",
-            lngLat: [135.5262, 35.3117],
-            image: "images/itinerary_photo_1.jpg",
-            station: "京都府南丹市美山町",
-            pass: "團體行程已含",
-            desc: "隱世獨立的世外桃源，數十棟傳統覆頂茅草屋參差錯落於山谷之間，純淨的溪流與裊裊炊煙令人忘卻煩囂。",
-            googleQuery: "美山町 茅葺之里"
+            id: 'off-d2-kinkakuji',
+            order: 'D2-2',
+            name: '金閣寺（鹿苑寺・鏡湖池純金倒影）',
+            time: 'Day 2 13:00 - 15:00',
+            station: '金閣寺道巴士站直達',
+            pass: '門票¥500 (公司團體券)',
+            image: 'images/kiyomizudera.jpg',
+            googleQuery: '金閣寺',
+            sub: '【金碧輝煌足利將軍別墅】純金箔貼飾三層樓閣，映照於鏡湖池上的天下奇景。',
+            desc: '室町幕府足利義滿將軍所建之修禪道場，舍利殿外牆覆蓋金箔在陽光照耀下閃耀奪目，是京都最具代表性的歷史地標之一。',
+            lngLat: [135.7292, 35.0394]
           },
           {
-            id: "d3_dotonbori",
-            order: "D3",
-            time: "11/27 傍晚",
-            name: "道頓堀 ＆ 心齋橋筋老街",
-            sub: "固力果跑跑人招牌打卡、一蘭拉麵、巨蟹招牌與熱鬧商圈",
-            lngLat: [135.5013, 34.6690],
-            image: "images/dotonbori.jpg",
-            station: "難波站 14 號出口步行 3 分",
-            pass: "散策購物",
-            desc: "大阪最具代表性的美食與購物動脈，運河兩側霓虹招牌爭奇鬥艷，聚集了全關西最道地的章魚燒與炸串小吃。",
-            googleQuery: "道頓堀 固力果"
+            id: 'off-d2-transfer',
+            order: 'D2-3',
+            name: '專車移師大阪 ＆ 心齋橋 Grand Hotel 入住',
+            time: 'Day 2 16:30 - 18:00',
+            station: '心齋橋站 (大阪市中心樞紐)',
+            pass: '公司專屬包車直達飯店門口',
+            image: 'images/dotonbori.jpg',
+            googleQuery: '心齋橋站 大阪',
+            sub: '【轉移大本營】告別京都古都，入住大阪最繁華商圈心齋橋 Grand Hotel。',
+            desc: '大型遊覽車專車接送全員由京都移往大阪。入住地理位置極佳的心齋橋飯店，樓下即是藥妝店與便利商店，為後續自由行奠定最強後盾。',
+            lngLat: [135.5036, 34.6738]
           },
           {
-            id: "d4_freeday",
-            order: "D4",
-            time: "11/28 全天",
-            name: "全日自由活動（Plan A / Plan B / Plan C）",
-            sub: "自主規劃！歷史商街、港灣海景或北攝賞楓自由二選一",
-            lngLat: [135.502, 34.675],
-            image: "images/PlanA_vs_PlanB_比較圖.png",
-            station: "大阪市中心",
-            pass: "自由行程",
-            desc: "請利用上方 Plan A / Plan B 切換晶片切換詳細動線與參觀時間表。",
-            googleQuery: "心齋橋"
+            id: 'off-d3-usj',
+            order: 'D3-1',
+            name: '日本環球影城（USJ）全日冒險狂歡',
+            time: 'Day 3 08:00 - 21:00',
+            station: 'JR 環球城站 (Universal City)',
+            pass: '公司贈送 USJ 門票 + 快速通關',
+            image: 'images/kaiyukan.jpg',
+            googleQuery: '日本環球影城 USJ',
+            sub: '【全日熱血放電】超級任天堂世界瑪利歐賽車、哈利波特魔法禁忌之旅與刺激雲霄飛車。',
+            desc: '全球最具人氣的主題樂園！全員沉浸在超級任天堂世界用能量手環敲磚磚、在霍格華茲城堡翱翔天際，享受全員狂歡尖叫的一整天。',
+            lngLat: [135.4323, 34.6654]
           },
           {
-            id: "d5_rinku",
-            order: "D5",
-            time: "11/29 10:30 - 13:00",
-            name: "臨空城 Rinku Premium Outlets ➔ 返台",
-            sub: "關西空港對岸海景 Outlet，採購運動品牌、精品，搭 AK171 賦歸小港",
-            lngLat: [135.2954, 34.4072],
-            image: "images/kix_airport.jpg",
-            station: "JR / 南海電鐵「臨空城站」徒步 6 分",
-            pass: "專車前往空港",
-            desc: "兩百多家國際精品與知名日系品牌林立，緊鄰大阪灣畔，登機前最後一站盡情免稅掃貨！",
-            googleQuery: "臨空城 Outlet"
+            id: 'off-d4-free',
+            order: 'D4-1',
+            name: '大阪全日自由活動（Plan A/B/C 三路並進）',
+            time: 'Day 4 08:00 - 22:30',
+            station: '心齋橋 / 大阪港 / 箕面 / 梅田',
+            pass: '大阪周遊券 1-Day Pass (全額贊助)',
+            image: 'images/osaka_castle.jpg',
+            googleQuery: '心齋橋筋商店街',
+            sub: '【自由行巔峰對決】文化古蹟線 vs 港灣海景海遊館線 vs 北攝勝尾寺賞楓線！',
+            desc: '自由探索大阪魅力的黃金日！全員可依自身喜好選擇 Plan A+ 旗艦文化歷史線、Plan B 港灣海景露天溫泉線，或 Plan C 箕面勝尾寺賞楓祈福線。',
+            lngLat: [135.5020, 34.6698]
+          },
+          {
+            id: 'off-d4-banquet',
+            order: 'D4-2',
+            name: '盛欣網絡 2026 尾牙歡聚晚宴（黑毛和牛燒肉）',
+            time: 'Day 4 19:30 - 22:00',
+            station: '道頓堀 / 難波特選料亭',
+            pass: '公司全額招待 (特撰頂級和牛吃到飽)',
+            image: 'images/dotonbori.jpg',
+            googleQuery: '道頓堀 和牛燒肉 大阪',
+            sub: '【豪邁乾杯犒賞】A5 特選黑毛和牛燒肉、生啤酒放題，歡慶 2026 業績輝煌！',
+            desc: '自由行尾聲全員齊聚道頓堀高檔和牛料亭。厚切牛舌、A5 霜降和牛與頂級海鮮無限享用，總經理與各部門主管舉杯慰勞團隊辛勞，氣氛熱烈沸騰！',
+            lngLat: [135.5010, 34.6687]
+          },
+          {
+            id: 'off-d5-pack',
+            order: 'D5-1',
+            name: '黑門市場最後巡禮 ＆ 行李打包大撤退',
+            time: 'Day 5 09:00 - 11:30',
+            station: '近鐵日本橋站 (10號出口)',
+            pass: '黑門市場美食自費',
+            image: 'images/dotonbori.jpg',
+            googleQuery: '黑門市場 大阪',
+            sub: '【關西最後美食巡禮】現烤生蠔、神戶牛串、巨型草莓大福與明太子手信採購。',
+            desc: '退房後將大型行李寄放飯店大廳，步行至大阪知名「黑門市場」。品嚐最後一頓道地現烤海鮮、神戶牛串與濃醇豆乳，做最後的伴手禮衝刺！',
+            lngLat: [135.5068, 34.6653]
+          },
+          {
+            id: 'off-d5-depart',
+            order: 'D5-2',
+            name: '關西國際機場（KIX）滿載而歸凱旋返台',
+            time: 'Day 5 13:45 班機起飛',
+            station: '關西機場第一航廈 (AirAsia AK171)',
+            pass: '專屬遊覽車直送機場',
+            image: 'images/kix_airport.jpg',
+            googleQuery: '關西國際機場',
+            sub: '【平安賦歸】專車接駁至關西機場，免稅店最後補貨，搭機返抵高雄小港。',
+            desc: '全員登上遊覽車直奔關西國際機場，辦理行李託運與退稅。在國際線免稅區採購 Royce 生巧克力與白色戀人，搭乘 13:45 班機平安返抵高雄小港機場，圓滿結束 2026 盛欣大阪員工旅遊！',
+            lngLat: [135.2440, 34.4347]
           }
         ]
       }
     };
 
     /* ========================================================================
-       MapLibre GL 3D Map 初始化與底圖圖層配置
+       Map 初始化與底圖圖層配置
        ======================================================================== */
     const TILE_SOURCES = {
       satellite: {
@@ -1128,8 +1346,9 @@
       }
     };
 
+    let map;
     let currentLayerKey = 'satellite';
-    let currentPlanKey = 'planA';
+    let currentPlanKey = 'planAPlus';
     let activeMarkers = [];
     let isOrbiting = false;
     let orbitAnimFrame = null;
@@ -1152,13 +1371,13 @@
       };
     }
 
-    const map = new maplibregl.Map({
+    map = new maplibregl.Map({
       container: 'map',
       style: createMapStyle(currentLayerKey),
-      center: LANDMARKS_DATA.planA.center,
-      zoom: LANDMARKS_DATA.planA.zoom,
-      pitch: LANDMARKS_DATA.planA.pitch,
-      bearing: LANDMARKS_DATA.planA.bearing,
+      center: LANDMARKS_DATA.planAPlus.center,
+      zoom: LANDMARKS_DATA.planAPlus.zoom,
+      pitch: LANDMARKS_DATA.planAPlus.pitch,
+      bearing: LANDMARKS_DATA.planAPlus.bearing,
       antialias: true
     });
 
@@ -1201,6 +1420,53 @@
       const data = LANDMARKS_DATA[currentPlanKey];
       if (!data) return;
 
+      document.getElementById('drawerPlanTitle').textContent = data.title;
+      document.getElementById('drawerPlanSubtitle').textContent = data.subtitle;
+      const depEl = document.getElementById('drawerDepartureTime');
+      if (depEl) {
+        depEl.textContent = data.departureInfo || '請見節點時程';
+      }
+
+      const spotListEl = document.getElementById('drawerSpotList');
+      spotListEl.innerHTML = '';
+
+      data.spots.forEach(spot => {
+        const card = document.createElement('div');
+        card.className = 'spot-card';
+        card.id = 'card-' + spot.id;
+        card.onclick = () => selectSpot(spot.id);
+
+        card.innerHTML = `
+          <div class="spot-card-header">
+            <div class="spot-img-box">
+              <img src="${spot.image}" alt="${spot.name}" onerror="this.src='images/harukas.jpg'">
+            </div>
+            <div class="spot-info">
+              <span class="spot-time-badge" style="${spot.order === '0' ? 'background:#059669; color:#fff; border:1px solid #34d399;' : ''}">${spot.order === '0' ? '⏰ 出發：' + spot.time : spot.time}</span>
+              <h4 class="spot-name">${spot.order === '0' ? '🏨 出發起點：' + spot.name : spot.order + '. ' + spot.name}</h4>
+              <p class="spot-subtext">${spot.sub}</p>
+            </div>
+          </div>
+          <div class="spot-badges-row">
+            <span class="badge-transit">🚇 ${spot.station}</span>
+            <span class="badge-pass">🎫 ${spot.pass}</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
+            <span style="font-size:12px; color:var(--gold-light); font-weight:600;">🔍 點擊飛入地標</span>
+            <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(spot.googleQuery || spot.name)}" 
+               target="_blank" 
+               onclick="event.stopPropagation();"
+               style="font-size:11px; color:#38bdf8; text-decoration:none; display:inline-flex; align-items:center; gap:4px; padding:3px 8px; background:rgba(56,189,248,0.12); border-radius:6px; border:1px solid rgba(56,189,248,0.3);">
+              📍 Google 導航
+            </a>
+          </div>
+        `;
+
+        spotListEl.appendChild(card);
+      });
+
+      if (!map) return;
+
       activeMarkers.forEach(m => m.remove());
       activeMarkers = [];
 
@@ -1211,7 +1477,7 @@
 
         el.innerHTML = `
           <div class="marker-pin-body">
-            <span class="marker-order-num">${spot.order}</span>
+            <span class="marker-order-num" style="${spot.order === '0' ? 'background:#059669; color:#fff;' : ''}">${spot.order === '0' ? '🏨' : spot.order}</span>
             <div class="marker-photo-thumb">
               <img src="${spot.image}" alt="${spot.name}" onerror="this.src='images/harukas.jpg'">
             </div>
@@ -1242,88 +1508,35 @@
 
       if (map && map.isStyleLoaded()) {
         try {
-          if (map.getSource('route-line')) {
-            map.getSource('route-line').setData(geojson);
+          const source = map.getSource('route-line-source');
+          if (source) {
+            source.setData(geojson);
           } else {
-            map.addSource('route-line', {
+            map.addSource('route-line-source', {
               type: 'geojson',
               data: geojson
             });
 
             map.addLayer({
-              id: 'route-line-glow',
+              id: 'route-line-layer',
               type: 'line',
-              source: 'route-line',
-              layout: { 'line-join': 'round', 'line-cap': 'round' },
+              source: 'route-line-source',
+              layout: {
+                'line-join': 'round',
+                'line-cap': 'round'
+              },
               paint: {
-                'line-color': data.routeColor,
-                'line-width': 10,
-                'line-opacity': 0.35,
-                'line-blur': 4
-              }
-            });
-
-            map.addLayer({
-              id: 'route-line-core',
-              type: 'line',
-              source: 'route-line',
-              layout: { 'line-join': 'round', 'line-cap': 'round' },
-              paint: {
-                'line-color': '#ffffff',
-                'line-width': 3,
-                'line-opacity': 0.95
+                'line-color': data.color || '#d4af37',
+                'line-width': 4.5,
+                'line-opacity': 0.85,
+                'line-dasharray': [2, 1.5]
               }
             });
           }
-
-          if (map.getLayer('route-line-glow')) {
-            map.setPaintProperty('route-line-glow', 'line-color', data.routeColor);
-          }
-        } catch (err) {
-          console.warn("Map line update deferred:", err);
+        } catch (e) {
+          console.warn('MapLibre route layer sync note:', e);
         }
       }
-
-      document.getElementById('drawerPlanTitle').textContent = data.title;
-      document.getElementById('drawerPlanSubtitle').textContent = data.subtitle;
-
-      const spotListEl = document.getElementById('drawerSpotList');
-      spotListEl.innerHTML = '';
-
-      data.spots.forEach(spot => {
-        const card = document.createElement('div');
-        card.className = 'spot-card';
-        card.id = 'card-' + spot.id;
-        card.onclick = () => selectSpot(spot.id);
-
-        card.innerHTML = `
-          <div class="spot-card-header">
-            <div class="spot-img-box">
-              <img src="${spot.image}" alt="${spot.name}" onerror="this.src='images/harukas.jpg'">
-            </div>
-            <div class="spot-info">
-              <span class="spot-time-badge">${spot.time}</span>
-              <h4 class="spot-name">${spot.order}. ${spot.name}</h4>
-              <p class="spot-subtext">${spot.sub}</p>
-            </div>
-          </div>
-          <div class="spot-badges-row">
-            <span class="badge-transit">🚇 ${spot.station}</span>
-            <span class="badge-pass">🎫 ${spot.pass}</span>
-          </div>
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
-            <span style="font-size:12px; color:var(--gold-light); font-weight:600;">🔍 點擊飛入地標</span>
-            <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(spot.googleQuery || spot.name)}" 
-               target="_blank" 
-               onclick="event.stopPropagation();"
-               style="font-size:11px; color:#38bdf8; text-decoration:none; display:inline-flex; align-items:center; gap:4px; padding:3px 8px; background:rgba(56,189,248,0.12); border-radius:6px; border:1px solid rgba(56,189,248,0.3);">
-              📍 Google 導航
-            </a>
-          </div>
-        `;
-
-        spotListEl.appendChild(card);
-      });
     }
 
     /* ========================================================================
@@ -1336,7 +1549,10 @@
 
       const buttons = document.querySelectorAll('.plan-selector-bar .plan-tab-btn');
       buttons.forEach(btn => btn.classList.remove('active'));
-      if (window.event && window.event.currentTarget) {
+      const activeBtn = document.getElementById('tab-' + planKey);
+      if (activeBtn) {
+        activeBtn.classList.add('active');
+      } else if (window.event && window.event.currentTarget) {
         window.event.currentTarget.classList.add('active');
       }
 
