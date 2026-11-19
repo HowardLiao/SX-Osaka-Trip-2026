@@ -533,6 +533,220 @@
     border: 1px solid var(--stone-border);
     margin: 10px 0;
   }
+
+  /* === NEON UPGRADE: Live Status Bar, Taxi/SOS Modal, Toast, Checklist, Print === */
+  @keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .section-card.active {
+    animation: fadeSlideIn 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .metric-box {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .metric-box:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--card-shadow-hover);
+  }
+  .live-telemetry-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    background: linear-gradient(135deg, #fffdf5 0%, #fef3c7 100%);
+    border: 1.5px solid var(--gold-300);
+    border-radius: var(--radius-md);
+    padding: 10px 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 10px rgba(180, 83, 9, 0.08);
+    font-size: 12.5px;
+    color: var(--stone-dark);
+  }
+  .telemetry-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #ffffff;
+    border: 1px solid var(--gold-300);
+    border-radius: 999px;
+    padding: 4px 12px;
+    font-weight: 800;
+    color: var(--gold-800);
+    font-variant-numeric: tabular-nums;
+  }
+  .telemetry-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #16a34a;
+    box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.2);
+  }
+  .top-actions-wrap {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  @media (max-width: 560px) {
+    .top-bar { padding: 8px 10px; gap: 6px; }
+    .top-title { font-size: 12.5px; }
+    .top-action-btn { font-size: 11px; padding: 5px 9px; }
+    .top-action-btn .hide-xs { display: none; }
+  }
+  /* Quick SOS / Taxi Card Modal */
+  .sos-modal-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    background: rgba(15, 23, 42, 0.72);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    padding: 16px;
+    overflow-y: auto;
+    align-items: center;
+    justify-content: center;
+  }
+  .sos-modal-backdrop.open {
+    display: flex;
+  }
+  .sos-modal {
+    width: 100%;
+    max-width: 560px;
+    background: #ffffff;
+    border: 2px solid var(--gold-500);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+    animation: fadeSlideIn 0.22s ease;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .taxi-card {
+    background: #fffdf5;
+    border: 2px solid var(--gold-400);
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 12px;
+  }
+  .taxi-jp-name {
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--stone-dark);
+    margin: 4px 0;
+    letter-spacing: 0.3px;
+  }
+  .taxi-jp-addr {
+    font-size: 15px;
+    font-weight: 700;
+    color: #92400e;
+    background: #ffffff;
+    border: 1px dashed var(--gold-400);
+    border-radius: 8px;
+    padding: 8px 10px;
+    margin: 6px 0 8px 0;
+    user-select: all;
+  }
+  .btn-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    font-weight: 800;
+    padding: 5px 11px;
+    border-radius: 6px;
+    text-decoration: none;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+  }
+  .btn-chip:active { transform: scale(0.97); }
+  .calc-mode-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+  .calc-mode-btn {
+    flex: 1;
+    min-width: 110px;
+    padding: 7px 10px;
+    font-size: 12px;
+    font-weight: 800;
+    border-radius: 8px;
+    border: 1.5px solid var(--gold-300);
+    background: #ffffff;
+    color: var(--gold-800);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .calc-mode-btn.active {
+    background: var(--gold-gradient);
+    color: #ffffff;
+    border-color: var(--gold-700);
+    box-shadow: 0 2px 6px rgba(180, 83, 9, 0.25);
+  }
+  .calc-quick-btn {
+    padding: 4px 9px;
+    font-size: 11.5px;
+    font-weight: 800;
+    border-radius: 999px;
+    border: 1px solid var(--gold-400);
+    background: #ffffff;
+    color: var(--gold-800);
+    cursor: pointer;
+  }
+  .calc-quick-btn:hover { background: var(--gold-100); }
+  .checklist-progress-bar {
+    width: 100%;
+    height: 8px;
+    background: #e7e5e4;
+    border-radius: 999px;
+    overflow: hidden;
+    margin: 8px 0 12px 0;
+  }
+  .checklist-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #d97706, #16a34a);
+    border-radius: 999px;
+    transition: width 0.25s ease;
+  }
+  .toast-pill {
+    position: fixed;
+    bottom: calc(82px + env(safe-area-inset-bottom));
+    left: 50%;
+    transform: translateX(-50%) translateY(16px);
+    background: #0f172a;
+    color: #fde68a;
+    font-size: 13px;
+    font-weight: 800;
+    padding: 9px 18px;
+    border-radius: 999px;
+    border: 1px solid #d4af37;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.22s ease;
+    z-index: 3000;
+    white-space: nowrap;
+  }
+  .toast-pill.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  .bnav-item {
+    font-size: 10.5px;
+    padding: 4px 2px;
+  }
+  @media print {
+    .top-bar, .bottom-nav, .category-scroll, #back-to-top, .sos-modal-backdrop, .toast-pill { display: none !important; }
+    body { padding-bottom: 0; background: #ffffff; }
+    .section-card { display: block !important; box-shadow: none; border: 1px solid #d6d3d1; break-inside: avoid; }
+  }
 </style>
 </head>
 <body>
@@ -543,9 +757,10 @@
     <div class="pyramid-logo"></div>
     <div class="top-title">盛欣網絡 2026 大阪五日行</div>
   </div>
-  <div style="display:flex; gap:8px;">
-    <a href="3d.html" class="top-action-btn" style="background:linear-gradient(135deg, #d4af37 0%, #b45309 100%); color:#0f172a; box-shadow:0 2px 8px rgba(212,175,55,0.4); text-decoration:none; font-weight:800;">🗾 關西在地 3D 地圖</a>
-    <a href="tel:078012266" class="top-action-btn" style="text-decoration:none; background:#16a34a; color:#ffffff; font-weight:800;">📞 橙屋商旅 (07-801-2266)</a>
+  <div class="top-actions-wrap">
+    <button type="button" onclick="openSosModal()" class="top-action-btn" style="background:#0f172a; color:#fde68a; border:1px solid #d4af37; cursor:pointer; font-weight:800;">🚖 司機卡<span class="hide-xs"> / 聯絡</span></button>
+    <a href="3d.html" class="top-action-btn" style="background:linear-gradient(135deg, #d4af37 0%, #b45309 100%); color:#0f172a; box-shadow:0 2px 8px rgba(212,175,55,0.4); text-decoration:none; font-weight:800;">🗾 <span class="hide-xs">關西在地 </span>3D 地圖</a>
+    <a href="tel:078012266" class="top-action-btn" style="text-decoration:none; background:#16a34a; color:#ffffff; font-weight:800;">📞 橙屋<span class="hide-xs">商旅 (07-801-2266)</span></a>
   </div>
 </header>
 
@@ -557,6 +772,18 @@
     <h1>盛欣網絡科技有限公司<br>大阪五日員旅隨身指南</h1>
     <div class="hero-meta"><strong>2026 年 11 月 24 日（二）行前落腳 ➔ 11 月 25 日（三）～ 11 月 29 日（日）大阪五日員旅</strong> ｜ 航班 AK170 / AK171</div>
     <div class="author-tag">EXECUTIVE BLUEPRINT • HOWARD LIAO PH.D.</div>
+  </div>
+
+  <!-- LIVE COUNTDOWN & DUAL TIMEZONE TELEMETRY BAR -->
+  <div class="live-telemetry-bar" aria-label="出發倒數與台日雙時區">
+    <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+      <span class="telemetry-dot"></span>
+      <span id="trip-countdown" style="font-weight:900; color:#92400e;">⏳ 計算距離 11/25 06:00 亞航 C 櫃台集合...</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+      <span class="telemetry-chip">🇹🇼 台灣 <span id="clock-tw">--:--</span></span>
+      <span class="telemetry-chip" style="border-color:#059669; color:#065f46;">🇯🇵 日本 JST <span id="clock-jp">--:--</span></span>
+    </div>
   </div>
 
   <!-- GOLD STEP PYRAMID METRICS -->
@@ -603,12 +830,12 @@
   <!-- HORIZONTAL CATEGORY SELECTOR -->
   <div class="category-scroll">
     <a href="3d.html" class="cat-btn" style="text-decoration:none; display:inline-flex; align-items:center; background:#1e1e24; color:#fde68a; border:1px solid #d4af37; font-weight:800;">🗾 在地 3D 地圖</a>
-    <button class="cat-btn active" onclick="showTab('sec-transport', 0)">🚄 交通與前晚住宿</button>
-    <button class="cat-btn" onclick="showTab('sec-plans', 1)">📊 Day 4 自由行對決</button>
-    <button class="cat-btn" onclick="showTab('sec-itinerary', 2)">🗺️ 官方五日行程</button>
-    <button class="cat-btn" onclick="showTab('sec-electronics', 3)">🛒 日本必買全品類省錢全鑑</button>
-    <button class="cat-btn" onclick="showTab('sec-tools', 4)">📱 必備工具與 App</button>
-    <button class="cat-btn" onclick="showTab('sec-weather', 5)">❄️ 氣溫穿著 ＆ 必備清單</button>
+    <button class="cat-btn active" data-tab="sec-transport" onclick="showTab('sec-transport')">🚄 交通與前晚住宿</button>
+    <button class="cat-btn" data-tab="sec-plans" onclick="showTab('sec-plans')">📊 Day 4 自由行對決</button>
+    <button class="cat-btn" data-tab="sec-itinerary" onclick="showTab('sec-itinerary')">🗺️ 官方五日行程</button>
+    <button class="cat-btn" data-tab="sec-electronics" onclick="showTab('sec-electronics')">🛒 日本必買全品類省錢全鑑</button>
+    <button class="cat-btn" data-tab="sec-tools" onclick="showTab('sec-tools')">📱 必備工具與 App</button>
+    <button class="cat-btn" data-tab="sec-weather" onclick="showTab('sec-weather')">❄️ 氣溫穿著 ＆ 必備清單</button>
   </div>
 
     <!-- SECTION 1: TRANSPORT & HOTELS (INTERACTIVE COMPARATOR) -->
@@ -620,7 +847,7 @@
 
     <div class="danger-callout">
       <strong>🚨 關鍵死線提醒：當天清晨（11/25）「絕對不可搭高鐵」！</strong><br>
-      台中首班高鐵 0583 次（06:25 發車 ➔ 07:30 抵達左營）。但 AK170 也是 <strong>07:30 準時電腦鎖櫃截止報到</strong>，左營到小港飆車需 25 分鐘，<strong>100% 趕不上！</strong>因此 <strong>2026 年 11 月 24 日（星期二）</strong>前一晚必須在高雄過夜，以確保 <strong>2026 年 11 月 25 日（星期三）</strong>清晨準時抵達小港機場。
+      台中首班高鐵 0583 次（06:25 發車 ➔ 07:30 抵達左營）。從左營飆車到小港最快需 25 分鐘（抵達已 <strong>07:55~08:00 廉航關櫃鎖機死線</strong>），不僅 <strong>100% 錯過 06:00 亞航 C 櫃台團體集合</strong>，更有極高風險遭鎖櫃無法登機！因此 <strong>2026 年 11 月 24 日（星期二）</strong>前一晚必須在高雄過夜。
     </div>
 
     <div style="background:#f0fdf4; border:1.5px solid #86efac; border-radius:12px; padding:15px; margin-bottom:18px;">
@@ -629,7 +856,7 @@
         <span>11/24（二）前一晚住宿：確定入住【橙屋商旅】（已全額結清）</span>
       </div>
       <p style="font-size:13px; color:#14532d; margin:0; line-height:1.6;">
-        前泊住宿已於 11/12 完成全額付款（NT$ 1,580），距小港機場車程僅 3 分鐘，清晨 06:20 出發最無壓力。<strong>以下其餘 6 個原評估備選方案已轉為灰色歷史存查模式</strong>（若需重新比較性價比仍可隨時勾選查看）。
+        前泊住宿已於 11/12 完成全額付款（NT$ 1,580），距小港機場車程僅 3 分鐘，配合最新手冊清晨 <strong>05:50 出發、06:00 準時於亞航 C 櫃台集合</strong>最無壓力。<strong>以下其餘 6 個原評估備選方案已轉為灰色歷史存查模式</strong>（若需重新比較性價比仍可隨時勾選查看）。
       </p>
     </div>
 
@@ -637,7 +864,7 @@
     <div id="hotel-list">
 
       <!-- 1. 橙屋商旅（👑 11/24 最終確定入住・全額付清） -->
-      <div class="hotel-item-card" data-id="h2" data-name="橙屋商旅" data-area="小港機場旁" data-price="1580" data-transit="0" data-total="1580" data-wakeup="06:00" data-cp="10.0" data-type="機場商旅" style="border:2.5px solid #16a34a; border-radius:14px; padding:18px; margin-bottom:16px; background:#f0fdf4; box-shadow:0 4px 18px rgba(22,163,74,0.18);">
+      <div class="hotel-item-card" data-id="h2" data-name="橙屋商旅" data-area="小港機場旁" data-price="1580" data-transit="0" data-total="1580" data-wakeup="05:30" data-cp="10.0" data-type="機場商旅" style="border:2.5px solid #16a34a; border-radius:14px; padding:18px; margin-bottom:16px; background:#f0fdf4; box-shadow:0 4px 18px rgba(22,163,74,0.18);">
         <div style="display:flex; justify-content:space-between; align-items:flex-start;">
           <label style="display:flex; align-items:center; gap:12px; cursor:pointer; flex:1;">
             <input type="checkbox" class="hotel-check" checked onchange="calculateComparison()" style="width:22px; height:22px; accent-color:#16a34a; cursor:pointer;">
@@ -912,8 +1139,8 @@
 
       <div class="tip-box" style="margin-top:14px; margin-bottom:0; font-size:12.5px; line-height:1.6;">
         💡 <strong>11/29（星期日）高鐵搶票與彈性搭乘技巧：</strong><br>
-        1. <strong>提前 28 天訂票</strong>：週日傍晚是全台收假大尖峰，建議 11/01 起優先預訂 <strong>18:15 或 18:35 對號座</strong>。<br>
-        2. <strong>提早出關可免費改早</strong>：若提早抵達左營站（如 17:35 到），可在手機 App 或櫃檯<strong>免費改早一班（如 17:55）</strong>，或直接搭自由座提早出發（左營是起站，排隊一定有座位）！<br>
+        1. <strong>提前 28 天訂票</strong>：週日傍晚是全台收假大尖峰，建議 11/01 起優先預訂 <strong>18:35 (0676次) 或 18:55 (0152次直達快車) 對號座</strong>。<br>
+        2. <strong>提早出關可免費改早</strong>：若提早抵達左營站（如 17:50 到），可在手機 App 或櫃檯<strong>免費改早一班（如 18:15）</strong>，或直接搭自由座提早出發（左營是起站，排隊一定有座位）！<br>
         3. <strong>延誤免驚</strong>：萬一班機延誤錯過原班次，當日車票可直接臨櫃改簽當天其他班次，不會作廢。
       </div>
     </div>
@@ -982,8 +1209,8 @@
         <div class="timeline-node" style="padding: 14px; background: #f0fdf4; border-left: 6px solid #059669;">
           <div class="node-time" style="font-size:12.5px; padding:3px 8px; background:#dcfce7; color:#15803d;">08:00 - 08:15</div>
           <div class="node-body">
-            <h4 style="font-size:16px;">心齋橋飯店出發 ➔ 御堂筋線搭 2 站至「大國町站」</h4>
-            <p style="font-size:13px; margin-top:4px;">心齋橋站刷 ICOCA 乘御堂筋線（車程 4 分鐘），大國町站 1 號出口出站，步行 3 分鐘即達木津市場。</p>
+            <h4 style="font-size:16px;">RITA HOTEL NAMBA 出發 ➔ 散步直達「木津市場」（超近免轉車！）</h4>
+            <p style="font-size:13px; margin-top:4px;">下榻之 <strong>RITA HOTEL NAMBA</strong> 鄰近大國町站，<strong>步行約 8~10 分鐘即可直達木津市場</strong>（比住心齋橋還近、免搭地鐵！）；若同行夥伴從心齋橋出發，搭御堂筋線 2 站至大國町 1 號出口步行 3 分鐘會合。</p>
           </div>
         </div>
 
@@ -1412,10 +1639,13 @@
       <span class="pyramid-badge">官方原檔</span>
     </div>
 
-    <div style="background:#fffbeb; border:1px solid #fcd34d; border-radius:12px; padding:14px; margin-bottom:20px; font-size:13.5px; color:#78350f;">
-      <strong>📌 官方團體資訊（說明會手冊修正版）：</strong><br>
-      • 協辦旅行社：旅天下聯合國際旅行社 ｜ 專案業務：簡佑庭（`02-7701-0660#8502`） ｜ 業務主管：李政慧（`02-7701-0660#8489`）<br>
-      • 隨團領隊：<strong>謝澤于 先生</strong>（手機：`+886 0911-982-037`）<br>
+    <div style="background:#fffbeb; border:1.5px solid #fcd34d; border-radius:12px; padding:16px; margin-bottom:20px; font-size:13.5px; color:#78350f; line-height:1.8;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:8px;">
+        <strong>📌 官方團體資訊（說明會手冊修正版）：</strong>
+        <button type="button" onclick="openSosModal()" class="btn-chip" style="background:#0f172a; color:#fde68a; border-color:#d4af37;">🚖 開啟飯店日文司機卡 ＆ 緊急電話</button>
+      </div>
+      • 協辦旅行社：旅天下聯合國際旅行社 ｜ 專案業務：簡佑庭 <a href="tel:0277010660" class="btn-chip" style="background:#fef3c7; color:#92400e; border-color:#fcd34d; padding:2px 8px;">📞 02-7701-0660 #8502</a> ｜ 業務主管：李政慧 <a href="tel:0277010660" class="btn-chip" style="background:#fef3c7; color:#92400e; border-color:#fcd34d; padding:2px 8px;">📞 #8489</a><br>
+      • 隨團領隊：<strong>謝澤于 先生</strong> <a href="tel:+886911982037" class="btn-chip" style="background:#16a34a; color:#ffffff; padding:2px 10px;">📞 +886 0911-982-037</a><br>
       • 集合時間地點：<strong>2026/11/25 (三) 清晨 06:00</strong> 高雄小港機場 <strong>亞洲航空 C 櫃台</strong><br>
       • 航班：去程 <strong>AK170 (09:00-13:10)</strong> ｜ 回程 <strong>AK171 (14:15-16:30)</strong><br>
       • 行李額度：每人含 <strong>20 公斤託運行李 + 7 公斤手提行李</strong>
@@ -1435,9 +1665,12 @@
         🍽️ <strong>餐食</strong>：早餐／機上簡餐 ｜ 午餐／贈送~輕食壽司餐盒+綠茶 ｜ 晚餐／<strong>日式相撲鍋吃到飽+半隻龍蝦+海鮮拼盤 (餐標 3,500 日幣)</strong>
       </div>
       <div style="margin-top:10px;">
-        <div style="font-size:13px; font-weight:800; color:var(--gold-800); margin-bottom:6px;">🏨 下榻飯店：URBAN 京都大飯店（或 Mystays 京都四條 / MONday 京都 / 京都塔飯店同級）</div>
-        <img src="images/itinerary_photo_1.jpg" style="width:100%; border-radius:10px; border:1px solid var(--stone-border); margin-bottom:6px;" alt="URBAN 京都大飯店大浴場與外觀">
-        <img src="images/itinerary_photo_2.jpg" style="width:100%; border-radius:10px; border:1px solid var(--stone-border);" alt="URBAN 京都大飯店雙床房實景">
+        <div style="font-size:13px; font-weight:800; color:var(--gold-800); margin-bottom:6px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:6px;">
+          <span>🏨 確定下榻飯店：URBAN HOTEL KYOTO-SHIJO PREMIUM（京都四條堀川）</span>
+          <a href="https://www.google.com/maps/search/?api=1&query=URBAN+HOTEL+KYOTO-SHIJO+PREMIUM" target="_blank" class="btn-chip" style="background:#fef3c7; color:#92400e; border-color:#fcd34d;">📍 Google Maps</a>
+        </div>
+        <img src="images/itinerary_photo_1.jpg" style="width:100%; border-radius:10px; border:1px solid var(--stone-border); margin-bottom:6px;" alt="URBAN HOTEL KYOTO-SHIJO PREMIUM 大浴場與外觀">
+        <img src="images/itinerary_photo_2.jpg" style="width:100%; border-radius:10px; border:1px solid var(--stone-border);" alt="URBAN HOTEL KYOTO-SHIJO PREMIUM 雙床房實景">
       </div>
     </div>
 
@@ -1445,7 +1678,7 @@
     <div style="border:2px solid var(--gold-300); border-radius:16px; padding:18px; margin-bottom:22px; background:#ffffff; box-shadow:0 3px 12px rgba(180,83,9,0.06);">
       <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--sand-300); padding-bottom:8px; margin-bottom:12px;">
         <span style="font-weight:900; font-size:16px; color:var(--gold-800); background:var(--gold-100); padding:3px 10px; border-radius:6px;">第 2 天 ｜ 2026 年 11 月 26 日（星期四）</span>
-        <span style="font-size:12.5px; color:var(--stone-muted); font-weight:700;">宿：京都</span>
+        <span style="font-size:12.5px; color:var(--stone-muted); font-weight:700;">宿：京都 URBAN HOTEL KYOTO-SHIJO PREMIUM（續住）</span>
       </div>
       <h3 style="font-size:19px; font-weight:900; color:var(--stone-dark); margin-bottom:8px;">★米其林評鑑星級【伊根灣舟屋】遊覽船 ➔ 日本三景【天橋立】傘松公園纜車「升天之龍」</h3>
       <p style="font-size:13.5px; color:var(--stone-muted); line-height:1.6; margin-bottom:12px;">
@@ -1505,9 +1738,15 @@
       </div>
 
       <div style="margin-top:10px;">
-        <div style="font-size:13px; font-weight:800; color:var(--gold-800); margin-bottom:6px;">🏨 下榻飯店：心齋橋 Grand Hotel（或 捷絲旅 Just Sleep 心齋橋 / Holiday Inn 智選假日 / 大阪本町 ROUTE INN 同級）</div>
-        <img src="images/itinerary_photo_3.jpg" style="width:100%; border-radius:10px; border:1px solid var(--stone-border); margin-bottom:6px;" alt="心齋橋 Grand Hotel 外觀與餐廳">
-        <img src="images/itinerary_photo_4.jpg" style="width:100%; border-radius:10px; border:1px solid var(--stone-border);" alt="心齋橋 Grand Hotel 雙床房實景">
+        <div style="font-size:13px; font-weight:800; color:var(--gold-800); margin-bottom:6px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:6px;">
+          <span>🏨 確定下榻飯店：RITA HOTEL NAMBA（大阪難波麗塔酒店・連住兩晚）</span>
+          <div style="display:flex; gap:6px;">
+            <a href="tel:+81665377032" class="btn-chip" style="background:#dcfce7; color:#15803d; border-color:#86efac;">📞 +81-6-6537-7032</a>
+            <a href="https://www.google.com/maps/search/?api=1&query=RITA+HOTEL+NAMBA+Osaka" target="_blank" class="btn-chip" style="background:#fef3c7; color:#92400e; border-color:#fcd34d;">📍 Google Maps</a>
+          </div>
+        </div>
+        <img src="images/itinerary_photo_3.jpg" style="width:100%; border-radius:10px; border:1px solid var(--stone-border); margin-bottom:6px;" alt="大阪難波下榻飯店參考實景">
+        <img src="images/itinerary_photo_4.jpg" style="width:100%; border-radius:10px; border:1px solid var(--stone-border);" alt="大阪難波雙床房參考實景">
       </div>
     </div>
 
@@ -1560,32 +1799,46 @@
       <span class="pyramid-badge">省錢排行榜</span>
     </div>
 
-        <!-- LIVE CURRENCY CALCULATOR (REAL-TIME JPY -> TWD) -->
+        <!-- LIVE CURRENCY CALCULATOR (REAL-TIME JPY -> TWD, 3 MODES + CUSTOM RATE) -->
     <div style="background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border: 2px solid var(--gold-500); border-radius: 14px; padding: 18px; margin-bottom: 22px; box-shadow: 0 4px 14px rgba(180,83,9,0.12);">
-      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 1px solid var(--gold-300); padding-bottom: 8px; margin-bottom: 12px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; border-bottom: 1px solid var(--gold-300); padding-bottom: 8px; margin-bottom: 12px;">
         <h3 style="font-size:16.5px; font-weight:900; color:#92400e; display:flex; align-items:center; gap:6px;">
           <span>🧮</span> 現場購物即時換算機（日幣 ➔ 台幣）
         </h3>
-        <span style="font-size:11px; font-weight:800; background:var(--gold-600); color:#fff; padding:2px 8px; border-radius:4px;">現場血拼必備</span>
+        <span style="font-size:11px; font-weight:800; background:var(--gold-600); color:#fff; padding:2px 8px; border-radius:4px;">三模式切換・現場必備</span>
       </div>
-      <p style="font-size:12.5px; color:#78350f; margin-bottom:12px;">
-        在 Bic Camera 或藥妝店看到日幣標價？輸入未稅或含稅日幣金額，一鍵自動扣除 <strong>免稅 10% 與 7% 折價券</strong>，秒算折合台幣實付金額！
-      </p>
+      <div class="calc-mode-group" role="group" aria-label="折扣模式切換">
+        <button type="button" class="calc-mode-btn active" data-mode="coupon" onclick="setCalcMode('coupon', this)">⚡ 電器 10%免稅+7%券</button>
+        <button type="button" class="calc-mode-btn" data-mode="taxfree" onclick="setCalcMode('taxfree', this)">🛍️ 一般 10%免稅</button>
+        <button type="button" class="calc-mode-btn" data-mode="raw" onclick="setCalcMode('raw', this)">💴 含稅原價直算</button>
+      </div>
+      <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-bottom:10px;">
+        <span style="font-size:11.5px; font-weight:800; color:#92400e;">快選金額：</span>
+        <button type="button" class="calc-quick-btn" onclick="quickJpy(5000)">¥5,000</button>
+        <button type="button" class="calc-quick-btn" onclick="quickJpy(10000)">¥10,000</button>
+        <button type="button" class="calc-quick-btn" onclick="quickJpy(30000)">¥30,000</button>
+        <button type="button" class="calc-quick-btn" onclick="quickJpy(50000)">¥50,000</button>
+        <button type="button" class="calc-quick-btn" onclick="quickJpy(100000)">¥100,000</button>
+      </div>
       <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; align-items:center;">
         <div>
-          <label style="font-size:11.5px; font-weight:800; color:var(--stone-muted); display:block; margin-bottom:4px;">輸入商品日幣標價 (JPY ¥)：</label>
+          <label for="calc-jpy" style="font-size:11.5px; font-weight:800; color:var(--stone-muted); display:block; margin-bottom:4px;">輸入商品日幣標價 (JPY ¥)：</label>
           <input type="number" id="calc-jpy" placeholder="例如: 35000" oninput="calcTwd()" style="width:100%; padding:10px 12px; font-size:16px; font-weight:800; border:2px solid var(--gold-400); border-radius:8px; outline:none; background:#ffffff; color:#1c1917;">
         </div>
         <div>
-          <label style="font-size:11.5px; font-weight:800; color:var(--stone-muted); display:block; margin-bottom:4px;">退稅折算實付台幣 (TWD NT$)：</label>
+          <label style="font-size:11.5px; font-weight:800; color:var(--stone-muted); display:block; margin-bottom:4px;">折算實付台幣 (TWD NT$)：</label>
           <div id="calc-twd-result" style="width:100%; padding:10px 12px; font-size:17px; font-weight:900; border:2px solid var(--nile-emerald); border-radius:8px; background:#ecfdf5; color:#065f46; text-align:center;">
             NT$ 0
           </div>
         </div>
       </div>
-      <div style="display:flex; justify-content:space-between; font-size:11.5px; color:#92400e; margin-top:10px;">
-        <span>基準匯率：1 JPY ≈ 0.21 TWD</span>
-        <span>計算公式：JPY × 0.90(免稅) × 0.93(券) × 0.21</span>
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; font-size:11.5px; color:#92400e; margin-top:10px;">
+        <label style="display:inline-flex; align-items:center; gap:4px; font-weight:700;">
+          匯率 1 JPY ≈
+          <input type="number" id="calc-rate" value="0.21" step="0.005" min="0.1" max="0.5" oninput="calcTwd()" style="width:64px; padding:2px 6px; font-size:12px; font-weight:800; border:1px solid var(--gold-400); border-radius:4px; background:#fff; color:#78350f;">
+          TWD
+        </label>
+        <span id="calc-formula-note">計算公式：JPY × 0.90(免稅) × 0.93(券) × 0.21</span>
       </div>
     </div>
 
@@ -1607,7 +1860,7 @@
 
           <!-- COMPARISON SUMMARY BOXES -->
           <div style="margin-bottom:10px;">
-            <div style="font-size:13.5px; font-weight:900; color:#059669; margin-bottom:4px;">🟢 $0% 免手續費（良心必去，實拿滿 10%）：</div>
+            <div style="font-size:13.5px; font-weight:900; color:#059669; margin-bottom:4px;">🟢 0% 免手續費（良心必去，實拿滿 10%）：</div>
             <div style="font-size:12.5px; color:#334155; line-height:1.5; background:#f0fdf4; border:1px solid #bbf7d0; border-radius:6px; padding:8px 10px;">
               • <strong>電器/相機</strong>：Bic Camera、友都八喜 Yodobashi、愛電王 EDION、樂天電器<br>
               • <strong>藥妝/生活</strong>：驚安殿堂 Donki、松本清、鶴羽藥妝、大國藥妝、Sundrug、OS Drug、杉藥局<br>
@@ -1943,20 +2196,28 @@
       </p>
     </div>
 
-    <!-- PACKING CHECKLIST -->
+    <!-- PACKING CHECKLIST (PERSISTENT LOCALSTORAGE + PROGRESS BAR) -->
     <div style="background:#ffffff; border:1px solid var(--stone-border); border-radius:12px; padding:16px; margin-bottom:18px;">
-      <h4 style="font-size:15px; font-weight:900; color:var(--stone-dark); margin-bottom:12px;">🎒 出國必帶重要物品清單（出發前打勾核對）：</h4>
-      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:10px; font-size:13px; color:var(--stone-text);">
-        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" style="width:17px; height:17px; accent-color:#d97706;"> 護照正本（效期需在6個月以上）</label>
-        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" style="width:17px; height:17px; accent-color:#d97706;"> 台灣身分證（隨身備查）</label>
-        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" style="width:17px; height:17px; accent-color:#d97706;"> Visit Japan Web 入境截圖</label>
-        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" style="width:17px; height:17px; accent-color:#d97706;"> 日幣現金（約3~5萬円備用）</label>
-        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" style="width:17px; height:17px; accent-color:#d97706;"> 海外高回饋信用卡（JCB/富邦J卡等）</label>
-        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" style="width:17px; height:17px; accent-color:#d97706;"> 日本上網卡 / eSIM 或漫遊</label>
-        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" style="width:17px; height:17px; accent-color:#d97706;"> 行動電源（<strong style="color:#b91c1c;">限手提上機，嚴禁托運</strong>）</label>
-        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" style="width:17px; height:17px; accent-color:#d97706;"> 舒適好走的運動球鞋（每日萬步）</label>
-        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" style="width:17px; height:17px; accent-color:#d97706;"> 防風保暖外套、發熱衣、暖暖包</label>
-        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" style="width:17px; height:17px; accent-color:#d97706;"> 個人常備用藥、保濕乳液/護唇膏</label>
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+        <h4 style="font-size:15px; font-weight:900; color:var(--stone-dark); margin:0;">🎒 出國必帶重要物品清單（自動記憶打勾狀態）：</h4>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span id="checklist-status" style="font-size:12px; font-weight:800; color:var(--gold-800); background:var(--gold-100); padding:2px 9px; border-radius:999px;">已完成 0 / 11 項</span>
+          <button type="button" onclick="resetChecklist()" style="font-size:11px; font-weight:700; color:#64748b; background:#f1f5f9; border:1px solid #cbd5e1; border-radius:6px; padding:2px 8px; cursor:pointer;">重設</button>
+        </div>
+      </div>
+      <div class="checklist-progress-bar"><div id="checklist-progress-fill" class="checklist-progress-fill"></div></div>
+      <div id="packing-checklist" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:10px; font-size:13px; color:var(--stone-text);">
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" class="pack-check" data-key="passport" onchange="saveChecklist()" style="width:17px; height:17px; accent-color:#d97706;"> 護照正本（效期需在6個月以上）</label>
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" class="pack-check" data-key="idcard" onchange="saveChecklist()" style="width:17px; height:17px; accent-color:#d97706;"> 台灣身分證（隨身備查）</label>
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" class="pack-check" data-key="vjw" onchange="saveChecklist()" style="width:17px; height:17px; accent-color:#d97706;"> Visit Japan Web 入境截圖</label>
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" class="pack-check" data-key="jpy" onchange="saveChecklist()" style="width:17px; height:17px; accent-color:#d97706;"> 日幣現金（約3~5萬円備用）</label>
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" class="pack-check" data-key="card" onchange="saveChecklist()" style="width:17px; height:17px; accent-color:#d97706;"> 海外高回饋信用卡（JCB/富邦J卡等）</label>
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" class="pack-check" data-key="esim" onchange="saveChecklist()" style="width:17px; height:17px; accent-color:#d97706;"> 日本上網卡 / eSIM 或漫遊</label>
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" class="pack-check" data-key="powerbank" onchange="saveChecklist()" style="width:17px; height:17px; accent-color:#d97706;"> 行動電源（<strong style="color:#b91c1c;">限手提上機，嚴禁托運</strong>）</label>
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" class="pack-check" data-key="toiletries" onchange="saveChecklist()" style="width:17px; height:17px; accent-color:#d97706;"> 牙刷牙膏備品（<strong style="color:#15803d;">11/24 橙屋環保不提供</strong>）</label>
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" class="pack-check" data-key="shoes" onchange="saveChecklist()" style="width:17px; height:17px; accent-color:#d97706;"> 舒適好走的運動球鞋（每日萬步）</label>
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" class="pack-check" data-key="coat" onchange="saveChecklist()" style="width:17px; height:17px; accent-color:#d97706;"> 防風保暖外套、發熱衣、暖暖包</label>
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" class="pack-check" data-key="meds" onchange="saveChecklist()" style="width:17px; height:17px; accent-color:#d97706;"> 個人常備用藥、保濕乳液/護唇膏</label>
       </div>
     </div>
 
@@ -1996,45 +2257,180 @@
 
 </div>
 
-<!-- MOBILE BOTTOM NAVIGATION BAR -->
+<!-- MOBILE BOTTOM NAVIGATION BAR (ALL 6 TABS EXACTLY SYNCED) -->
 <nav class="bottom-nav">
-  <button class="bnav-item active" onclick="showTab('sec-transport', 0)">
+  <button class="bnav-item active" data-tab="sec-transport" onclick="showTab('sec-transport')">
     <span class="bnav-icon">🚄</span>
     <span>交通住宿</span>
   </button>
-  <button class="bnav-item" onclick="showTab('sec-plans', 1)">
+  <button class="bnav-item" data-tab="sec-plans" onclick="showTab('sec-plans')">
     <span class="bnav-icon">📊</span>
     <span>自由活動</span>
   </button>
-  <button class="bnav-item" onclick="showTab('sec-itinerary', 2)">
+  <button class="bnav-item" data-tab="sec-itinerary" onclick="showTab('sec-itinerary')">
     <span class="bnav-icon">🗺️</span>
     <span>五日行程</span>
   </button>
-  <button class="bnav-item" onclick="showTab('sec-electronics', 3)">
+  <button class="bnav-item" data-tab="sec-electronics" onclick="showTab('sec-electronics')">
     <span class="bnav-icon">🛒</span>
-    <span>必買全品類</span>
+    <span>必買換算</span>
   </button>
-  <button class="bnav-item" onclick="showTab('sec-tools', 4)">
+  <button class="bnav-item" data-tab="sec-tools" onclick="showTab('sec-tools')">
     <span class="bnav-icon">📱</span>
-    <span>實用工具</span>
+    <span>工具App</span>
+  </button>
+  <button class="bnav-item" data-tab="sec-weather" onclick="showTab('sec-weather')">
+    <span class="bnav-icon">❄️</span>
+    <span>行前清單</span>
   </button>
 </nav>
 
+<!-- QUICK SOS & JAPANESE TAXI CARD MODAL -->
+<div id="sos-modal" class="sos-modal-backdrop" onclick="if(event.target===this) closeSosModal()">
+  <div class="sos-modal" role="dialog" aria-modal="true" aria-label="日本計程車司機卡與緊急聯絡">
+    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid var(--gold-300); padding-bottom:10px; margin-bottom:14px;">
+      <h3 style="font-size:18px; font-weight:900; color:var(--stone-dark); margin:0;">🚖 日本計程車司機卡 ＆ 緊急聯絡</h3>
+      <button type="button" onclick="closeSosModal()" style="background:#f1f5f9; border:none; width:32px; height:32px; border-radius:50%; font-size:16px; font-weight:900; cursor:pointer; color:#334155;">✕</button>
+    </div>
+
+    <div style="font-size:12.5px; color:#57534e; margin-bottom:12px;">
+      在京都或大阪搭計程車時，直接將下方日文地址畫面出示給司機看，或點擊一鍵複製！
+    </div>
+
+    <div class="taxi-card">
+      <span style="font-size:11px; font-weight:800; background:var(--gold-100); color:var(--gold-800); padding:2px 8px; border-radius:4px;">Day 1 - 2 京都住宿 (11/25 - 11/26)</span>
+      <div class="taxi-jp-name">アーバンホテル京都四条プレミアム</div>
+      <div style="font-size:12.5px; font-weight:700; color:#57534e;">URBAN HOTEL KYOTO-SHIJO PREMIUM</div>
+      <div class="taxi-jp-addr">〒600-8481 京都府京都市下京区四条通堀川東入唐津屋町535</div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <button type="button" onclick="copyText('〒600-8481 京都府京都市下京区四条通堀川東入唐津屋町535 アーバンホテル京都四条プレミアム')" class="btn-chip" style="background:var(--gold-600); color:#fff;">📋 複製日文地址</button>
+        <a href="https://www.google.com/maps/search/?api=1&query=URBAN+HOTEL+KYOTO-SHIJO+PREMIUM" target="_blank" class="btn-chip" style="background:#fef3c7; color:#92400e; border-color:#fcd34d;">📍 Google Maps</a>
+      </div>
+    </div>
+
+    <div class="taxi-card" style="border-color:#16a34a; background:#f0fdf4;">
+      <span style="font-size:11px; font-weight:800; background:#dcfce7; color:#15803d; padding:2px 8px; border-radius:4px;">Day 3 - 4 大阪住宿 (11/27 - 11/28)</span>
+      <div class="taxi-jp-name">リタホテル難波（RITA HOTEL NAMBA）</div>
+      <div class="taxi-jp-addr" style="color:#166534; border-color:#86efac;">〒557-0022 大阪府大阪市西成区中開1丁目3-12</div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <button type="button" onclick="copyText('〒557-0022 大阪府大阪市西成区中開1丁目3-12 RITA HOTEL NAMBA')" class="btn-chip" style="background:#16a34a; color:#fff;">📋 複製日文地址</button>
+        <a href="tel:+81665377032" class="btn-chip" style="background:#dcfce7; color:#15803d; border-color:#86efac;">📞 +81-6-6537-7032</a>
+        <a href="https://www.google.com/maps/search/?api=1&query=RITA+HOTEL+NAMBA+Osaka" target="_blank" class="btn-chip" style="background:#ffffff; color:#15803d; border-color:#86efac;">📍 Google Maps</a>
+      </div>
+    </div>
+
+    <div class="taxi-card" style="border-color:#ea580c; background:#fff7ed;">
+      <span style="font-size:11px; font-weight:800; background:#ffedd5; color:#c2410c; padding:2px 8px; border-radius:4px;">Day 4 晚餐全員預約 (11/28 17:30・10位)</span>
+      <div class="taxi-jp-name">焼肉力丸 心斎橋店（ISビル 4F）</div>
+      <div class="taxi-jp-addr" style="color:#9a3412; border-color:#fdba74;">〒542-0085 大阪府大阪市中央区心斎橋筋2丁目1-32 ISビル 4F</div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <button type="button" onclick="copyText('〒542-0085 大阪府大阪市中央区心斎橋筋2丁目1-32 ISビル 4F 焼肉力丸 心斎橋店')" class="btn-chip" style="background:#ea580c; color:#fff;">📋 複製日文地址</button>
+        <a href="https://www.google.com/maps/search/?api=1&query=%E7%87%92%E8%82%89%E5%8A%9B%E4%B8%B8+%E5%BF%83%E6%96%8E%E6%A9%8B%E5%BA%97" target="_blank" class="btn-chip" style="background:#ffffff; color:#9a3412; border-color:#fdba74;">📍 Google Maps</a>
+      </div>
+    </div>
+
+    <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:12px; padding:14px;">
+      <div style="font-size:13.5px; font-weight:900; color:#0f172a; margin-bottom:8px;">📞 團務與緊急一鍵撥號</div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(210px, 1fr)); gap:8px;">
+        <a href="tel:+886911982037" class="btn-chip" style="background:#16a34a; color:#fff; justify-content:center; padding:8px;">🧑‍✈️ 隨團領隊 謝澤于 (0911-982-037)</a>
+        <a href="tel:078012266" class="btn-chip" style="background:#0284c7; color:#fff; justify-content:center; padding:8px;">🏨 11/24 橙屋商旅 (07-801-2266)</a>
+        <a href="tel:0277010660" class="btn-chip" style="background:#b45309; color:#fff; justify-content:center; padding:8px;">🏢 旅天下 02-7701-0660 (#8502/#8489)</a>
+        <a href="tel:+81662278623" class="btn-chip" style="background:#dc2626; color:#fff; justify-content:center; padding:8px;">🆘 駐大阪辦事處 (+81-6-6227-8623)</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST NOTIFICATION -->
+<div id="toast-pill" class="toast-pill" role="status" aria-live="polite"></div>
+
 <script>
-  function showTab(secId, index) {
+  // Exact Tab Switcher (Fixed index offset bug using data-tab)
+  function showTab(secId) {
+    const targetSec = document.getElementById(secId);
+    if (!targetSec) return;
+
     document.querySelectorAll('.section-card').forEach(el => el.classList.remove('active'));
-    document.querySelectorAll('.cat-btn').forEach(el => el.classList.remove('active'));
-    document.querySelectorAll('.bnav-item').forEach(el => el.classList.remove('active'));
-    
-    document.getElementById(secId).classList.add('active');
-    
-    const catBtns = document.querySelectorAll('.cat-btn');
-    if (catBtns[index]) catBtns[index].classList.add('active');
-    
-    const bnavs = document.querySelectorAll('.bnav-item');
-    if (bnavs[index]) bnavs[index].classList.add('active');
+    document.querySelectorAll('.cat-btn[data-tab]').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.bnav-item[data-tab]').forEach(el => el.classList.remove('active'));
+
+    targetSec.classList.add('active');
+
+    const activeCat = document.querySelector(`.cat-btn[data-tab="${secId}"]`);
+    if (activeCat) {
+      activeCat.classList.add('active');
+      activeCat.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    }
+
+    const activeBnav = document.querySelector(`.bnav-item[data-tab="${secId}"]`);
+    if (activeBnav) activeBnav.classList.add('active');
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Live Countdown & Dual Timezone Clock (TW + JP JST)
+  function updateLiveTelemetry() {
+    const now = new Date();
+    const twFmt = new Intl.DateTimeFormat('zh-TW', { timeZone: 'Asia/Taipei', hour: '2-digit', minute: '2-digit', hour12: false });
+    const jpFmt = new Intl.DateTimeFormat('ja-JP', { timeZone: 'Asia/Tokyo', hour: '2-digit', minute: '2-digit', hour12: false });
+    const clockTw = document.getElementById('clock-tw');
+    const clockJp = document.getElementById('clock-jp');
+    if (clockTw) clockTw.textContent = twFmt.format(now);
+    if (clockJp) clockJp.textContent = jpFmt.format(now);
+
+    const countdownEl = document.getElementById('trip-countdown');
+    if (!countdownEl) return;
+
+    const meetTime = new Date('2026-11-25T06:00:00+08:00');
+    const endTime = new Date('2026-11-29T16:30:00+08:00');
+    const diffMs = meetTime - now;
+
+    if (diffMs > 0) {
+      const days = Math.floor(diffMs / 86400000);
+      const hrs = Math.floor((diffMs % 86400000) / 3600000);
+      const mins = Math.floor((diffMs % 3600000) / 60000);
+      countdownEl.textContent = `⏳ 距離 11/25 06:00 小港亞航 C 櫃台集合：剩 ${days} 天 ${hrs} 時 ${mins} 分`;
+    } else if (now <= endTime) {
+      countdownEl.textContent = '🎉 盛欣網絡 2026 大阪五日員旅進行中！祝全體同仁旅途愉快！';
+    } else {
+      countdownEl.textContent = '✨ 盛欣網絡 2026 大阪五日員旅圓滿完成！';
+    }
+  }
+
+  // Quick SOS / Taxi Card Modal & Clipboard Toast
+  function openSosModal() {
+    const modal = document.getElementById('sos-modal');
+    if (modal) modal.classList.add('open');
+  }
+  function closeSosModal() {
+    const modal = document.getElementById('sos-modal');
+    if (modal) modal.classList.remove('open');
+  }
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeSosModal();
+  });
+
+  let toastTimer = null;
+  function showToast(msg) {
+    const pill = document.getElementById('toast-pill');
+    if (!pill) return;
+    pill.textContent = msg;
+    pill.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => pill.classList.remove('show'), 2200);
+  }
+  function copyText(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(() => showToast('✅ 已複製日文地址！')).catch(() => showToast('📋 請長按地址複製'));
+    } else {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      showToast('✅ 已複製日文地址！');
+    }
   }
 
   function filterPlans(mode, btn) {
@@ -2079,6 +2475,7 @@
       if (blockSpecial) blockSpecial.style.display = 'none';
     }
   }
+
   function calculateComparison() {
     const checkedBoxes = document.querySelectorAll('.hotel-check:checked');
     const countBadge = document.getElementById('selected-count');
@@ -2131,24 +2528,88 @@
     const topItem = selectedData[0];
     recBox.innerHTML = `
       <strong>🏆 目前勾選中性價比第一名：【${topItem.name}】（評分 ${topItem.cp} / 10）</strong><br>
-      總花費約 <strong>NT$ ${topItem.total.toLocaleString()} 元</strong>（含交通），起床時間 <strong>${topItem.wakeup}</strong>。從容省力、完全不耽誤隔天早上 06:30 機場集合！
+      總花費約 <strong>NT$ ${topItem.total.toLocaleString()} 元</strong>（含交通），起床時間 <strong>${topItem.wakeup}</strong>。從容省力、完全不耽誤隔天早上 <strong>06:00 亞航 C 櫃台集合</strong>！
     `;
   }
 
-  
-  // Live Currency Converter
+  // Live Currency Converter (3 modes + custom rate + quick preset)
+  let calcMode = 'coupon';
+  function setCalcMode(mode, btn) {
+    calcMode = mode;
+    document.querySelectorAll('.calc-mode-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    calcTwd();
+  }
+  function quickJpy(amount) {
+    const jpyInput = document.getElementById('calc-jpy');
+    if (jpyInput) {
+      jpyInput.value = amount;
+      calcTwd();
+    }
+  }
   function calcTwd() {
     const jpyInput = document.getElementById('calc-jpy');
+    const rateInput = document.getElementById('calc-rate');
     const twdResult = document.getElementById('calc-twd-result');
+    const noteEl = document.getElementById('calc-formula-note');
+
     const jpy = parseFloat(jpyInput.value);
-    
+    const rate = parseFloat(rateInput ? rateInput.value : 0.21) || 0.21;
+
+    let multiplier = 1;
+    let formulaText = `計算公式：JPY × ${rate}`;
+    if (calcMode === 'coupon') {
+      multiplier = 0.90 * 0.93;
+      formulaText = `計算公式：JPY × 0.90(免稅) × 0.93(券) × ${rate}`;
+    } else if (calcMode === 'taxfree') {
+      multiplier = 0.90;
+      formulaText = `計算公式：JPY × 0.90(免稅) × ${rate}`;
+    }
+    if (noteEl) noteEl.textContent = formulaText;
+
     if (isNaN(jpy) || jpy <= 0) {
       twdResult.textContent = 'NT$ 0';
       return;
     }
-    // Formula: JPY * 0.90 (Tax-free 10%) * 0.93 (Coupon 7%) * 0.21 (rate)
-    const finalTwd = Math.round(jpy * 0.90 * 0.93 * 0.21);
+    const finalTwd = Math.round(jpy * multiplier * rate);
     twdResult.textContent = '約 NT$ ' + finalTwd.toLocaleString();
+  }
+
+  // Persistent Packing Checklist (localStorage)
+  const CHECKLIST_STORAGE_KEY = 'sx_osaka_2026_packing_v1';
+  function updateChecklistUI() {
+    const checks = document.querySelectorAll('.pack-check');
+    const total = checks.length;
+    let done = 0;
+    checks.forEach(c => { if (c.checked) done++; });
+    const statusEl = document.getElementById('checklist-status');
+    const fillEl = document.getElementById('checklist-progress-fill');
+    const pct = total ? Math.round((done / total) * 100) : 0;
+    if (statusEl) statusEl.textContent = `已完成 ${done} / ${total} 項 (${pct}%)`;
+    if (fillEl) fillEl.style.width = pct + '%';
+  }
+  function saveChecklist() {
+    const state = {};
+    document.querySelectorAll('.pack-check').forEach(c => {
+      state[c.dataset.key] = c.checked;
+    });
+    try { localStorage.setItem(CHECKLIST_STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+    updateChecklistUI();
+  }
+  function loadChecklist() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(CHECKLIST_STORAGE_KEY) || '{}');
+      document.querySelectorAll('.pack-check').forEach(c => {
+        if (saved[c.dataset.key]) c.checked = true;
+      });
+    } catch (e) {}
+    updateChecklistUI();
+  }
+  function resetChecklist() {
+    document.querySelectorAll('.pack-check').forEach(c => c.checked = false);
+    try { localStorage.removeItem(CHECKLIST_STORAGE_KEY); } catch (e) {}
+    updateChecklistUI();
+    showToast('🔄 已重設行前清單');
   }
 
   // Scroll listener for back to top button
@@ -2163,8 +2624,13 @@
     }
   });
 
-  // Run once on load
-  document.addEventListener('DOMContentLoaded', calculateComparison);
+  // Init on load
+  document.addEventListener('DOMContentLoaded', function() {
+    calculateComparison();
+    loadChecklist();
+    updateLiveTelemetry();
+    setInterval(updateLiveTelemetry, 30000);
+  });
 </script>
 
 <!-- FLOATING BACK TO TOP BUTTON -->
